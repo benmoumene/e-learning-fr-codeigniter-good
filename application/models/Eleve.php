@@ -40,12 +40,10 @@ if (!defined('BASEPATH'))
 		    return $this->nom;
 		}
 		
-		
 		public function setNom($nom)
 		{
 		    $this->nom = $nom;
 		}
-		
 		
 		/**
 		 * Get email

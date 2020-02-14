@@ -15,10 +15,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <a class="nav-link active" href="#">Accueil</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="index.php/schema">Génération base de données</a>
+    <a class="nav-link" href="index.php/schema">Generation base de donnees</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="index.php/acces">Donner accès</a>
+    <a class="nav-link" href="index.php/acces">Donner acces</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="index.php/email">Contact</a>
@@ -42,15 +42,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<h1>Bienvenu sur le site pour le cours UX!</h1>
 
 	<div id="body">
-		<p>Sur ce site vous trouverez toutes les ressources nécessaires. Les cours seront disponibles sur ce site, vous pourrez égalemment déposer des documents...</p>
-		<ul>
-		<?php foreach($data as $row) : ?>
-			<li><?=$row['message']?></li>
-		<?php endforeach;?>
-		</ul>
+		<p>Sur ce site vous trouverez toutes les ressources necessaires. Les cours seront disponibles sur ce site, vous pourrez egalemment deposer des documents...</p>
+		
 	</div>
 
-	<p class="footer">Ce site est réservé à partager des ressources pour le cours UX</p>
+	<p class="footer">Ce site est reserve au partage des ressources pour le cours UX</p>
 </div>
 
 

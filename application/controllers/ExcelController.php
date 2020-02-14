@@ -98,7 +98,7 @@ class ExcelController extends CI_Controller {
 			
 			$schemaTool = new \Doctrine\ORM\Tools\SchemaTool($this->em);
 			$classes = $this->em->getMetadataFactory()->getAllMetadata();
-			$schemaTool->createSchema($classes);
+			$schemaTool->updateSchema($classes);
 			
 			$entitiesClassLoader = new ClassLoader('models', rtrim(APPPATH, "/" ));
 			$entitiesClassLoader->register();

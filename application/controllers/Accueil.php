@@ -20,11 +20,12 @@ class Accueil extends CI_Controller {
 	 */
 	public function index()
 	{
-		$this->load->database();
-		$query = $this->db->query('SELECT message FROM affichage');
+		/*$this->load->database();*/
+		/*$query = $this->db->query('SELECT message FROM affichage');
 		$query = $query->result_array();
-		$this->load->view('accueil',['data'=>$query]);
-		$this->db->close();
+		*/
+		$this->load->view('accueil');
+		/*$this->db->close();*/
 	}
 
 }
