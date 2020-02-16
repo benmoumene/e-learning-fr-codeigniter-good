@@ -42,7 +42,7 @@ class ExcelController extends CI_Controller {
 	**/
 	public function import(){
 		
-		if(isset($_FILES['file']['tmp_name'])){
+		if(!empty($_FILES['file']['tmp_name'])){
 			
 			$inputFileType = 'Xlsx';
 			$inputFileName = $_FILES['file']['tmp_name'];

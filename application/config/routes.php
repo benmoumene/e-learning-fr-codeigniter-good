@@ -54,4 +54,4 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 $route['email'] = 'EmailController';
 $route['acces'] = 'ExcelController';
-$route['eleve'] = 'EleveController';
+$route['cours'] = 'CoursController';

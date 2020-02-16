@@ -15,7 +15,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <a class="nav-link active" href="#">Accueil</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="index.php/schema">Generation base de donnees</a>
+    <a class="nav-link" href="index.php/cours">Creer un cours</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="index.php/acces">Donner acces</a>
@@ -48,8 +48,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 	<p class="footer">Ce site est reserve au partage des ressources pour le cours UX</p>
 </div>
-
-
 
 
 </body>
