@@ -55,4 +55,3 @@ $route['translate_uri_dashes'] = FALSE;
 $route['email'] = 'EmailController';
 $route['acces'] = 'ExcelController';
 $route['cours'] = 'CoursController';
-$route['connexion'] = 'ConnexionController';

@@ -24,8 +24,6 @@ class Accueil extends CI_Controller {
 		/*$query = $this->db->query('SELECT message FROM affichage');
 		$query = $query->result_array();
 		*/
-	    
-	    $this->load->library('session');
 		$this->load->view('accueil');
 		/*$this->db->close();*/
 	}
