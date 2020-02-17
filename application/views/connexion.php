@@ -1,6 +1,6 @@
 <html>
 <head>    
-    <title> Donner accès à des élèves </title>
+    <title>Connexion</title>
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 <body>
@@ -35,14 +35,21 @@
 </style>
 
 
-	<?php
-		echo form_open_multipart('/ExcelController/import');
-	?>
-	<input type="file" id="id" name="file" /><br><br>
-    <input type="submit" name="import" value="importer" />
-<?php
-echo form_close();
-?>
+<div id="container">
+    <?php
+        echo form_open('/ConnexionController/connexion');
+    	?>
+    	<label>Email : 
+        	<input type="email" id="email" name="email" /></label>
+        <label>Mot de passe :
+        	<input type="password" id="mdp" name="mdp" /></label>	
+        
+        <input type="submit" name="connexion" value="se connecter" /><br><br>
+           
+    <?php
+    echo form_close();
+    ?>    
+</div>
+
 </body>
 </html>
-

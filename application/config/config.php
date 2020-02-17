@@ -324,7 +324,7 @@ $config['cache_query_string'] = FALSE;
 | https://codeigniter.com/user_guide/libraries/encryption.html
 |
 */
-$config['encryption_key'] = '';
+$config['encryption_key'] = '1Z9YX7M2TBMWA5KF3J419GPQYHJOQ';
 
 /*
 |--------------------------------------------------------------------------
@@ -400,7 +400,7 @@ $config['sess_regenerate_destroy'] = FALSE;
 |       'cookie_httponly') will also affect sessions.
 |
 */
-$config['cookie_prefix']	= '';
+$config['cookie_prefix']	= 'ux_ad_';
 $config['cookie_domain']	= '';
 $config['cookie_path']		= '/';
 $config['cookie_secure']	= FALSE;
@@ -432,7 +432,7 @@ $config['standardize_newlines'] = FALSE;
 |          for backwards compatibility purposes!
 |
 */
-$config['global_xss_filtering'] = FALSE;
+$config['global_xss_filtering'] = TRUE;
 
 /*
 |--------------------------------------------------------------------------
@@ -502,7 +502,7 @@ $config['time_reference'] = 'local';
 | Note: You need to have eval() enabled for this to work.
 |
 */
-$config['rewrite_short_tags'] = FALSE;
+$config['rewrite_short_tags'] = TRUE;
 
 /*
 |--------------------------------------------------------------------------
