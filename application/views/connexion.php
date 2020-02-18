@@ -4,25 +4,10 @@
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 <body>
-<nav class="navbar navbar-expand-sm bg-light justify-content-center">
-  <ul class="nav">
-  <li class="nav-item">
-    <a class="nav-link active" href="<?= "/projetL3/index.php";?>">Accueil</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/projetL3/index.php/cours">Creer un cours</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/projetL3/index.php/acces">Donner acces</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/projetL3/index.php/email">Contact</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/projetL3/index.php/connexion">Connexion</a>
-  </li>
-</ul>
-</nav>
+
+<!-- AFFICHER LE MENU -->
+<?php $this->load->view("Menu"); ?>
+
 <body>
 	<style>
 	

@@ -17,6 +17,7 @@ class EmailController extends CI_Controller {
 	 * @return void
 	**/
     public function index() {
+        $this->load->helper('cookie');
         $this->load->helper('form');
         $this->load->view('contact');
     }

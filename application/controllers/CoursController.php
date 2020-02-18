@@ -47,6 +47,7 @@ class CoursController extends CI_Controller {
     
     
     public function index() {
+        $this->load->helper('cookie');
         $this->load->helper('form');
         $this->load->view('creer_cours');
     }

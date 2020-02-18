@@ -23,6 +23,7 @@ class ExcelController extends CI_Controller {
 	 * @return void
 	**/
     public function index() {
+        $this->load->helper('cookie');
 		$this->load->helper('form');
         $this->load->view('creer_acces');
     }
@@ -62,7 +63,6 @@ class ExcelController extends CI_Controller {
 			/*creation objet eleve avec les donnees puis on le sauvegarde
 			 dans la base de donnee avec notre ORM(Eleve herite de ORM)*/
 			
-			$this->load->database();
 			
 			$connectionOptions = array(
 			    'driver' => 'pdo_mysql',
@@ -102,6 +102,16 @@ class ExcelController extends CI_Controller {
 			
 			$entitiesClassLoader = new ClassLoader('models', rtrim(APPPATH, "/" ));
 			$entitiesClassLoader->register();
+			
+			$enseignant = new Enseignant();
+			$enseignant->setNom("Nourhene Ben Rabah");
+			$enseignant->setEmail("tt9814023@gmail.com");
+		
+			$this->load->library('encrypt');
+			$mdp = $this->encrypt->encode('admin');
+			$enseignant->setMotDePasse($mdp);
+			$this->em->persist($enseignant);
+			
 			$i = 0;
 			foreach( $eleves as $eleve )
 			{          
@@ -118,6 +128,7 @@ class ExcelController extends CI_Controller {
 					}
 				}
 			}
+			
 			
 		}
 	}
