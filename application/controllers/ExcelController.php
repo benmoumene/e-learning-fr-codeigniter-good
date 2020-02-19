@@ -77,7 +77,7 @@ class ExcelController extends CI_Controller {
 			$config = new Configuration;
 			$cache = new ArrayCache;
 			$config->setMetadataCacheImpl($cache);
-			$driverImpl = $config->newDefaultAnnotationDriver(array(APPPATH.'models/'));
+			$driverImpl = $config->newDefaultAnnotationDriver(array(APPPATH.'models/entity'));
 			$config->setMetadataDriverImpl($driverImpl);
 			$config->setQueryCacheImpl($cache);
 			
@@ -101,6 +101,7 @@ class ExcelController extends CI_Controller {
 			$schemaTool->updateSchema($classes);
 			
 			$entitiesClassLoader = new ClassLoader('models', rtrim(APPPATH, "/" ));
+			
 			$entitiesClassLoader->register();
 			
 			$enseignant = new Enseignant();

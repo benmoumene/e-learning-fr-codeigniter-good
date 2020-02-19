@@ -25,7 +25,7 @@ class CoursController extends CI_Controller {
         $config = new Configuration;
         $cache = new ArrayCache;
         $config->setMetadataCacheImpl($cache);
-        $driverImpl = $config->newDefaultAnnotationDriver(array(APPPATH.'models/'));
+        $driverImpl = $config->newDefaultAnnotationDriver(array(APPPATH.'models/entity'));
         $config->setMetadataDriverImpl($driverImpl);
         $config->setQueryCacheImpl($cache);
         
@@ -53,9 +53,9 @@ class CoursController extends CI_Controller {
     }
     
     public function creer_cours() {
-        $this->load->model("cours");
+        $this->load->model("entity/cours");
         $cours = new Cours;
-        $this->load->model("document");
+        $this->load->model("entity/document");
         $cours->setIntitule($this->input->post('nom_cours'));
         $this->em->persist($cours);
         
