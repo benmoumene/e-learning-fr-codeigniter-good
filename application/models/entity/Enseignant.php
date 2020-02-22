@@ -17,11 +17,11 @@ if (!defined('BASEPATH'))
 		 */
 		private $nom;
 		/**
-		 *  @Column(type="string", nullable = false) 
+		 *  @Column(type="string", nullable = false, unique = true) 
 		 */
 		private $email;
 		/**
-		 *  @Column(type="string", nullable = true)
+		 *  @Column(type="string", nullable = false)
 		 */
 		private $motDePasse;
 		

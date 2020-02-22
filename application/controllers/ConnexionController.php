@@ -33,6 +33,28 @@ class ConnexionController extends CI_Controller {
         $this->load->view('connexion');
     }
     
+    /**
+     * permet de verifier les identifiants
+     * et de donner accï¿½s ï¿½
+     * l'administrateur(via des cookies) 
+     * uniquement si les identifiants sont
+     * correct
+     * 
+     * @uses $this->load->helper()
+     * @uses $this->load->library()
+     * @uses $this->load->model()
+     * @uses $this->input->post()
+     * @uses $this->encrypt->encode()
+     * @uses $this->config->item()
+     * @uses set_cookie()
+     * @uses redirect()
+     * @uses site_url()
+     * @uses get_cookie()
+     * @uses $this->encrypt->decode()
+     * $this->administrator_model->validate()
+     *
+     * @return void
+     **/
     public function connexion(){
         $this->load->helper('cookie');
         $this->load->library('encrypt');
@@ -46,14 +68,14 @@ class ConnexionController extends CI_Controller {
                 $cookies_email['name'] = $this->_cookie_id_name;
                 $cookies_email['value'] = $this->encrypt->encode($this->input->post('email'));
                 // $cookies_email['domain'] = "";
-                $cookies_email['prefix'] = $this->config->item('cookie_prefix');
+                $cookies_email['prefix'] = ($this->administrator_model->type == "enseignant") ? $this->config->item('cookie_prefix') : "ux_e";
                 set_cookie($cookies_email);
                 
                 $cookies_password = $this->_cookie;
                 $cookies_password['name'] = $this->_cookie_id_password;
                 $cookies_password['value'] = $this->encrypt->encode($this->input->post('mdp'));
                 // $cookies_email['domain'] = "";
-                $cookies_password['prefix'] = $this->config->item('cookie_prefix');
+                $cookies_password['prefix'] = ($this->administrator_model->type == 'enseignant') ? $this->config->item('cookie_prefix') : "ux_e";
                 set_cookie($cookies_password);
                 
                 // Tout est ok, ont redirige vers la page d'accueil de l'admin
@@ -75,42 +97,8 @@ class ConnexionController extends CI_Controller {
         }
         elseif ($this->router->fetch_class() != "connexion")
         {
-            redirect(site_url("connexion")); // Mauvais email, ont redirige vers la page de connexion
+            redirect(site_url("connexion"));
         }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        /*
-        
-        $infos_professeur = $this->db->query('SELECT nom, email, motDePasse FROM enseignant');
-        
-        $infos_professeur = $infos_professeur->result_array()[0];
-        
-        $this->load->library('encrypt');
-  
-        if($this->input->post('email') != $infos_professeur["email"]){
-            $this->load->helper('cookie');
-        }
-        */
-        
-        /*Si le mot de passe et l'email correspond à celui de l'enseignant on met l'utilisateur en admin*/
-        /*
-        if($this->encrypt->decode($infos_professeur["motDePasse"]) == $this->input->post('mdp')){
-            $this->load->helper('cookie');
-            
-            redirect("accueil");
-        } else{
-            $this->load->helper('cookie');
-        }
-        */
        
     }
 }
