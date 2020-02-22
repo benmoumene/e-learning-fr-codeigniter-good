@@ -15,7 +15,7 @@ if (!defined('BASEPATH'))
          */
         private $id;
         /**
-         * @Column(type="string", nullable=false)
+         * @Column(type="string", nullable = false)
          */
         private $intitule;
         

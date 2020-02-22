@@ -5,17 +5,13 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Doctrine\Common\ClassLoader,
 Doctrine\ORM\Configuration,
 Doctrine\ORM\EntityManager,
-Doctrine\Common\Cache\ArrayCache;
+Doctrine\Common\Cache\ArrayCache,
+Doctrine\DBAL\Logging\EchoSQLLogger;
 require './vendor/autoload.php';
 
 
 class ExcelController extends CI_Controller {
-    function __construct() {
-        parent::__construct();
-        $this->load->library('session');
-    }
-    
-    
+
 	/**
 	 * Charge les fonctions utilise pour
 	 * le formulaire(present dans la vue)
@@ -29,7 +25,6 @@ class ExcelController extends CI_Controller {
     public function index() {
         $this->load->helper('cookie');
 		$this->load->helper('form');
-		$import = $this->session->flashdata('import_success');
         $this->load->view('creer_acces');
     }
 	
@@ -47,11 +42,7 @@ class ExcelController extends CI_Controller {
 	 * @return void
 	**/
 	public function import(){
-	    if($_FILES['file']['name'] == ''){ 
-	        $this->session->set_flashdata("import_success","Veuillez sélectionner un fichier Xlsx");
-	        redirect(site_url('acces'));
-	    }
-	    
+		
 		if(!empty($_FILES['file']['tmp_name'])){
 			
 			$inputFileType = 'Xlsx';
@@ -96,6 +87,9 @@ class ExcelController extends CI_Controller {
 			$config->setProxyDir(APPPATH.'/models/proxies');
 			$config->setProxyNamespace('Proxies');
 			
+			// Set up logger
+			$logger = new EchoSQLLogger;
+			$config->setSQLLogger($logger);
 			
 			$config->setAutoGenerateProxyClasses( TRUE );
 			
@@ -110,8 +104,6 @@ class ExcelController extends CI_Controller {
 			
 			$entitiesClassLoader->register();
 			
-			/*  PERMET D'INSERER L'ENSEIGNANTE, 
-			 * DECOMMENTER CE CODE UNIQUEMENT SI BESOIN
 			$enseignant = new Enseignant();
 			$enseignant->setNom("Nourhene Ben Rabah");
 			$enseignant->setEmail("tt9814023@gmail.com");
@@ -120,82 +112,26 @@ class ExcelController extends CI_Controller {
 			$mdp = $this->encrypt->encode('admin');
 			$enseignant->setMotDePasse($mdp);
 			$this->em->persist($enseignant);
-			*/
 			
-			$emailSent = true;
 			$i = 0;
 			foreach( $eleves as $eleve )
 			{          
 				if($i++ >0){
 					if(isset($eleve[0]) && isset($eleve[1])){
+						
+					      
 					    $nouvelEleve = new Eleve();
 					    $nouvelEleve->setNom($eleve[0]);
-					    $nouvelEleve->setPrenom($eleve[1]);
-					    $nouvelEleve->setEmail($eleve[2]);
-					    /* Le mot de passe sera genere par le helper appelle dans la methode set*/
+					    $nouvelEleve->setEmail($eleve[1]);
 					    
-					    $this->load->library('encrypt');
-					    $mdpBeforeEncryption = $nouvelEleve->get_random_password();
-					    $nouvelEleve->setMotDePasse($this->encrypt->encode($mdpBeforeEncryption)); 
-					    
-					  
-					    echo ($mdpBeforeEncryption.'<br>');
-					    
-					    /*On capture les exception afin de ne pas afficher les logs de doctrine à l'utilisateur*/
-					    try {
-					        $this->em->persist($nouvelEleve);
-					        $this->em->flush();
-					    }
-					    catch(Doctrine\DBAL\DBALException | Doctrine\DBAL\ConnectionException  $e){
-					        $this->session->set_flashdata("import_success","L'importation des élèves a échoué.");
-					        redirect(site_url("acces"));
-					        exit;
-					    }
-					    
-					   
-					    if(!($this->send_email_to_students($nouvelEleve->getEmail(), $mdpBeforeEncryption))){
-					        $emailSent = false;
-					    }
+					    $this->em->persist($nouvelEleve);
+					    $this->em->flush();
 					}
 				}
 			}
 			
 			
-			if($emailSent){
-			    $this->session->set_flashdata("import_success","L'importation des élèves a été effectué.");
-			    
-			}
-			redirect(site_url("acces"));
-			
 		}
-	}
-	
-	public function send_email_to_students($email, $mdp){
-	    //Load email library
-	    $this->load->library('email');
-	    
-	    $config = array();
-	    $config['protocol'] = 'smtp';
-	    $config['smtp_host'] = 'smtp.gmail.com';
-	    $config['smtp_user'] = 'tt9814023@gmail.com';
-	    $config['smtp_pass'] = 'monmotdepasse99';
-	    $config['smtp_port'] = 465;
-	    $config['mailtype'] = 'html';
-	    $config['smtp_crypto'] = 'ssl';
-	    $this->email->initialize($config);
-	    $this->email->set_newline("\r\n");
-	    
-	    
-	    $this->email->from($config['smtp_user']);
-	    $this->email->to($email);
-	    $this->email->subject("Votre inscription sur le site du cours UX a été effectuée");
-	    $this->email->message("Voici vos identifiant pour vous connecter sur le site du cours UX : <br>  <b>Email : </b>".$email."<br>   <b>Mot de passe : </b>".$mdp);
-	    //Send mail
-	    if($this->email->send()){
-	        return true;
-	    }
-	    
-	    return false;
 	}
     
 }

@@ -46,42 +46,13 @@ class CoursController extends CI_Controller {
     }
     
     
-    /**
-     * Charge les fonctions utilise pour
-     * le formulaire(present dans la vue)
-     * puis charge la vue de la page
-     *
-     * @uses $this->load->helper()
-     * @uses $this->load->view()
-     *
-     * @return void
-     **/
     public function index() {
         $this->load->helper('cookie');
         $this->load->helper('form');
         $this->load->view('creer_cours');
     }
     
-    
-    /**
-     * creer un cours dans la base de donn�es
-     * le formulaire(present dans la vue)
-     * si des documents sont joints au cours
-     * alors on les upload avec la methode
-     * do_upload
-     *
-     * @uses $this->load->model()
-     * @uses  $this->em->persist()
-     * @uses  $this->do_upload()
-     * @uses $this->em->flush()
-     *
-     * @return void
-     **/
     public function creer_cours() {
-        if($this->input->post('nom_cours') == ''){
-            $this->session->set_flashdata("cours_champ_required","Veuillez saisir un nom pour le cours");
-            redirect(site_url('cours'));
-        }
         $this->load->model("entity/cours");
         $cours = new Cours;
         $this->load->model("entity/document");
@@ -94,19 +65,7 @@ class CoursController extends CI_Controller {
         $this->em->flush();
     }
     
-    /**
-     * permet d'upload les documents
-     * joints � un cours 
-     * dans le dossier uploads
-     * situ� � la racine du projet
-     *
-     * @uses $this->load->model()
-     * @uses  $this->em->persist()
-     * @uses  $this->do_upload()
-     * @uses $this->em->flush()
-     *
-     * @return void
-     **/
+    
     public function do_upload($cours) {
         $config = array(
             'upload_path' => "./uploads/",

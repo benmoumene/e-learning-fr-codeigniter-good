@@ -29,18 +29,6 @@ class EmailController extends CI_Controller {
 	 * $config['smtp_user'] etant le mail destinee à recevoir
 	 * les messages envoyees a partir du formulaire
 	 *
-	 * @uses $this->input->post()
-	 * @uses $this->load->library()
-	 * @uses $this->email->initialize()
-	 * @uses $this->email->set_newline()
-	 * @uses $this->email->from()
-	 * @uses $this->email->to()
-	 * @uses $this->email->subject()
-	 * @uses $this->email->message()
-	 * @uses $this->email->send()
-	 * @uses $this->session->set_flashdata()
-	 * @uses $this->load->view()
-	 *
 	 * @return void
 	**/
     public function send_mail() {

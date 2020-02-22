@@ -28,20 +28,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <a class="nav-link" href="/projetL3/index.php/connexion">Connexion</a>
       </li>
   <?php endif;?>
-  <?php if (!is_null(get_cookie('ux_ad_1C89DS7CDS8CD89CSD7CSDDSVDSIJPIOCDS')) && !is_null(get_cookie('ux_ad_189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD')) || !is_null(get_cookie('ux_e1C89DS7CDS8CD89CSD7CSDDSVDSIJPIOCDS')) && !is_null(get_cookie('ux_e189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'))) : ?>
+  <?php if (!is_null(get_cookie('ux_ad_1C89DS7CDS8CD89CSD7CSDDSVDSIJPIOCDS')) && !is_null(get_cookie('ux_ad_189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'))) : ?>
       <li class="nav-item">
         <a class="nav-link" href="/projetL3/index.php/deconnexion">Se deconnecter</a>
       </li>
-  <?php endif;?>
-  <?php if(!is_null(get_cookie('ux_ad_1C89DS7CDS8CD89CSD7CSDDSVDSIJPIOCDS')) && !is_null(get_cookie('ux_ad_189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'))) :?>
       <li class="nav-item">
         ADMIN CONNECTE
       </li>
-  <?php endif;?>  
-  <?php if(!is_null(get_cookie('ux_e1C89DS7CDS8CD89CSD7CSDDSVDSIJPIOCDS')) && !is_null(get_cookie('ux_e189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'))) :?>
-      <li class="nav-item">
-        ELEVE CONNECTE
-      </li>
-  <?php endif;?>  
+  <?php endif;?>
 </ul>
 </nav>
