@@ -29,11 +29,15 @@
         <label>Mot de passe :
         	<input type="password" id="mdp" name="mdp" /></label>	
         
-        <input type="submit" name="connexion" value="se connecter" /><br><br>
+        <input type="submit" name="connexion" value="se connecter" /><br>
            
     <?php
     echo form_close();
     ?>
+    
+    <?php echo form_open('MotDePasseOublieController/index'); ?>
+    	<a href="./motdepasseoublie">Mot de passe oubliée? </a>
+    <?php form_close();?>
 </div>
 
 </body>

@@ -57,3 +57,4 @@ $route['acces'] = 'ExcelController';
 $route['cours'] = 'CoursController';
 $route['connexion'] = 'ConnexionController';
 $route['deconnexion'] = 'DeconnexionController';
+$route['motdepasseoublie'] = 'MotDePasseOublieController';

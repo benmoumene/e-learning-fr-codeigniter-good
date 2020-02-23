@@ -19,9 +19,7 @@ class Administrator_model extends CI_MODEL{
      * @return bool
      **/
     public function validate($email, $motDePasse) {
-        var_dump($motDePasse);
         if (($passwd_crypt = $this->_getUser($email)) !== FALSE){
-            echo 'VALIDATE RETUNR';
             return (bool) ($motDePasse == $passwd_crypt);
         }
         return false;
@@ -38,17 +36,21 @@ class Administrator_model extends CI_MODEL{
      * @return bool
      **/
     private function _getUser($email) {
+        /*-----CHECK IF ADMIN(ENSEIGNANT)-----*/
         $user = $this->db->select(array('email', 'motDePasse'))->get_where($this->_table, array('email' => $email))->row();
         if (isset($user->motDePasse)){
             $this->type = "enseignant";
             return $this->encrypt->decode($user->motDePasse);
         }
         
+        /*-----CHECK IF ELEVE-----*/
         $user = $this->db->select(array('email', 'motDePasse'))->get_where("eleve", array('email' => $email))->row();
         if (isset($user->motDePasse)){
             $this->type = "eleve";
             return $this->encrypt->decode($user->motDePasse);
         }
+        
+        /*-----RETURN FALSE IF NOT ADMIN AND NOT ELEVE-----*/
         return false;
     }
 }
