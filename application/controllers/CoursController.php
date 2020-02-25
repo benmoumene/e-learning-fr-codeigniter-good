@@ -78,10 +78,13 @@ class CoursController extends CI_Controller {
      * @return void
      **/
     public function creer_cours() {
+        //vérification que le champ intitule est rempli
         if($this->input->post('nom_cours') == ''){
             $this->session->set_flashdata("cours_champ_required","Veuillez saisir un nom pour le cours");
             redirect(site_url('cours'));
         }
+        
+        
         $this->load->model("entity/cours");
         $cours = new Cours;
         $this->load->model("entity/document");
@@ -92,6 +95,9 @@ class CoursController extends CI_Controller {
             $this->do_upload($cours);    
         }
         $this->em->flush();
+        
+        $this->session->set_flashdata("import", "Le cours a été crée");
+        redirect(site_url("cours"));
     }
     
     /**
@@ -118,6 +124,7 @@ class CoursController extends CI_Controller {
         );
         
         $count = count($_FILES['files']['name']);
+        $import = 'Le cours ';
         
         for ($i = 0; $i < $count; $i++) {
             $config['file_name'] = $_FILES['files']['name'][$i];
@@ -129,11 +136,13 @@ class CoursController extends CI_Controller {
                 $_FILES['file']['error'] = $_FILES['files']['error'][$i];
                 $_FILES['file']['size'] = $_FILES['files']['size'][$i];
                 
+                
+                
                 $this->load->library('upload', $config);
                 if($this->upload->do_upload('file'))
                 {            
                    
-                    echo 'uploaded';
+                    $import .= 'a été importé';
                     $this->load->model("cours");
                     $this->load->model("document");
                     $document = new Document;
@@ -146,10 +155,20 @@ class CoursController extends CI_Controller {
                 }
                 else
                 {
-                    echo 'not uploaded';
+                    $import .= 'n\'a été importé';
                 }
                 $this->em->flush();
+                $this->session->set_flashdata("import", $import);
             }
         }
-   }
+        
+        if($count == 0){
+            $this->session->set_flashdata("import", "Le cours a été crée sans documents");
+        }
+        else{
+            $this->session->set_flashdata("import", "Le cours a été crée avec ".$count." documents associés");
+        }
+        redirect(site_url("cours"));
+    }
 }
+

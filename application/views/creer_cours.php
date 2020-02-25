@@ -54,7 +54,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
      <p><?=$this->session->flashdata('cours_champ_required');?></p>  
 </div>
 
-	
+	<?php 
+	   echo $this->session->flashdata('import');
+	?>
 
 
 </body>

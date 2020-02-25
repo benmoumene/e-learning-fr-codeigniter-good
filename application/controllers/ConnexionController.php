@@ -1,4 +1,5 @@
 <?php
+defined('BASEPATH') OR exit('No direct script access allowed');
 class ConnexionController extends CI_Controller {
     private $_cookie = array(
         // 'name'   => '',
@@ -14,6 +15,7 @@ class ConnexionController extends CI_Controller {
     
     function __construct() {
         parent::__construct();
+        $this->load->library('session');
     }
     
     /**
@@ -28,8 +30,9 @@ class ConnexionController extends CI_Controller {
      **/
     public function index() {
         $this->load->helper('cookie');
-        $this->load->library('session');
+        
         $this->load->helper('form');
+        $this->session->flashdata('import_success');
         $this->load->view('connexion');
     }
     
@@ -83,6 +86,7 @@ class ConnexionController extends CI_Controller {
             }
             else
             {
+                $this->session->set_flashdata("unable_to_connect","La connexion a échouée");
                 // Mauvais email, ont redirige vers la page de connexion
                 redirect(site_url("connexion"));
             }
@@ -93,10 +97,12 @@ class ConnexionController extends CI_Controller {
             $mail = $this->encrypt->decode(get_cookie($this->config->item('cookie_prefix').$this->_cookie_id_name));
             $password = $this->encrypt->decode(get_cookie($this->config->item('cookie_prefix').$this->_cookie_id_password));
             if ($this->administrator_model->validate($mail, $password) == FALSE)
+                $this->session->set_flashdata("unable_to_connect","La connexion a échouée");
                 redirect(site_url("connexion")); // Mauvais email, ont redirige vers la page de connexion
         }
         elseif ($this->router->fetch_class() != "connexion")
         {
+            $this->session->set_flashdata("unable_to_connect","La connexion a échouée");
             redirect(site_url("connexion"));
         }
        

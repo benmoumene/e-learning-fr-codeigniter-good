@@ -2,6 +2,7 @@
 class EmailController extends CI_Controller {
     function __construct() {
         parent::__construct();
+        $this->load->helper('cookie');
         $this->load->library('session');
         $this->load->helper('form');
     }
@@ -17,7 +18,6 @@ class EmailController extends CI_Controller {
 	 * @return void
 	**/
     public function index() {
-        $this->load->helper('cookie');
         $this->load->helper('form');
         $this->load->view('contact');
     }

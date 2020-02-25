@@ -33,7 +33,10 @@
            
     <?php
     echo form_close();
+    echo $this->session->flashdata('unable_to_connect');
     ?>
+    
+    
     
     <?php echo form_open('MotDePasseOublieController/index'); ?>
     	<a href="./motdepasseoublie">Mot de passe oubliée? </a>

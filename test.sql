@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mer. 19 fév. 2020 à 07:25
+-- Généré le :  mar. 25 fév. 2020 à 22:42
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -21,9 +21,9 @@ SET time_zone = "+00:00";
 --
 -- Base de données :  `test`
 --
-
 CREATE DATABASE IF NOT EXISTS `test` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `test`;
+
 -- --------------------------------------------------------
 
 --
@@ -33,9 +33,9 @@ USE `test`;
 DROP TABLE IF EXISTS `cours`;
 CREATE TABLE IF NOT EXISTS `cours` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `intitule` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `intitule` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -47,11 +47,11 @@ DROP TABLE IF EXISTS `document`;
 CREATE TABLE IF NOT EXISTS `document` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `cours_id` int(11) DEFAULT NULL,
-  `nom` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `path` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `nom` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `path` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_211FE8207ECF78B0` (`cours_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -62,18 +62,20 @@ CREATE TABLE IF NOT EXISTS `document` (
 DROP TABLE IF EXISTS `eleve`;
 CREATE TABLE IF NOT EXISTS `eleve` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nom` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `nom` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `motDePasse` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `prenom` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQ_2D602AF3E7927C74` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=166 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Déchargement des données de la table `eleve`
 --
 
-INSERT INTO `eleve` (`id`, `nom`, `email`) VALUES
-(1, 'mickael gudin', 'mickaelgudin@gmail.com'),
-(2, 'nicolas lewin', 'nicolaslewin@gmail.com');
+INSERT INTO `eleve` (`id`, `nom`, `email`, `motDePasse`, `prenom`) VALUES
+(164, 'gudin', 'mickaelgudin@gmail.com', 'UQYOZFdvVyRRZFZrVDQBZA==', 'mickael');
 
 -- --------------------------------------------------------
 
@@ -84,18 +86,19 @@ INSERT INTO `eleve` (`id`, `nom`, `email`) VALUES
 DROP TABLE IF EXISTS `enseignant`;
 CREATE TABLE IF NOT EXISTS `enseignant` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nom` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `motDePasse` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `nom` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `motDePasse` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQ_CEFA2C71E7927C74` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Déchargement des données de la table `enseignant`
 --
 
 INSERT INTO `enseignant` (`id`, `nom`, `email`, `motDePasse`) VALUES
-(1, 'Nourhene Ben Rabah', 'tt9814023@gmail.com', 'A2UMNQwzBG1eZA==');
+(24, 'Nourhene Ben Rabah', 'tt9814023@gmail.com', 'UzUKMwI9UDkCOA==');
 
 --
 -- Contraintes pour les tables déchargées

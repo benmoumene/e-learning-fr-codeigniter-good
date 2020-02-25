@@ -21,7 +21,6 @@
 
 
 	<?php
-					echo $this->session->flashdata('email_sent');
 					echo form_open('/EmailController/send_mail');
 				?>
 	<!--Section: Contact v.2-->
@@ -38,7 +37,7 @@
 	        <!--Grid column-->
 	        <div class="col-md-9 mb-md-0 mb-5">
 	            <?php
-					echo $this->session->flashdata('email_sent');
+					
 					echo form_open('/EmailController/send_mail');
 				?>
 
@@ -104,6 +103,7 @@
 	<!--Section: Contact v.2-->
 <?php
 echo form_close();
+echo $this->session->flashdata('email_sent');
 ?>
 </body>
 </html>
