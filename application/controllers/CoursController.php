@@ -1,48 +1,14 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-use Doctrine\Common\ClassLoader,
-Doctrine\ORM\Configuration,
-Doctrine\ORM\EntityManager,
-Doctrine\Common\Cache\ArrayCache,
-Doctrine\DBAL\Logging\EchoSQLLogger;
-require './vendor/autoload.php';
 class CoursController extends CI_Controller {
+    
     function __construct() {
         parent::__construct();
         $this->load->library('session');
         $this->load->helper('form');
-        $connectionOptions = array(
-            'driver' => 'pdo_mysql',
-            'user' =>     'root',
-            'password' => '',
-            'host' =>     'localhost',
-            'dbname' =>   'test'
-        );
         
-        
-        // Set up caches
-        $config = new Configuration;
-        $cache = new ArrayCache;
-        $config->setMetadataCacheImpl($cache);
-        $driverImpl = $config->newDefaultAnnotationDriver(array(APPPATH.'models/entity'));
-        $config->setMetadataDriverImpl($driverImpl);
-        $config->setQueryCacheImpl($cache);
-        
-        $config->setQueryCacheImpl($cache);
-        
-        // Proxy configuration
-        $config->setProxyDir(APPPATH.'/models/proxies');
-        $config->setProxyNamespace('Proxies');
-        
-        // Set up logger
-        $logger = new EchoSQLLogger;
-        $config->setSQLLogger($logger);
-        
-        $config->setAutoGenerateProxyClasses( TRUE );
-        
-        // Create EntityManager
-        $this->em = EntityManager::create($connectionOptions, $config);
+        $this->doctrine->em->beginTransaction();
     }
     
     
@@ -71,9 +37,9 @@ class CoursController extends CI_Controller {
      * do_upload
      *
      * @uses $this->load->model()
-     * @uses  $this->em->persist()
+     * @uses  $this->doctrine->em->persist()
      * @uses  $this->do_upload()
-     * @uses $this->em->flush()
+     * @uses $this->doctrine->em->flush()
      *
      * @return void
      **/
@@ -89,12 +55,13 @@ class CoursController extends CI_Controller {
         $cours = new Cours;
         $this->load->model("entity/document");
         $cours->setIntitule($this->input->post('nom_cours'));
-        $this->em->persist($cours);
+        $this->doctrine->em->persist($cours);
         
         if(!empty($_FILES['files']['tmp_name'][0])){
             $this->do_upload($cours);    
         }
-        $this->em->flush();
+        $this->doctrine->em->flush();
+        $this->doctrine->em->commit();
         
         $this->session->set_flashdata("import", "Le cours a été crée");
         redirect(site_url("cours"));
@@ -107,9 +74,9 @@ class CoursController extends CI_Controller {
      * situ� � la racine du projet
      *
      * @uses $this->load->model()
-     * @uses  $this->em->persist()
+     * @uses  $this->doctrine->em->persist()
      * @uses  $this->do_upload()
-     * @uses $this->em->flush()
+     * @uses $this->doctrine->em->flush()
      *
      * @return void
      **/
@@ -150,14 +117,22 @@ class CoursController extends CI_Controller {
                     $document->setCours($cours);
                     $document->setNom($_FILES['file']['name']);
                     $document->setPath("./uploads/".$_FILES['file']['name']);
-                    $this->em->persist($document);
+                    $this->doctrine->em->persist($document);
                     
                 }
                 else
                 {
-                    $import .= 'n\'a été importé';
+                    /*
+                     * SI L'UN DES DOCUMENTS N'EST PAS DE TYPE
+                     * PDF ALORS ON FAIT UN ROLLBACK
+                     * ET AUCUN COURS NI DOCUMENT N'EST CREE
+                     * */
+                    $import = 'Les documents doivent être de type pdf';
+                    $this->doctrine->em->rollback();
+                    $this->session->set_flashdata("import", $import);
+                    redirect(site_url("cours"));
                 }
-                $this->em->flush();
+                $this->doctrine->em->flush();
                 $this->session->set_flashdata("import", $import);
             }
         }
@@ -168,6 +143,7 @@ class CoursController extends CI_Controller {
         else{
             $this->session->set_flashdata("import", "Le cours a été crée avec ".$count." documents associés");
         }
+        $this->doctrine->em->commit();
         redirect(site_url("cours"));
     }
 }

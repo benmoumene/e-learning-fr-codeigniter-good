@@ -12,6 +12,10 @@ if (!defined('BASEPATH'))
          * @GeneratedValue
          */
 		private $id;
+		/**
+		 * @Column(type="string", nullable = false)
+		 */
+		private $prenom;
 		/** 
 		 * @Column(type="string", nullable = false) 
 		 */
@@ -50,6 +54,24 @@ if (!defined('BASEPATH'))
 		{
 		    $this->nom = $nom;
 		}
+		
+		
+		/**
+		 * Get prenom
+		 *
+		 * @return string
+		 */
+		public function getPrenom()
+		{
+		    return $this->prenom;
+		}
+		
+		public function setPrenom($prenom)
+		{
+		    $this->prenom = $prenom;
+		}
+		
+		
 		
 		/**
 		 * Get email
