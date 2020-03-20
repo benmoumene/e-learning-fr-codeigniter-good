@@ -122,7 +122,7 @@ class ConnexionController extends CI_Controller
         $cookie['name'] = $cookieId[$typeCookie];
         $cookie['value'] = $this->encrypt->encode($inputValue);
         
-        var_dump($this->user_model);
+        //var_dump($this->user_model);
         $cookie['prefix'] = ($this->user_model->type === "enseignant") ? $this->config->item('cookie_prefix') : "ux_e";
         set_cookie($cookie);
     }

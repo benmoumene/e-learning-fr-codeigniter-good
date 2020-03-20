@@ -41,13 +41,6 @@ class Eleve
      */
     private $motDePasse;
 
-    public function updateEmail()
-    {
-        $this->db->update('eleve', array(
-            'email' => $this->email
-        ));
-    }
-
     /**
      * Get id
      *
