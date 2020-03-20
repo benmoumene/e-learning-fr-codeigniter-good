@@ -14,11 +14,12 @@
 		"php" : ">=5.3.7",
 		"phpoffice/phpspreadsheet" : "^1.8",
 		"doctrine/orm" : "^2.5",
-		"phpunit/phpunit": "^5.7"
+		"phpunit/phpunit" : "^5.7"
 	},
+	"require-dev": {
+	    "phpunit/phpunit-selenium": ">=1.2"
+	  },
 	"suggest" : {
 		"paragonie/random_compat" : "Provides better randomness in PHP 5.x"
-	},
-	"require-dev" : {
 	}
 }
