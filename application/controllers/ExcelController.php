@@ -4,6 +4,9 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Doctrine\Common\ClassLoader;
 
+require './vendor/autoload.php';
+use SMTPValidateEmail\Validator as SmtpEmailValidator;
+
 class ExcelController extends CI_Controller
 {
 
@@ -147,14 +150,20 @@ class ExcelController extends CI_Controller
 
     public function send_email_to_students($email, $mdp)
     {
-        $subject = "Votre inscription sur le site du cours UX a été effectuée";
-        $message = "Voici vos identifiant pour vous connecter sur le site du cours UX : <br>  <b>Email : </b>" . $email . "<br>   <b>Mot de passe : </b>" . $mdp;
-
-        $params = array(
-            $email,
-            $subject,
-            $message
-        );
-        $this->load->library('EmailSender', $params);
+        $validator = new SmtpEmailValidator($this->input->post("email"), "tt9814023@gmail.com");
+        $results = $validator->validate();
+        
+        if($results[$email]){
+            //si l'email renseigné peut recevoir des mails
+            $subject = "Votre inscription sur le site du cours UX a été effectuée";
+            $message = "Voici vos identifiant pour vous connecter sur le site du cours UX : <br>  <b>Email : </b>" . $email . "<br>   <b>Mot de passe : </b>" . $mdp;
+    
+            $params = array(
+                $email,
+                $subject,
+                $message
+            );
+            $this->load->library('EmailSender', $params);
+        }
     }
 }

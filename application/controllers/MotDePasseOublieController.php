@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+require './vendor/autoload.php';
+use SMTPValidateEmail\Validator as SmtpEmailValidator;
+
 /**
  * Ce controller est le controller de la rubrique
  * mot de passe oubliée dans la page de connexion
@@ -60,8 +63,16 @@ class MotDePasseOublieController extends CI_Controller
         $user = $this->user_model->_getUser($this->input->post("email"));
 
         if ($user) {
-            $this->sendEmail($this->input->post("email"), $user);
-            $this->session->set_flashdata("envoie_mdp", "Vos identifiants ont été envoyés sur votre boîte mail.");
+            $validator = new SmtpEmailValidator($this->input->post("email"), "tt9814023@gmail.com");
+            $results   = $validator->validate();    
+            
+            if($results[$this->input->post("email")]){
+                //l'adresse mail renseignée peut recevoir des mails
+                $this->sendEmail($this->input->post("email"), $user);
+                $this->session->set_flashdata("envoie_mdp", "Vos identifiants ont été envoyés sur votre boîte mail.");
+            } else{
+                $this->session->set_flashdata("envoie_mdp", "Cette adresse mail n'est liée à aucun compte.");
+            }
         } else {
             $this->session->set_flashdata("envoie_mdp", "Cette adresse mail n'est liée à aucun compte.");
         }

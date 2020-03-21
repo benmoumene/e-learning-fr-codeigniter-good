@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+require './vendor/autoload.php';
+use SMTPValidateEmail\Validator as SmtpEmailValidator;
 /**
  * Ce controller est le controller de la rubrique compte
  * permettant à l'utilisateur de modifier ses informations(son email, son mot de passe)
@@ -48,8 +50,19 @@ class CompteController extends CI_Controller
     public function hasChange()
     {
         if (filter_var($this->input->post('email'), FILTER_VALIDATE_EMAIL)) {
-            $this->changeEmail($this->input->post('email'));
-            redirect(site_url("compte"));
+            
+            $validator = new SmtpEmailValidator($this->input->post("email"), "tt9814023@gmail.com");
+            $results   = $validator->validate();
+            
+            if($results[$this->input->post("email")]){
+                //l'adresse mail renseignée peut recevoir des mails
+                $this->changeEmail($this->input->post('email'));
+                redirect(site_url("compte"));
+            }
+            else{
+                echo 'mauvais mail';
+                //redirect(site_url("compte"));
+            }
         } else {
             redirect(site_url("compte"));
         }
