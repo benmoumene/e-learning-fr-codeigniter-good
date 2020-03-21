@@ -50,28 +50,19 @@ class EmailController extends CI_Controller
      */
     public function send_mail()
     {
-        $from_email = $this->input->post('email');
-        $this->load->library('email');
-        /*on appel le fichier de config email(non natif) qui contient un
-         * tableau de config pour envoyer des emails
-         * */
-        $this->config->load('email');
+        $params = array(
+            $this->input->post('email'),
+            $this->input->post('subject'),
+            $this->input->post('message'),
+            $this->input->post('email')
+        );
+        $response = $this->load->library('EmailSender', $params);
         
-        $config = $this->config->item('email');
-        
-        $config = $this->config->item($config);
-        $this->email->initialize($config);
-        $this->email->set_newline("\r\n");
-
-        $this->email->from($this->input->post('email'), $this->input->post('name'));
-        $this->email->to($config['smtp_user']);
-        $this->email->subject($this->input->post('subject'));
-        $this->email->message($this->input->post('message'));
-        // Send mail
-        if ($this->email->send())
+        if ($response)
             $this->session->set_flashdata("email_sent", "Congragulation Email Send Successfully.");
         else
             $this->session->set_flashdata("email_sent", "You have encountered an error");
+        
         $this->load->view('contact');
     }
 }

@@ -8,6 +8,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
  */
 class Accueil extends CI_Controller
 {
+
     /**
      * Charge les fonctions utilisees par
      * la page d'accueil

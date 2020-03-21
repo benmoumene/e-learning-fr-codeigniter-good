@@ -9,7 +9,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
  */
 class CompteController extends CI_Controller
 {
-    
+
     /**
      * Charge les fonctions utilise par
      * la page d'accueil et lance
@@ -47,13 +47,16 @@ class CompteController extends CI_Controller
      */
     public function hasChange()
     {
-        $this->changeEmail($this->input->post('email'));
-        
-        redirect(site_url("compte"));
+        if (filter_var($this->input->post('email'), FILTER_VALIDATE_EMAIL)) {
+            $this->changeEmail($this->input->post('email'));
+            redirect(site_url("compte"));
+        } else {
+            redirect(site_url("compte"));
+        }
     }
 
     /**
-     * Cette methode appelle le model Eleve
+     * Cette methode appelle le model user
      * et lui demande de modifier l'email dans
      * la base de donnees
      *
@@ -62,11 +65,11 @@ class CompteController extends CI_Controller
     public function changeEmail(string $newmail)
     {
         $this->load->model('user_model');
-        /*si l'utilisateur connecté est un eleve alors le cookie(contenant email) commence par ux_e*/
+        /* si l'utilisateur connecté est un eleve alors le cookie(contenant email) commence par ux_e */
         $oldmail = $this->encrypt->decode(get_cookie('ux_e189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'));
-        
-        if($oldmail === ''){
-            /*l'utilisateur connecté est un enseignant*/
+
+        if ($oldmail === '') {
+            /* l'utilisateur connecté est un enseignant */
             $oldmail = $this->encrypt->decode(get_cookie('ux_ad_189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'));
         }
         $this->user_model->updateUserDetails($oldmail, $newmail);

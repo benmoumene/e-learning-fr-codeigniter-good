@@ -11,11 +11,11 @@ class ExcelController extends CI_Controller
     {
         parent::__construct();
         $this->load->helper('cookie');
-        /*REDIRECT IF CURRENT USER IS NOT ADMIN*/
-        if (is_null(get_cookie('ux_ad_1C89DS7CDS8CD89CSD7CSDDSVDSIJPIOCDS')) && is_null(get_cookie('ux_ad_189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'))){
+        /* REDIRECT IF CURRENT USER IS NOT ADMIN */
+        if (is_null(get_cookie('ux_ad_1C89DS7CDS8CD89CSD7CSDDSVDSIJPIOCDS')) && is_null(get_cookie('ux_ad_189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'))) {
             redirect(site_url("accueil"));
         }
-        
+
         $this->load->library('session');
     }
 
@@ -147,26 +147,14 @@ class ExcelController extends CI_Controller
 
     public function send_email_to_students($email, $mdp)
     {
-        // Load email library
-        $this->load->library('email');
-        /*on appel le fichier de config email(non natif) qui contient un
-         * tableau de config pour envoyer des emails
-         * */
-        $this->config->load('email');
-        $config = $this->config->item('email');
-       
-        $this->email->initialize($config);
-        $this->email->set_newline("\r\n");
+        $subject = "Votre inscription sur le site du cours UX a été effectuée";
+        $message = "Voici vos identifiant pour vous connecter sur le site du cours UX : <br>  <b>Email : </b>" . $email . "<br>   <b>Mot de passe : </b>" . $mdp;
 
-        $this->email->from($config['smtp_user']);
-        $this->email->to($email);
-        $this->email->subject("Votre inscription sur le site du cours UX a été effectuée");
-        $this->email->message("Voici vos identifiant pour vous connecter sur le site du cours UX : <br>  <b>Email : </b>" . $email . "<br>   <b>Mot de passe : </b>" . $mdp);
-        // Send mail
-        if ($this->email->send()) {
-            return true;
-        }
-
-        return false;
+        $params = array(
+            $email,
+            $subject,
+            $message
+        );
+        $this->load->library('EmailSender', $params);
     }
 }

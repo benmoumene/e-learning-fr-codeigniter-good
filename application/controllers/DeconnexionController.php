@@ -9,6 +9,7 @@
  */
 class DeconnexionController extends CI_Controller
 {
+
     /**
      * Charge les fonctions utilisees par
      * la déconnexion
@@ -21,7 +22,7 @@ class DeconnexionController extends CI_Controller
     }
 
     /**
-     * function qui supprime les cookies de connexion 
+     * function qui supprime les cookies de connexion
      * existants et enfin redirige vers l'accueil
      *
      * @uses delete_cookie()

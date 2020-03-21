@@ -3,16 +3,20 @@
 if (! defined('BASEPATH'))
     exit('No direct script access allowed');
 
+/**
+ * Ce model sert à gérer la partie connexion(vérifier les identifiants)
+ * et égalemment à la modification des informations d'un utilisateur
+ * (quand ce dernier est connecté)
+ *
+ * @author Mickael GUDIN <mickaelgudin@gmail.com>
+ */
 class User_model extends CI_MODEL
 {
     private $_cookie = array(
         'expire' => '86500',
         'path' => '/'
     );
-    private $_cookiesId = array(
-        "name" => "189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD",
-        "password" => "1C89DS7CDS8CD89CSD7CSDDSVDSIJPIOCDS"
-    );
+    
     
     private $_table = "enseignant";
 
