@@ -18,5 +18,8 @@
 	},
 	"suggest" : {
 		"paragonie/random_compat" : "Provides better randomness in PHP 5.x"
+	},
+	"require-dev" : {
+		"kenjis/ci-phpunit-test" : "^0.17.3"
 	}
 }

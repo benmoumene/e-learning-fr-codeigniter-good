@@ -11,13 +11,13 @@
 
 namespace Symfony\Component\Console\Helper;
 
-use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\StreamableInputInterface;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
+use Symfony\Component\Console\Output\ConsoleSectionOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
@@ -65,7 +65,7 @@ class QuestionHelper extends Helper
 
                 $default = explode(',', $default);
                 foreach ($default as $k => $v) {
-                    $v = trim($v);
+                    $v = $question->isTrimmable() ? trim($v) : $v;
                     $default[$k] = isset($choices[$v]) ? $choices[$v] : $v;
                 }
             }
@@ -86,46 +86,6 @@ class QuestionHelper extends Helper
         };
 
         return $this->validateAttempts($interviewer, $output, $question);
-    }
-
-    /**
-     * Sets the input stream to read from when interacting with the user.
-     *
-     * This is mainly useful for testing purpose.
-     *
-     * @deprecated since version 3.2, to be removed in 4.0. Use
-     *             StreamableInputInterface::setStream() instead.
-     *
-     * @param resource $stream The input stream
-     *
-     * @throws InvalidArgumentException In case the stream is not a resource
-     */
-    public function setInputStream($stream)
-    {
-        @trigger_error(sprintf('The %s() method is deprecated since Symfony 3.2 and will be removed in 4.0. Use %s::setStream() instead.', __METHOD__, StreamableInputInterface::class), E_USER_DEPRECATED);
-
-        if (!\is_resource($stream)) {
-            throw new InvalidArgumentException('Input stream must be a valid resource.');
-        }
-
-        $this->inputStream = $stream;
-    }
-
-    /**
-     * Returns the helper's input stream.
-     *
-     * @deprecated since version 3.2, to be removed in 4.0. Use
-     *             StreamableInputInterface::getStream() instead.
-     *
-     * @return resource
-     */
-    public function getInputStream()
-    {
-        if (0 === \func_num_args() || func_get_arg(0)) {
-            @trigger_error(sprintf('The %s() method is deprecated since Symfony 3.2 and will be removed in 4.0. Use %s::getStream() instead.', __METHOD__, StreamableInputInterface::class), E_USER_DEPRECATED);
-        }
-
-        return $this->inputStream;
     }
 
     /**
@@ -156,13 +116,14 @@ class QuestionHelper extends Helper
         $this->writePrompt($output, $question);
 
         $inputStream = $this->inputStream ?: STDIN;
-        $autocomplete = $question->getAutocompleterValues();
+        $autocomplete = $question->getAutocompleterCallback();
 
         if (null === $autocomplete || !Terminal::hasSttyAvailable()) {
             $ret = false;
             if ($question->isHidden()) {
                 try {
-                    $ret = trim($this->getHiddenResponse($output, $inputStream));
+                    $hiddenResponse = $this->getHiddenResponse($output, $inputStream, $question->isTrimmable());
+                    $ret = $question->isTrimmable() ? trim($hiddenResponse) : $hiddenResponse;
                 } catch (RuntimeException $e) {
                     if (!$question->isHiddenFallback()) {
                         throw $e;
@@ -175,10 +136,17 @@ class QuestionHelper extends Helper
                 if (false === $ret) {
                     throw new RuntimeException('Aborted.');
                 }
-                $ret = trim($ret);
+                if ($question->isTrimmable()) {
+                    $ret = trim($ret);
+                }
             }
         } else {
-            $ret = trim($this->autocomplete($output, $question, $inputStream, \is_array($autocomplete) ? $autocomplete : iterator_to_array($autocomplete, false)));
+            $autocomplete = $this->autocomplete($output, $question, $inputStream, $autocomplete);
+            $ret = $question->isTrimmable() ? trim($autocomplete) : $autocomplete;
+        }
+
+        if ($output instanceof ConsoleSectionOutput) {
+            $output->addContent($ret);
         }
 
         $ret = \strlen($ret) > 0 ? $ret : $question->getDefault();
@@ -209,11 +177,9 @@ class QuestionHelper extends Helper
     }
 
     /**
-     * @param string $tag
-     *
      * @return string[]
      */
-    protected function formatChoiceQuestionChoices(ChoiceQuestion $question, $tag)
+    protected function formatChoiceQuestionChoices(ChoiceQuestion $question, string $tag)
     {
         $messages = [];
 
@@ -246,17 +212,15 @@ class QuestionHelper extends Helper
      * Autocompletes a question.
      *
      * @param resource $inputStream
-     *
-     * @return string
      */
-    private function autocomplete(OutputInterface $output, Question $question, $inputStream, array $autocomplete)
+    private function autocomplete(OutputInterface $output, Question $question, $inputStream, callable $autocomplete): string
     {
         $fullChoice = '';
         $ret = '';
 
         $i = 0;
         $ofs = -1;
-        $matches = $autocomplete;
+        $matches = $autocomplete($ret);
         $numMatches = \count($matches);
 
         $sttyMode = shell_exec('stty -g');
@@ -285,7 +249,7 @@ class QuestionHelper extends Helper
 
                 if (0 === $i) {
                     $ofs = -1;
-                    $matches = $autocomplete;
+                    $matches = $autocomplete($ret);
                     $numMatches = \count($matches);
                 } else {
                     $numMatches = 0;
@@ -313,12 +277,21 @@ class QuestionHelper extends Helper
             } elseif (\ord($c) < 32) {
                 if ("\t" === $c || "\n" === $c) {
                     if ($numMatches > 0 && -1 !== $ofs) {
-                        $ret = $matches[$ofs];
+                        $ret = (string) $matches[$ofs];
                         // Echo out remaining chars for current match
                         $remainingCharacters = substr($ret, \strlen(trim($this->mostRecentlyEnteredValue($fullChoice))));
                         $output->write($remainingCharacters);
                         $fullChoice .= $remainingCharacters;
                         $i = self::strlen($fullChoice);
+
+                        $matches = array_filter(
+                            $autocomplete($ret),
+                            function ($match) use ($ret) {
+                                return '' === $ret || 0 === strpos($match, $ret);
+                            }
+                        );
+                        $numMatches = \count($matches);
+                        $ofs = -1;
                     }
 
                     if ("\n" === $c) {
@@ -349,7 +322,7 @@ class QuestionHelper extends Helper
                 $numMatches = 0;
                 $ofs = 0;
 
-                foreach ($autocomplete as $value) {
+                foreach ($autocomplete($ret) as $value) {
                     // If typed characters match the beginning chunk of value (e.g. [AcmeDe]moBundle)
                     if (0 === strpos($value, $tempRet)) {
                         $matches[$numMatches++] = $value;
@@ -377,7 +350,7 @@ class QuestionHelper extends Helper
         return $fullChoice;
     }
 
-    private function mostRecentlyEnteredValue($entered)
+    private function mostRecentlyEnteredValue(string $entered): string
     {
         // Determine the most recent value that the user entered
         if (false === strpos($entered, ',')) {
@@ -395,14 +368,12 @@ class QuestionHelper extends Helper
     /**
      * Gets a hidden response from user.
      *
-     * @param OutputInterface $output      An Output instance
-     * @param resource        $inputStream The handler resource
-     *
-     * @return string The answer
+     * @param resource $inputStream The handler resource
+     * @param bool     $trimmable   Is the answer trimmable
      *
      * @throws RuntimeException In case the fallback is deactivated and the response cannot be hidden
      */
-    private function getHiddenResponse(OutputInterface $output, $inputStream)
+    private function getHiddenResponse(OutputInterface $output, $inputStream, bool $trimmable = true): string
     {
         if ('\\' === \DIRECTORY_SEPARATOR) {
             $exe = __DIR__.'/../Resources/bin/hiddeninput.exe';
@@ -414,7 +385,8 @@ class QuestionHelper extends Helper
                 $exe = $tmpExe;
             }
 
-            $value = rtrim(shell_exec($exe));
+            $sExec = shell_exec($exe);
+            $value = $trimmable ? rtrim($sExec) : $sExec;
             $output->writeln('');
 
             if (isset($tmpExe)) {
@@ -434,8 +406,9 @@ class QuestionHelper extends Helper
             if (false === $value) {
                 throw new RuntimeException('Aborted.');
             }
-
-            $value = trim($value);
+            if ($trimmable) {
+                $value = trim($value);
+            }
             $output->writeln('');
 
             return $value;
@@ -444,7 +417,8 @@ class QuestionHelper extends Helper
         if (false !== $shell = $this->getShell()) {
             $readCmd = 'csh' === $shell ? 'set mypassword = $<' : 'read -r mypassword';
             $command = sprintf("/usr/bin/env %s -c 'stty -echo; %s; stty echo; echo \$mypassword'", $shell, $readCmd);
-            $value = rtrim(shell_exec($command));
+            $sCommand = shell_exec($command);
+            $value = $trimmable ? rtrim($sCommand) : $sCommand;
             $output->writeln('');
 
             return $value;
@@ -456,9 +430,7 @@ class QuestionHelper extends Helper
     /**
      * Validates an attempt.
      *
-     * @param callable        $interviewer A callable that will ask for a question and return the result
-     * @param OutputInterface $output      An Output instance
-     * @param Question        $question    A Question instance
+     * @param callable $interviewer A callable that will ask for a question and return the result
      *
      * @return mixed The validated response
      *
@@ -474,7 +446,7 @@ class QuestionHelper extends Helper
             }
 
             try {
-                return \call_user_func($question->getValidator(), $interviewer());
+                return $question->getValidator()($interviewer());
             } catch (RuntimeException $e) {
                 throw $e;
             } catch (\Exception $error) {
