@@ -52,7 +52,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 $route['default_controller'] = 'Accueil';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
-$route['email'] = 'EmailController';
+$route['contact'] = 'EmailController';
 $route['acces'] = 'ExcelController';
 $route['cours'] = 'CoursController';
 $route['connexion'] = 'ConnexionController';

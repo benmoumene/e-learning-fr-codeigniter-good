@@ -7,6 +7,7 @@ class CoursController extends CI_Controller
     function __construct()
     {
         parent::__construct();
+        $this->load->helper('cookie');
         /* REDIRECT IF CURRENT USER IS NOT ADMIN */
         if (is_null(get_cookie('ux_ad_1C89DS7CDS8CD89CSD7CSDDSVDSIJPIOCDS')) && is_null(get_cookie('ux_ad_189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'))) {
             redirect(site_url("accueil"));
