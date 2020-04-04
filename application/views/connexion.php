@@ -1,51 +1,34 @@
-<html>
-<head>
-	<title>Connexion</title>
-<link
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-	crossorigin="anonymous">
-</head>
-<body>
+<?php $this->load->view("header"); ?>
 
-	<!-- AFFICHER LE MENU -->
-<?php $this->load->view("Menu"); ?>
-
-
-
-
-<body>
-	<style>
-.nav-link {
-	color: white;
-}
-
-.bg-light {
-	background-color: rgb(51, 153, 255) !important;
-}
-</style>
-
-
-	<div id="container">
-    <?php
+<div class="card connexion" style="width: 60%;margin: 20px auto">
+    <div class="card-body">
+        
+    	<?php
         echo form_open('/ConnexionController/connexion');
-    ?>
-    	<label>Email : <input type="email" id="email" name="email" /></label>
-		<label>Mot de passe : <input type="password" id="mdp" name="mdp" /></label>
+    	?>    
 
-		<input type="submit" name="connexion" value="se connecter" /><br>
-           
+    <center>
+    	  <h5 class="card-title">Se connecter</h5>
+          <div class="justify-content-md-center">
+            <div class="col-md-4 form-group mb-2">
+              <input type="email" name="email" class="form-control" placeholder="Email (*)">
+              <br>
+              <input type="password" name="mdp" class="form-control" placeholder="Mot de passe (*)">
+            </div>
+            <?php echo form_open('MotDePasseOublieController/index'); ?>
+                <a href="./motdepasseoublie">Mot de passe oubliée? </a>
+            <?php form_close();?>
+          </div>
+          <br>
+           <input class="btn btn-primary col-md-2 col-sm-2" type="submit" name="connexion" value="Connexion" />
+    </center>  
+
     <?php
-        echo form_close();
-        echo $this->session->flashdata('unable_to_connect');
+    echo form_close();
+    echo $this->session->flashdata('unable_to_connect');
     ?>
     
-    
-    
-    <?php echo form_open('MotDePasseOublieController/index'); ?>
-    	<a href="./motdepasseoublie">Mot de passe oublié? </a>
-    <?php form_close();?>
+</div>
 </div>
 
 </body>

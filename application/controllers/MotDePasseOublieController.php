@@ -55,7 +55,7 @@ class MotDePasseOublieController extends CI_Controller
      */
     public function send_password()
     {
-        $this->load->model('user_model');
+        $this->load->model('dao/user_model');
         /*
          * user_model a une methode permettant de retourner
          * le mot de passe d'un user(etudiant ou enseignant)

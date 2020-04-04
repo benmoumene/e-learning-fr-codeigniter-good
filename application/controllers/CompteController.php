@@ -60,8 +60,7 @@ class CompteController extends CI_Controller
                 redirect(site_url("compte"));
             }
             else{
-                echo 'mauvais mail';
-                //redirect(site_url("compte"));
+                redirect(site_url("compte"));
             }
         } else {
             redirect(site_url("compte"));
@@ -77,7 +76,7 @@ class CompteController extends CI_Controller
      */
     public function changeEmail(string $newmail)
     {
-        $this->load->model('user_model');
+        $this->load->model('dao/user_model');
         /* si l'utilisateur connecté est un eleve alors le cookie(contenant email) commence par ux_e */
         $oldmail = $this->encrypt->decode(get_cookie('ux_e189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'));
 

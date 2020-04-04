@@ -59,3 +59,6 @@ $route['connexion'] = 'ConnexionController';
 $route['deconnexion'] = 'DeconnexionController';
 $route['motdepasseoublie'] = 'MotDePasseOublieController';
 $route['compte'] = 'CompteController';
+$route['publications'] = 'PublicationController';
+$route['enseignant'] = 'EnseignantController';
+$route['enseignements'] = 'EnseignementsController';

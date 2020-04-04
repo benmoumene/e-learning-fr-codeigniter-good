@@ -34,7 +34,7 @@ class ConnexionController extends CI_Controller
          * MODEL USER PERMETTANT DE VERIFIER SI LES IDENTIFIANTS
          * CORRESPONDENT A UN ETUDIANT OU A LA PROFESSEUR
          */
-        $this->load->model('user_model');
+        $this->load->model('dao/user_model');
     }
 
     /**
@@ -63,7 +63,9 @@ class ConnexionController extends CI_Controller
      */
     public function connexion()
     {
+        var_dump($_REQUEST);
         if ($this->input->post('email', TRUE) && $this->input->post('mdp', TRUE)) {
+            
             if ($this->user_model->validate($this->input->post('email'), $this->input->post('mdp'))) {
                 /* --ON INITIALISE LES COOKIES-- */
                 $this->setCookieForUser('name', $this->input->post('email'));
@@ -75,6 +77,7 @@ class ConnexionController extends CI_Controller
                 $this->redirect();
             }
         } elseif (get_cookie($this->config->item('cookie_prefix') . $this->_cookiesId['name'], TRUE) && get_cookie($this->config->item('cookie_prefix') . $this->_cookiesId['password'], TRUE)) {
+            
             $mail = $this->encrypt->decode(get_cookie($this->config->item('cookie_prefix') . $this->_cookiesId['name']));
             $password = $this->encrypt->decode(get_cookie($this->config->item('cookie_prefix') . $this->_cookiesId['password']));
 
@@ -83,9 +86,7 @@ class ConnexionController extends CI_Controller
                 $hasFailed = true;
 
             $this->redirect($hasFailed);
-        } elseif ($this->router->fetch_class() != "connexion") {
-            $this->redirect();
-        }
+        } 
     }
 
     /**

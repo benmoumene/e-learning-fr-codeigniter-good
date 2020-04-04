@@ -1,48 +1,22 @@
-<?php
-defined('BASEPATH') or exit('No direct script access allowed');
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<link
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-	crossorigin="anonymous">
-<title>Site UX</title>
-</head>
+<?php $this->load->view("header"); ?>
 
-<!-- AFFICHER LE MENU -->
-<?php $this->load->view("Menu"); ?>
-
-
-<body>
-	<style>
-.nav-link {
-	color: white;
-}
-
-.bg-light {
-	background-color: rgb(51, 153, 255) !important;
-}
-</style>
-
-
-	<div id="container">
-		<h1>Mot de passe oublié ?</h1>
+<div class="card connexion" style="width: 60%;margin: 20px auto">
+    <div class="card-body">
+        
 	<?php
-echo form_open('/MotDePasseOublieController/send_password');
-?>
-	<div id="body">
-			<label>Email : <input type="email" id="email" name="email" /></label>
-			<input type="submit" name="connexion" value="envoyer mot de passe" /><br>
-			<br>
-		</div>
+        echo form_open('/MotDePasseOublieController/send_password');
+    	?>
+    <center>	
+    	<div col-md-4 form-group mb-2>
+    		<h5 class="card-title">Mot de passe oublié ?</h5>
+    		<input type="email" class="form-control" style="width: 30%;" id="email" name="email" placeholder="Email (*)"/><br>
+    	 	<input class="btn btn-primary" type="submit" name="connexion" value="Envoyer mot de passe" /><br><br>
+    		<span style="color:red;"><?= $this->session->flashdata('envoie_mdp');?></span>
+    	</div>
+	</center>
 	<?php echo  form_close();?>
-	<span><?= $this->session->flashdata('envoie_mdp');?></span>
 	</div>
-
+</div>
 
 </body>
 </html>

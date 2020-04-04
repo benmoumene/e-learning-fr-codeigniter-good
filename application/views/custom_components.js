@@ -3,6 +3,6 @@ Vue.component('menu-item', {
 	props: {
 		'nom' : String
 	}
-})
+});
 
-new Vue({el : ".nav"})
+new Vue({el : ".navbar-nav"});
