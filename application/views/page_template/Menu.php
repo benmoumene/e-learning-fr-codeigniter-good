@@ -11,6 +11,8 @@ else if(!is_null(get_cookie('ux_e1C89DS7CDS8CD89CSD7CSDDSVDSIJPIOCDS')) && !is_n
     $user = "etudiant";
     $menuItems = ["deconnexion","publications", "enseignant", "enseignements", "contact", "compte"];
 }
+
+$_SESSION['user'] = $user;
 ?>
 <link rel="stylesheet" type="text/css" href="/projetL3/application/views/style/custom.css"> 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">

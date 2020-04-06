@@ -37,7 +37,10 @@ class ExcelController extends CI_Controller
         $this->load->helper('cookie');
         $this->load->helper('form');
         $import = $this->session->flashdata('import_success');
-        $this->load->view('creer_acces');
+        
+        $this->load->model("dao/ClasseDAO");
+        $data['classeList'] = $this->ClasseDAO->getListClasse();
+        $this->load->view('creer_acces', $data);
     }
 
     /**
@@ -131,6 +134,9 @@ class ExcelController extends CI_Controller
                     $nouvelEleve->setNom($eleve[0]);
                     $nouvelEleve->setPrenom($eleve[1]);
                     $nouvelEleve->setEmail($eleve[2]);
+                    
+                    $classe = $this->doctrine->em->find("Classe", $_POST["classe_id"]);
+                    $nouvelEleve->setClasse($classe);
                     /* Le mot de passe sera genere par le helper appelle dans la methode set */
 
                     $this->load->library('encrypt');
@@ -166,7 +172,7 @@ class ExcelController extends CI_Controller
 
     public function send_email_to_students($email, $mdp)
     {
-        $validator = new SmtpEmailValidator($this->input->post("email"), "tt9814023@gmail.com");
+        $validator = new SmtpEmailValidator($email, "tt9814023@gmail.com");
         $results = $validator->validate();
         
         if($results[$email]){

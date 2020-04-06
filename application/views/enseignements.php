@@ -1,34 +1,44 @@
-<?php $this->load->view("page_template/header"); 
+<?php
 
-//on recupere les id des cours de chaque document
+$this->load->view("page_template/header");
+
+// on recupere les id des cours de chaque document
 $idsCours = array();
-foreach($documents as $document){
-    array_push($idsCours, $document['cours_id']);    
+foreach ($documents as $document) {
+    array_push($idsCours, $document['cours_id']);
 }
 ?>
 
-<div class="list-group">
+<div class="card" style="width: 60%; margin: 20px auto">
+	<bonjour>
+	<div class="card-body">
+
+		<div class="list-group">
   
-  <?php foreach ($coursList as $cours): ?>
-          <a href="index.php?cours=<?=$cours['id']?>" class="list-group-item list-group-item-action flex-column align-items-start coursIntitule">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1"><?=$cours["intitule"]?></h5>
-              <small>3 days ago</small>
-            </div>
-            <p class="mb-1">Description du cours</p>
-          </a>
-      
-     <?php foreach($documents as $document):?>
-          <?php if($document['cours_id'] == $cours['id']): ?>    
-              <a href="<?=$document["path"]?>" class="list-group-item list-group-item-action flex-column align-items-start ml-4 documents documentsCours<?=$document['cours_id']?>" style="display: none;">
-                <div class="d-flex w-100 justify-content-between">
-                  <h5 class="mb-1"><?=$document["nom"]?></h5>
-                </div>
-              </a>
-          <?php endif;?>
-      <?php endforeach;?>
+      <?php foreach ($coursList as $cours): ?>
+              <a href="index.php?cours=<?=$cours['id']?>"
+    				class="list-group-item list-group-item-action flex-column align-items-start coursIntitule">
+    				<div class="d-flex w-100 justify-content-between">
+    					<h5 class="mb-1"><?=$cours["intitule"]?></h5>
+    				</div>
+    				<p class="mb-1">Description du cours</p>
+    			</a>
+          
+         <?php foreach($documents as $document):?>
+              <?php if($document['cours_id'] == $cours['id']): ?>    
+                  <a href="<?=$document["path"]?>"
+    				class="list-group-item list-group-item-action flex-column align-items-start ml-4 documents documentsCours<?=$document['cours_id']?>"
+    				style="display: none;">
+    				<div class="d-flex w-100 justify-content-between">
+    					<h5 class="mb-1"><?=$document["nom"]?></h5>
+    				</div>
+    			</a>
+              <?php endif;?>
+          <?php endforeach;?>
       
   <?php endforeach;?>
+		</div>
+	</div>
 </div>
 
 

@@ -42,6 +42,30 @@ class Eleve
     private $motDePasse;
 
     /**
+     * Un document concerne un cours
+     *
+     * @ManyToOne(targetEntity="Classe", inversedBy="etudiants")
+     * @JoinColumn(nullable=true, name="classe_id", referencedColumnName="id")
+     */
+    private $classe;
+    
+    /**
+     * @return mixed
+     */
+    public function getClasse()
+    {
+        return $this->classe;
+    }
+
+    /**
+     * @param int $classe
+     */
+    public function setClasse($classe)
+    {
+        $this->classe = $classe;
+    }
+
+    /**
      * Get id
      *
      * @return integer
@@ -149,6 +173,7 @@ class Eleve
 
         return $password;
     }
+    
 }
 
 ?>

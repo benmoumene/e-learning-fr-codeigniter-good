@@ -8,7 +8,6 @@ if (! defined('BASEPATH'))
  */
 class Document
 {
-
     /**
      *
      * @Id
@@ -36,6 +35,7 @@ class Document
      * @JoinColumn(nullable=true, name="cours_id", referencedColumnName="id")
      */
     private $cours;
+    
 
     public function __construct()
     {}

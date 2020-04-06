@@ -1,5 +1,8 @@
 <?php $this->load->view("page_template/header"); ?>
 
+<div class="card" style="width: 60%;margin: 20px auto">
+    <div class="card-body">
+
 <div class="list-group">
   <a href="publications?numero=1" class="list-group-item list-group-item-action flex-column align-items-start">
     <div class="d-flex w-100 justify-content-between">
@@ -15,6 +18,9 @@
     </div>
     <p class="mb-1">Description publication 2</p>
   </a>
+</div>
+
+</div>
 </div>
 
 <?php $this->load->view("page_template/footer");?>

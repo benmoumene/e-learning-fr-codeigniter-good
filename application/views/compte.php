@@ -13,10 +13,11 @@
     		</div>
 		</center>
 		
-		
-		<a id="fichierImportation" href="/projetL3/uploads/modele_insertion/modele_importation.xlsx">
-			<img height="100" alt="fichier d'importation" src="/projetL3/application/views/images/excel.jpg"/>
-		</a>
+		<?php if($_SESSION['user'] == 'admin'): ?>
+    		<a id="fichierImportation" href="/projetL3/uploads/modele_insertion/modele_importation.xlsx">
+    			<img height="100" alt="fichier d'importation" src="/projetL3/application/views/images/excel.jpg"/>
+    		</a>
+		<?php endif;?>
 		
 		<?php echo form_close();?>
 </div>
