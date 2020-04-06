@@ -88,13 +88,13 @@ class ComposerStaticInit91799ce1aa541090f11f991fade7fc38
             'Symfony\\Contracts\\Service\\' => 26,
             'Symfony\\Component\\Yaml\\' => 23,
             'Symfony\\Component\\Console\\' => 26,
+            'SMTPValidateEmail\\' => 18,
         ),
         'P' => 
         array (
             'Psr\\SimpleCache\\' => 16,
             'Psr\\Container\\' => 14,
             'Prophecy\\' => 9,
-            'PhpParser\\' => 10,
             'PhpOffice\\PhpSpreadsheet\\' => 25,
             'PackageVersions\\' => 16,
         ),
@@ -157,6 +157,10 @@ class ComposerStaticInit91799ce1aa541090f11f991fade7fc38
         array (
             0 => __DIR__ . '/..' . '/symfony/console',
         ),
+        'SMTPValidateEmail\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zytzagoo/smtp-validate-email/src',
+        ),
         'Psr\\SimpleCache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
@@ -168,10 +172,6 @@ class ComposerStaticInit91799ce1aa541090f11f991fade7fc38
         'Prophecy\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpspec/prophecy/src/Prophecy',
-        ),
-        'PhpParser\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
         ),
         'PhpOffice\\PhpSpreadsheet\\' => 
         array (

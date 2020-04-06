@@ -1,4 +1,4 @@
-<?php $this->load->view("header"); 
+<?php $this->load->view("page_template/header"); 
       echo form_open('/EmailController/send_mail');
 ?>
 	<!--Section: Contact v.2-->
@@ -80,6 +80,8 @@
 echo form_close();
 echo $this->session->flashdata('email_sent');
 ?>
+
+<?php $this->load->view("page_template/footer");?>
 </body>
 </html>
 

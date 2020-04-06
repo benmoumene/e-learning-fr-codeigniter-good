@@ -1,4 +1,4 @@
-<?php $this->load->view("header"); ?>
+<?php $this->load->view("page_template/header"); ?>
 <div class="card" style="width: 60%;margin: 20px auto">
     <div class="card-body">
 		<?php echo form_open('/CompteController/hasChange');?>
@@ -12,8 +12,17 @@
     			</div>
     		</div>
 		</center>
+		
+		
+		<a id="fichierImportation" href="/projetL3/uploads/modele_insertion/modele_importation.xlsx">
+			<img height="100" alt="fichier d'importation" src="/projetL3/application/views/images/excel.jpg"/>
+		</a>
+		
 		<?php echo form_close();?>
+</div>
 </div>
 
 </body>
+
+<?php $this->load->view("page_template/footer");?>
 </html>

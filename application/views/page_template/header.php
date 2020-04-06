@@ -8,4 +8,4 @@
 
 <body class="body">
 <!-- AFFICHER LE MENU -->
-<?php $this->load->view("Menu"); ?>
+<?php $this->load->view("page_template/Menu"); ?>

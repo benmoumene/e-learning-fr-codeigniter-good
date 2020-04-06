@@ -111,8 +111,22 @@ class ExcelController extends CI_Controller
         $emailSent = true;
         $i = 0;
         foreach ($eleves as $eleve) {
-            if ($i ++ > 0) {
-                if (isset($eleve[0]) && isset($eleve[1])) {
+            if($i == 0){
+                /*verification que la premiere ligne(entete)
+                 *corresponde au modèle du fichier 
+                 *d'importation disponible dans la rubrique
+                 *compte de l'enseignante connecté
+                 **/
+                if(isset($eleve[0]) && isset($eleve[1]) && isset($eleve[2])){
+                    if($eleve[0] == "nom" && $eleve[1]=="prenom" && $eleve[2] != "email"){
+                        $this->session->set_flashdata("import_success", "Veuillez vérifier la syntaxe du fichier d'importation.");
+                        redirect(site_url("acces"));
+                    }
+                }
+            }
+            
+            else if ($i > 0) {
+                if (isset($eleve[0]) && isset($eleve[1]) && isset($eleve[2])) {
                     $nouvelEleve = new Eleve();
                     $nouvelEleve->setNom($eleve[0]);
                     $nouvelEleve->setPrenom($eleve[1]);
@@ -140,6 +154,8 @@ class ExcelController extends CI_Controller
                     }
                 }
             }
+            
+            $i++;
         }
 
         if ($emailSent) {

@@ -19,6 +19,7 @@ class EnseignementsController extends CI_Controller
         $this->load->helper('cookie');
         $this->load->library('session');
         $this->load->model("dao/CoursDAO");
+        $this->load->model("dao/DocumentDAO");
     }
     
     /**
@@ -28,7 +29,11 @@ class EnseignementsController extends CI_Controller
      */
     public function index()
     {
-        $this->session->set_flashdata("coursList", $this->CoursDAO->getListCours());
-        $this->load->view('enseignements');
+        $data["coursList"] = $this->CoursDAO->getListCours();
+        
+        //on recupere les documents par cours(Dictionnaire)
+        $data["documents"] = $this->DocumentDAO->getDocumentsList();
+        
+        $this->load->view('enseignements', $data);
     }
 }

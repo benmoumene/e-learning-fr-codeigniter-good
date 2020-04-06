@@ -1,4 +1,4 @@
-<?php $this->load->view("header"); ?>
+<?php $this->load->view("page_template/header"); ?>
 
 <div class="card connexion" style="width: 60%;margin: 20px auto">
     <div class="card-body">
@@ -17,6 +17,8 @@
 	<?php echo  form_close();?>
 	</div>
 </div>
+
+<?php $this->load->view("page_template/footer");?>
 
 </body>
 </html>

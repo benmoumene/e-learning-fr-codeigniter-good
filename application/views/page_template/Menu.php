@@ -41,4 +41,4 @@ else if(!is_null(get_cookie('ux_e1C89DS7CDS8CD89CSD7CSDDSVDSIJPIOCDS')) && !is_n
 </nav>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
-<script src="/projetL3/application/views/custom_components.js"></script>
+<script src="/projetL3/application/views/page_template/custom_components.js"></script>

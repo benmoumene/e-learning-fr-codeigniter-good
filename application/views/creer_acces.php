@@ -1,4 +1,4 @@
-<?php $this->load->view("header"); 
+<?php $this->load->view("page_template/header"); 
 	  echo form_open_multipart('/ExcelController/import');
 ?>
 	<div class="card connexion" style="width: 60%;margin: 20px auto">
@@ -26,7 +26,7 @@
 echo form_close();
 ?>
 
-      
+<?php $this->load->view("page_template/footer");?>      
 </body>
 </html>
 

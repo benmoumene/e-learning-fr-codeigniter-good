@@ -1,11 +1,16 @@
-<?php $this->load->view("header"); ?>
+<?php $this->load->view("page_template/header"); ?>
 
-<div id="container">
-	<h1>Bienvenu sur le site pour le cours UX!</h1>
-	<div id="body">
+<div class="card connexion" style="width: 60%;margin: 20px auto">
+    <div class="card-body">
+	<h1 class="card-title">Bienvenu sur le site pour le cours UX!</h1>
+	<div id="body" class="justify-content-md-center">
 		<p>Sur ce site vous trouverez toutes les ressources necessaires. Les cours seront disponibles sur ce site, vous pourrez egalemment deposer des documents...</p>
 	</div>
-	<p class="footer">Ce site est reserve au partage des ressources pour le cours UX</p>
-</div>
+	
+	</div>
+</div>	
+
+
+<?php $this->load->view("page_template/footer");?>
 </body>
 </html>

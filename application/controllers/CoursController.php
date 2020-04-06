@@ -119,7 +119,7 @@ class CoursController extends CI_Controller
 
                     $document->setCours($cours);
                     $document->setNom($_FILES['file']['name']);
-                    $document->setPath("./uploads/" . $_FILES['file']['name']);
+                    $document->setPath("/projetL3/uploads/" . $_FILES['file']['name']);
                     $this->doctrine->em->persist($document);
                 } else {
                     /*
