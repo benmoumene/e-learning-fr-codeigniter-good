@@ -17,6 +17,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <input type="text" id="nom_cours" name="nom_cours" placeholder="Nom du cours"/><br><br>
                 <label style="font-weight:bold">Documents du cours</label>
             	<input type="file"  class="form-control" id="id" name="files[]" multiple="multiple"/><br>
+            	
+            	<label class="required" style="font-weight:bold">Classes</label><br>
+            	<select name="classes_ids" multiple="multiple">
+            		<?php foreach($classeList as $classe): ?>
+            			<option value="<?=$classe['id']?>"><?=$classe['nom']?></option>
+            		<?php endforeach;?>
+            	</select><br><br>
+            	
             	<input class="btn btn-primary" type="submit" name="creer" value="Créer" /><br><br>
     		</div>
     	</div>

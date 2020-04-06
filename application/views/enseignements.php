@@ -45,16 +45,14 @@ foreach ($documents as $document) {
 <script>
 	
 	const intitules = document.querySelectorAll(".coursIntitule");
-
+	
 	for(let i=0; i<intitules.length; i++){
-    	intitules[i].addEventListener("click", function(){
+    		intitules[i].addEventListener("mouseover", function(){
     		event.preventDefault(intitules[i]);
 
+    		button = intitules[i];
     		//reinitialisation de l'affichage des documents
-			let allDocuments = document.querySelectorAll(".documents");	
-    		for(let j=0; j<allDocuments.length; j++){
-    			allDocuments[j].style.display = "none";
-        	}
+			reinit();
 
         	//on prend le numero du cours sur lequel on vient de cliquer
     		var numeroCours = intitules[i].href.substring(intitules[i].href.indexOf("=")+1);
@@ -66,7 +64,20 @@ foreach ($documents as $document) {
 			}
 			
     	});
+        	
+        intitules[i].addEventListener("blur", function(){
+			reinit();
+        });	
 	}
+
+
+	function reinit(){
+		let allDocuments = document.querySelectorAll(".documents");	
+		for(let j=0; j<allDocuments.length; j++){
+			allDocuments[j].style.display = "none";
+    	}
+	}
+	
 </script>
 
 <?php $this->load->view("page_template/footer");?>

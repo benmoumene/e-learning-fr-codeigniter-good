@@ -7,7 +7,7 @@ use Doctrine\Common\ClassLoader;
 require './vendor/autoload.php';
 use SMTPValidateEmail\Validator as SmtpEmailValidator;
 
-class ExcelController extends CI_Controller
+class AccesController extends CI_Controller
 {
 
     function __construct()

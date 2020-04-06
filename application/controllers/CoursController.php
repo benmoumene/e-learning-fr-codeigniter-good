@@ -31,7 +31,9 @@ class CoursController extends CI_Controller
     {
         $this->load->helper('cookie');
         $this->load->helper('form');
-        $this->load->view('creer_cours');
+        $this->load->model("dao/ClasseDAO");
+        $data['classeList'] = $this->ClasseDAO->getListClasse();
+        $this->load->view('creer_cours', $data);
     }
 
     /**

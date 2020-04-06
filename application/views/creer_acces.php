@@ -1,5 +1,5 @@
 <?php $this->load->view("page_template/header"); 
-	  echo form_open_multipart('/ExcelController/import');
+	  echo form_open_multipart('/AccesController/import');
 ?>
 	<div class="card connexion" style="width: 60%;margin: 20px auto">
     	<div class="card-body">

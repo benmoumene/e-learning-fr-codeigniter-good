@@ -29,8 +29,8 @@ class EnseignementsController extends CI_Controller
      */
     public function index()
     {
-        $data["coursList"] = $this->CoursDAO->getListCours();
         
+        $data["coursList"] = $this->CoursDAO->getListCours();
         //on recupere les documents par cours(Dictionnaire)
         $data["documents"] = $this->DocumentDAO->getDocumentsList();
         
