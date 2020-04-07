@@ -32,6 +32,18 @@ if (! defined('BASEPATH'))
          * @OneToMany(targetEntity="Eleve", mappedBy="cours", cascade="persist")
          */
         private $etudiants;
+        /**
+         * Many Classe have Many Cours.
+         * @ManyToMany(targetEntity="Cours", mappedBy="classes")
+         */
+        private $cours;
+        
+        
+        public function __construct()
+        {
+            $this->etudiants = new ArrayCollection();
+            $this->cours = new ArrayCollection();
+        }
         
         /**
          * @return mixed
@@ -57,13 +69,6 @@ if (! defined('BASEPATH'))
             $this->id = $id;
         }
     
-        public function __construct()
-        {
-            $this->etudiants = new ArrayCollection();
-        }
-
-        
-        
         /**
          * Get id
          *
@@ -99,6 +104,22 @@ if (! defined('BASEPATH'))
         {
             $this->etudiants = $etudiants;
         }
+        /**
+         * @return mixed
+         */
+        public function getCours()
+        {
+            return $this->cours;
+        }
+    
+        /**
+         * @param mixed $cours
+         */
+        public function setCours($cours)
+        {
+            $this->cours = $cours;
+        }
+     
     }
     
     ?>

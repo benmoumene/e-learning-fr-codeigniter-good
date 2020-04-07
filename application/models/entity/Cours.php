@@ -32,10 +32,19 @@ class Cours
      * @OneToMany(targetEntity="Document", mappedBy="cours")
      */
     private $documents;
+    
+    /**
+     * Many Cours have Many Classe.
+     * @ManyToMany(targetEntity="Classe", inversedBy="cours")
+     * @JoinTable(name="cours_classe")
+     */
+    private $classes;
+    
 
     public function __construct()
     {
         $this->documents = new ArrayCollection();
+        $this->classes = new ArrayCollection();
     }
 
     /**
@@ -46,7 +55,7 @@ class Cours
     public function getId()
     {
         return $this->id;
-    }
+    } 
 
     /**
      * Get nom
@@ -77,6 +86,22 @@ class Cours
     {
         $this->documents = $documents;
     }
+    /**
+     * @return mixed
+     */
+    public function getClasses()
+    {
+        return $this->classes;
+    }
+
+    /**
+     * @param mixed $classes
+     */
+    public function setClasses($classes)
+    {
+        $this->classes = $classes;
+    }
+ 
 }
 
 ?>

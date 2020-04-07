@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use Doctrine\Common\ClassLoader;
+
 class CoursController extends CI_Controller
 {
 
@@ -52,15 +54,29 @@ class CoursController extends CI_Controller
      */
     public function creer_cours()
     {
+        $schemaTool = new \Doctrine\ORM\Tools\SchemaTool($this->doctrine->em);
+        $classes = $this->doctrine->em->getMetadataFactory()->getAllMetadata();
+        $schemaTool->updateSchema($classes);
+        
+        $entitiesClassLoader = new ClassLoader('models', rtrim(APPPATH, "/"));
+        $entitiesClassLoader->register();
+        
+        
         // vérification que le champ intitule est rempli
         if ($this->input->post('nom_cours') == '') {
             $this->session->set_flashdata("cours_champ_required", "Veuillez saisir un nom pour le cours");
             redirect(site_url('cours'));
         }
 
-        $this->load->model("entity/cours");
         $cours = new Cours();
-        $this->load->model("entity/document");
+        
+        $classes = array();
+        for($i=0; $i<sizeof($_POST['classes_ids']); $i++){
+            $classe = $this->doctrine->em->find("Classe", $_POST['classes_ids'][$i]);
+            array_push($classes, $classe);
+        }
+        
+        $cours->setClasses($classes);
         $cours->setIntitule($this->input->post('nom_cours'));
         $this->doctrine->em->persist($cours);
 
@@ -72,6 +88,7 @@ class CoursController extends CI_Controller
 
         $this->session->set_flashdata("import", "Le cours a été crée");
         redirect(site_url("cours"));
+        
     }
 
     /**

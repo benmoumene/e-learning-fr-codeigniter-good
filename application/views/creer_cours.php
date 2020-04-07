@@ -19,7 +19,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             	<input type="file"  class="form-control" id="id" name="files[]" multiple="multiple"/><br>
             	
             	<label class="required" style="font-weight:bold">Classes</label><br>
-            	<select name="classes_ids" multiple="multiple">
+            	<select name="classes_ids[]" multiple="multiple">
             		<?php foreach($classeList as $classe): ?>
             			<option value="<?=$classe['id']?>"><?=$classe['nom']?></option>
             		<?php endforeach;?>
