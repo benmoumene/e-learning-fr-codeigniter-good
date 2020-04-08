@@ -24,6 +24,5 @@
 </div>
 
 </body>
-
 <?php $this->load->view("page_template/footer");?>
 </html>

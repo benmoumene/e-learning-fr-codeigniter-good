@@ -7,7 +7,7 @@ body{
     background: #FFFFFF !important;
 }
 
-nav{
+menu{
     background: #FFFFFF !important;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 0 6px rgba(0,0,0,0.23);
     color: #fff;
@@ -20,15 +20,14 @@ nav{
     height: 35px;
 }
 
-nav button i{
+menu button i{
     color: #fff;
     font-size: 30px;
     font-size: 25px;
     margin-top: 10px;
 }
-nav .fa-user-circle-o{
+menu .fa-user-circle-o{
     font-size: 40px;
-    float: right;
     margin-top: 6px;
 }
 .nav-item{
@@ -80,4 +79,8 @@ nav .fa-user-circle-o{
 
 #fichierImportation:after{
 	content:"Fichier d'importation";
+}
+
+.footer{
+	background-color: #5799D7;
 }

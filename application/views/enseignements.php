@@ -9,67 +9,57 @@ foreach ($documents as $document) {
 }
 ?>
 
-<div class="card" style="width: 60%; margin: 20px auto">
-	<bonjour>
+<div class="card" style="width: 60%; margin: 20px auto; margin-bottom: 100px;">
 	<div class="card-body">
-
+		
 		<div class="list-group">
-  
       <?php foreach ($coursList as $cours): ?>
-              <a href="index.php?cours=<?=$cours['id']?>"
-    				class="list-group-item list-group-item-action flex-column align-items-start coursIntitule">
-    				<div class="d-flex w-100 justify-content-between">
-    					<h5 class="mb-1"><?=$cours["intitule"]?></h5>
-    				</div>
-    				<p class="mb-1">Description du cours</p>
-    			</a>
-          
+      		  <list-item lien="index.php?cours=<?=$cours['id']?>" titre="<?=$cours["intitule"]?>" description="Description du cours" class="coursIntitule"></list-item>	
          <?php foreach($documents as $document):?>
               <?php if($document['cours_id'] == $cours['id']): ?>    
-                  <a href="<?=$document["path"]?>"
-    				class="list-group-item list-group-item-action flex-column align-items-start ml-4 documents documentsCours<?=$document['cours_id']?>"
-    				style="display: none;">
-    				<div class="d-flex w-100 justify-content-between">
-    					<h5 class="mb-1"><?=$document["nom"]?></h5>
-    				</div>
-    			</a>
+                  <list-item style="display: none;" lien="<?=$document["path"]?>" titre="<?=$document["nom"]?>" description="" class="ml-4 documents documentsCours<?=$document['cours_id']?>"></list-item>	
               <?php endif;?>
-          <?php endforeach;?>
-      
+          <?php endforeach;?> 
   <?php endforeach;?>
 		</div>
 	</div>
 </div>
 
 
+<script src="/projetL3/application/views/page_template/components_vuejs/list_group.js"></script>
+
 <script>
-	
 	const intitules = document.querySelectorAll(".coursIntitule");
+ 	var isClicked = false;
+ 	var elementClicked;
 	
 	for(let i=0; i<intitules.length; i++){
-    		intitules[i].addEventListener("mouseover", function(){
+    		intitules[i].addEventListener("click", function(){
     		event.preventDefault(intitules[i]);
 
-    		button = intitules[i];
-    		//reinitialisation de l'affichage des documents
-			reinit();
+    		if(isClicked && elementClicked === intitules[i]){ 
+        		reinit();
+				isClicked = false;
+            }
 
-        	//on prend le numero du cours sur lequel on vient de cliquer
-    		var numeroCours = intitules[i].href.substring(intitules[i].href.indexOf("=")+1);
-    		let documents = document.querySelectorAll(".documentsCours"+numeroCours);
-
-    		//on affiche les documents associes au cours sur lequel on vient de clique 
-			for(let k=0; k<documents.length; k++){
-				documents[k].style.display = "";
-			}
-			
+    		else{
+        		isClicked = true;
+        		elementClicked = intitules[i];
+        		button = intitules[i];
+        		//reinitialisation de l'affichage des documents
+    			reinit();
+    
+            	//on prend le numero du cours sur lequel on vient de cliquer
+        		var numeroCours = intitules[i].href.substring(intitules[i].href.indexOf("=")+1);
+        		let documents = document.querySelectorAll(".documentsCours"+numeroCours);
+    
+        		//on affiche les documents associes au cours sur lequel on vient de clique 
+    			for(let k=0; k<documents.length; k++){
+    				documents[k].style.display = "";
+    			}
+    		}
     	});
-        	
-        intitules[i].addEventListener("blur", function(){
-			reinit();
-        });	
 	}
-
 
 	function reinit(){
 		let allDocuments = document.querySelectorAll(".documents");	
