@@ -29,10 +29,32 @@ class EnseignementsController extends CI_Controller
      */
     public function index()
     {
+        $this->load->library('encrypt');
         
-        $data["coursList"] = $this->CoursDAO->getListCours();
+        if($_SESSION['user'] == 'admin'){
+            //on recupere tous les cours
+            $data["coursList"] = $this->CoursDAO->getListCours();
+        } else if($_SESSION['user'] == 'etudiant'){
+            /*on recupere seulement les cours 
+            de la classe de l'etudiant connecté*/
+            $email = $this->encrypt->decode(get_cookie('ux_e189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'));
+            $this->db->select("classe_id");
+            $this->db->from("eleve");
+            $this->db->where("email", $email);
+            $idClasse = intval($this->db->get()->result_array()[0]["classe_id"], 10);
+            
+            $data["coursList"] = $this->CoursDAO->getListCoursByIdClasse($idClasse);
+        }
+        
         //on recupere les documents par cours(Dictionnaire)
         $data["documents"] = $this->DocumentDAO->getDocumentsList();
+        
+        // on recupere les id des cours de chaque document
+        $idsCours = array();
+        foreach ($data["documents"] as $document) {
+            array_push($idsCours, $document['cours_id']);
+        }
+        $data["idsCours"] = $idsCours;
         
         $this->load->view('enseignements', $data);
     }

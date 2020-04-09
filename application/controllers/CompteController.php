@@ -20,6 +20,7 @@ class CompteController extends CI_Controller
     function __construct()
     {
         parent::__construct();
+        
         $this->load->helper('cookie');
         $this->load->library('encrypt');
 

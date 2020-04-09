@@ -1,12 +1,5 @@
 <?php
-
 $this->load->view("page_template/header");
-
-// on recupere les id des cours de chaque document
-$idsCours = array();
-foreach ($documents as $document) {
-    array_push($idsCours, $document['cours_id']);
-}
 ?>
 
 <div class="card" style="width: 60%; margin: 20px auto; margin-bottom: 100px;">
@@ -20,7 +13,7 @@ foreach ($documents as $document) {
                   <list-item style="display: none;" lien="<?=$document["path"]?>" titre="<?=$document["nom"]?>" description="" class="ml-4 documents documentsCours<?=$document['cours_id']?>"></list-item>	
               <?php endif;?>
           <?php endforeach;?> 
-  <?php endforeach;?>
+  	<?php endforeach;?>
 		</div>
 	</div>
 </div>
