@@ -27,7 +27,13 @@ class Document
      *  @Column(type="string", nullable = false)
      */
     private $path;
-
+    
+    /**
+     *
+     *  @Column(type="boolean")
+     */
+    private $status = true;
+    
     /**
      * Un document concerne un cours
      *
@@ -94,6 +100,23 @@ class Document
     {
         $this->cours = $cours;
     }
+    
+    /**
+     * @return boolean
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param boolean $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+ 
 }
 
 ?>

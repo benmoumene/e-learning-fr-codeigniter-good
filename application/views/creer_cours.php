@@ -15,6 +15,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="col-md-4 form-group mb-2">
             	<label class="required" style="font-weight:bold">Nom du cours</label>
                 <input type="text" id="nom_cours" name="nom_cours" placeholder="Nom du cours"/><br><br>
+               	
+               	
+               	<div class="form-group">
+                  <label for="exampleFormControlTextarea1" style="font-weight:bold">Description du cours</label>
+                  <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="5" name="description"></textarea>
+                </div>
+               
+               
                 <label style="font-weight:bold">Documents du cours</label>
             	<input type="file"  class="form-control" id="id" name="files[]" multiple="multiple"/><br>
             	

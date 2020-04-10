@@ -178,7 +178,7 @@ class AccesController extends CI_Controller
         if($results[$email]){
             //si l'email renseigné peut recevoir des mails
             $subject = "Votre inscription sur le site du cours UX a été effectuée";
-            $message = "Voici vos identifiant pour vous connecter sur le site du cours UX : <br>  <b>Email : </b>" . $email . "<br>   <b>Mot de passe : </b>" . $mdp;
+            $message = "Voici vos identifiants pour vous connecter sur le site du cours UX : <br>  <b>Email : </b>" . $email . "<br>   <b>Mot de passe : </b>" . $mdp;
     
             $params = array(
                 $email,

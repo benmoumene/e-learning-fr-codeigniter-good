@@ -79,6 +79,8 @@ class CoursController extends CI_Controller
         
         $cours->setClasses($classes);
         $cours->setIntitule($this->input->post('nom_cours'));
+        if(!empty($this->input->post('description')))
+            $cours->setDescription($this->input->post('description'));
         $this->doctrine->em->persist($cours);
 
         if (! empty($_FILES['files']['tmp_name'][0])) {

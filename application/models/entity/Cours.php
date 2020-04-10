@@ -25,7 +25,20 @@ class Cours
      * @Column(type="string", nullable=false)
      */
     private $intitule;
-
+    
+    /**
+     *
+     * @Column(type="text", nullable=true)
+     */
+    private $description = 'Pas encore de description pour ce cours';
+   
+    /**
+     *
+     * @Column(type="boolean")
+     */
+    private $status = true;
+    
+    
     /**
      * un cours a plusieurs documents
      *
@@ -101,7 +114,39 @@ class Cours
     {
         $this->classes = $classes;
     }
- 
+
+    /**
+     * 
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+    /**
+     * @return boolean
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param boolean $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
 }
 
 ?>
