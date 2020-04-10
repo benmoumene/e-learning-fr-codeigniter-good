@@ -10,11 +10,12 @@ class CoursController extends CI_Controller
     {
         parent::__construct();
         $this->load->helper('cookie');
+        $this->load->library('session');
         /* REDIRECT IF CURRENT USER IS NOT ADMIN */
         if ($_SESSION['user'] != 'admin') {
             redirect(site_url("accueil"));
         }
-        $this->load->library('session');
+        
         $this->load->helper('form');
         $this->doctrine->em->beginTransaction();
     }
