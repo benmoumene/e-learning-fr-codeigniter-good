@@ -42,12 +42,24 @@ class Eleve
     private $motDePasse;
 
     /**
+     *
+     *  @Column(type="datetime", nullable = false)
+     */
+    private $dateCreation;
+    
+    /**
      * Un document concerne un cours
      *
      * @ManyToOne(targetEntity="Classe", inversedBy="etudiants")
      * @JoinColumn(nullable=true, name="classe_id", referencedColumnName="id")
      */
     private $classe;
+    
+    public function __construct()
+    {
+        date_default_timezone_set('Europe/Paris');
+        $this->dateCreation = new DateTime();
+    }
     
     /**
      * @return mixed
@@ -133,6 +145,22 @@ class Eleve
     public function setMotDePasse($motDePasse)
     {
         $this->motDePasse = $motDePasse;
+    } 
+
+    /**
+     * @return DateTime
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
+    }
+
+    /**
+     * @param DateTime $dateCreation
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
     }
 
     /**
