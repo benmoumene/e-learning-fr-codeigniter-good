@@ -33,9 +33,3 @@ $_SESSION['user'] = $user;
     </menu> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
 <script src="/projetL3/application/views/page_template/components_vuejs/menu_components.js"></script>
-
-
-
-
-
-

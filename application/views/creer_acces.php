@@ -27,13 +27,29 @@
     	</center>
     </div>
 	
-	
-	<p><?=$this->session->flashdata('import_success');?></p>
 <?php
 echo form_close();
 ?>
 
-<?php $this->load->view("page_template/footer");?>      
+<?php $this->load->view("page_template/footer");?> 
+
+<script>
+Vue.use(VueToast);
+if("<?=$this->session->flashdata('import_success')?>" === "L'importation des élèves a été effectué."){
+	Vue.$toast.success("<?=$this->session->flashdata('import_success');?>", {
+	  position: 'top',
+	  duration: 8000
+	})
+}	
+else if("<?=$this->session->flashdata('import_success')?>" === "Veuillez sélectionner un fichier .xlsx" || "<?=$this->session->flashdata('import_success')?>" === "Veuillez vérifier la syntaxe du fichier d'importation." || "<?=$this->session->flashdata('import_success')?>" === "L'importation des élèves a échoué."){
+    Vue.$toast.error("<?=$this->session->flashdata('import_success');?>", {
+	  position: 'top', 
+	  duration: 8000
+	})
+}
+
+</script>
+     
 </body>
 </html>
 

@@ -1,16 +1,21 @@
+:root {
+  --bg-blanc: #FFFFFF !important;
+  --blue-personalise : #5799D7;
+}
+
 *{
     margin :0;
     padding: 0;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 body{
-    background: #FFFFFF !important;
+    background: var(--bg-blanc);
 }
 
 menu{
-    background: #FFFFFF !important;
+    background: var(--bg-blanc);
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 0 6px rgba(0,0,0,0.23);
-    color: #fff;
+    color: var(--bg-blanc);
     overflow: hidden;
 }
 
@@ -21,7 +26,7 @@ menu{
 }
 
 menu button i{
-    color: #fff;
+    color: var(--bg-blanc);
     font-size: 30px;
     font-size: 25px;
     margin-top: 10px;
@@ -40,16 +45,10 @@ menu .fa-user-circle-o{
     
 }
 
-.nav-item a:hover {
-    color: #5799D7 !important;
-    border-bottom: 3px solid #5799D7;
+.nav-item a:hover, .nav-item a.active {
+    color: var(--blue-personalise) !important;
+    border-bottom: 3px solid var(--blue-personalise);
     width: 100%;
-} 
-.nav-item a.active {
-    color: #5799D7 !important;
-    border-bottom: 3px solid #5799D7;
-    width: 100%;
-    
 } 
 
 .navbar{
@@ -82,5 +81,5 @@ menu .fa-user-circle-o{
 }
 
 .footer{
-	background-color: #5799D7;
+	background-color: var(--blue-personalise);
 }

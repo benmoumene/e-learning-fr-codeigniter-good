@@ -69,12 +69,12 @@ class MotDePasseOublieController extends CI_Controller
             if($results[$this->input->post("email")]){
                 //l'adresse mail renseignée peut recevoir des mails
                 $this->sendEmail($this->input->post("email"), $user);
-                $this->session->set_flashdata("envoie_mdp", "Vos identifiants ont été envoyés sur votre boîte mail.");
+                $this->session->set_flashdata("envoie_mdp", "Veuillez vérifier votre boîte mail.");
             } else{
-                $this->session->set_flashdata("envoie_mdp", "Cette adresse mail n'est liée à aucun compte.");
+                $this->session->set_flashdata("envoie_mdp", "Cette adresse n'est liée à aucun compte.");
             }
         } else {
-            $this->session->set_flashdata("envoie_mdp", "Cette adresse mail n'est liée à aucun compte.");
+            $this->session->set_flashdata("envoie_mdp", "Cette adresse n'est liée à aucun compte.");
         }
         $this->load->view("motdepasseoublie");
     }

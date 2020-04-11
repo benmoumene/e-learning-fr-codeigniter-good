@@ -1,5 +1,8 @@
 <?php
 
+require './vendor/autoload.php';
+use SMTPValidateEmail\Validator as SmtpEmailValidator;
+
 class EmailController extends CI_Controller
 {
 
@@ -56,13 +59,18 @@ class EmailController extends CI_Controller
             $this->input->post('message'),
             $this->input->post('email')
         );
-        $response = $this->load->library('EmailSender', $params);
+                
+        $validator = new SmtpEmailValidator($this->input->post("email"), "tt9814023@gmail.com");
+        $results = $validator->validate();
         
-        if ($response)
-            $this->session->set_flashdata("email_sent", "Congragulation Email Send Successfully.");
-        else
-            $this->session->set_flashdata("email_sent", "You have encountered an error");
-        
+        if (isset($results[$this->input->post("email")])){
+            $this->load->library('EmailSender', $params);
+            $this->session->set_flashdata("email_sent", "Votre message a bien été envoyé.");
+        }
+        else{
+            $this->session->set_flashdata("email_sent", "Veuillez vérifier la saisie des champs.");
+        }
+            
         $this->load->view('contact');
     }
 }

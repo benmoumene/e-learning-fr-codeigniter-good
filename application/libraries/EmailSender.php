@@ -43,10 +43,10 @@ class EmailSender
         
         $this->CI->email->subject($subject);
         $this->CI->email->message($message);
-        if ($this->CI->email->send()) {
-            return true;
+        if (! $this->CI->email->send()) {
+            return false;
         }
-        return false;
+        return true;
     }
     
    

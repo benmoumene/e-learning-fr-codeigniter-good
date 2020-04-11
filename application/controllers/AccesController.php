@@ -71,7 +71,7 @@ class AccesController extends CI_Controller
         try {
             $inputFileType = \PhpOffice\PhpSpreadsheet\IOFactory::identify($inputFileName);
         } catch (Exception $e) {
-            $this->session->set_flashdata("import_success", "Le fichier sélectionné n'est pas un fichier excel(avec l'extension .xlsx).");
+            $this->session->set_flashdata("import_success", "Veuillez sélectionner un fichier .xlsx");
             redirect(site_url("acces"));
         }
 
@@ -121,7 +121,7 @@ class AccesController extends CI_Controller
                  *compte de l'enseignante connecté
                  **/
                 if(isset($eleve[0]) && isset($eleve[1]) && isset($eleve[2])){
-                    if($eleve[0] == "nom" && $eleve[1]=="prenom" && $eleve[2] != "email"){
+                    if($eleve[0] != "nom" || $eleve[1]!="prenom" || $eleve[2] != "email"){
                         $this->session->set_flashdata("import_success", "Veuillez vérifier la syntaxe du fichier d'importation.");
                         redirect(site_url("acces"));
                     }
@@ -186,6 +186,10 @@ class AccesController extends CI_Controller
                 $message
             );
             $this->load->library('EmailSender', $params);
+            
+            return true;
         }
+        
+        return false;
     }
 }

@@ -63,13 +63,12 @@ class ConnexionController extends CI_Controller
      */
     public function connexion()
     {
-        var_dump($_REQUEST);
-        if ($this->input->post('email', TRUE) && $this->input->post('mdp', TRUE)) {
+        if ($this->input->post('email', TRUE) && $this->input->post('password', TRUE)) {
             
-            if ($this->user_model->validate($this->input->post('email'), $this->input->post('mdp'))) {
+            if ($this->user_model->validate($this->input->post('email'), $this->input->post('password'))) {
                 /* --ON INITIALISE LES COOKIES-- */
                 $this->setCookieForUser('name', $this->input->post('email'));
-                $this->setCookieForUser('password', $this->input->post('mdp'));
+                $this->setCookieForUser('password', $this->input->post('password'));
                 /* ----------------------------- */
 
                 $this->redirect(false, "accueil");
@@ -87,6 +86,7 @@ class ConnexionController extends CI_Controller
 
             $this->redirect($hasFailed);
         } 
+        $this->redirect();
     }
 
     /**

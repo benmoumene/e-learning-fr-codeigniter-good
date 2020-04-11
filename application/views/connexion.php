@@ -13,7 +13,7 @@
             <div class="col-md-4 form-group mb-2">
               <input type="email" name="email" class="form-control" placeholder="Email (*)">
               <br>
-              <input type="password" name="mdp" class="form-control" placeholder="Mot de passe (*)">
+              <input type="password" name="password" class="form-control" placeholder="Mot de passe (*)">
             </div>
             <?php echo form_open('MotDePasseOublieController/index'); ?>
                 <a href="./motdepasseoublie">Mot de passe oubliée? </a>
@@ -25,13 +25,20 @@
 
     <?php
     echo form_close();
-    echo $this->session->flashdata('unable_to_connect');
     ?>
     
 </div>
 </div>
 
 <?php $this->load->view("page_template/footer");?>
+
+<script>
+Vue.use(VueToast);
+Vue.$toast.error('<?=$_SESSION['unable_to_connect']?>', {
+	  position: 'top',
+	  duration: 8000	  
+})
+</script>
 
 </body>
 </html>
