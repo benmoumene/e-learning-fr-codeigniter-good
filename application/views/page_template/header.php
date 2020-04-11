@@ -4,11 +4,11 @@ $menuItems = ["connexion","publications", "enseignant", "contact"];
 
 if (!is_null(get_cookie('ux_ad_1C89DS7CDS8CD89CSD7CSDDSVDSIJPIOCDS')) && !is_null(get_cookie('ux_ad_189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'))){
     $user = 'admin';
-    $menuItems = ["deconnexion","cours", "acces","publications", "enseignant", "enseignements", "compte"];  
+    $menuItems = ["compte", "cours", "acces","publications", "enseignant", "enseignements","deconnexion"];  
 }
 else if(!is_null(get_cookie('ux_e1C89DS7CDS8CD89CSD7CSDDSVDSIJPIOCDS')) && !is_null(get_cookie('ux_e189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'))){
     $user = "etudiant";
-    $menuItems = ["deconnexion","publications", "enseignant", "enseignements", "contact", "compte"];
+    $menuItems = ["compte", "publications", "enseignant", "enseignements", "contact", "deconnexion"];
 }
 
 $_SESSION['user'] = $user;

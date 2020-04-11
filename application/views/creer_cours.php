@@ -7,9 +7,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="card connexion" style="width: 60%;margin: 20px auto">
     <div class="card-body">
 <?php
-    		echo form_open_multipart('/CoursController/creer_cours');
-    	?>
+	echo form_open_multipart('/CoursController/creer_cours');
+?>
     	<center>
+    	<p><?=$this->session->flashdata('cours_champ_required');?></p>  
+    	
     		<h5 class="card-title mb-4">Créer un cours</h5>
         <div class="justify-content-md-center">
             <div class="col-md-4 form-group mb-2">
@@ -37,10 +39,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     		</div>
     	</div>
     	
-    	 <p><?=$this->session->flashdata('cours_champ_required');?></p>  
-    	<?php 
-    	   echo $this->session->flashdata('import');
-    	?>
+    	 
     	</center>
     	
     	
@@ -52,5 +51,29 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </div>
 
 <?php $this->load->view("page_template/footer");?>
+<script>
+Vue.use(VueToast);
+if("<?=$this->session->flashdata('import')?>" === "Le cours a été crée sans documents" || ("<?=$this->session->flashdata('import')?>".includes("Le cours a été crée avec ") && "<?=$this->session->flashdata('import')?>".includes(" documents associés"))){
+	Vue.$toast.success("<?=$this->session->flashdata('import');?>", {
+	  position: 'top',
+	  duration: 8000
+	})
+}	
+else if("<?=$this->session->flashdata('cours_champ_required')?>" === "Veuillez saisir les champs requis"){
+	Vue.$toast.error("<?=$this->session->flashdata('cours_champ_required');?>", {
+		  position: 'top', 
+		  duration: 8000
+		})
+}
+else if("<?=$this->session->flashdata('import')?>" === "Les documents doivent être de type pdf"){
+    Vue.$toast.error("<?=$this->session->flashdata('import');?>", {
+	  position: 'top', 
+	  duration: 8000
+	})
+} 
+
+</script>
+
+
 </body>
 </html>

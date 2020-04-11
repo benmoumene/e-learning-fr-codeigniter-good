@@ -63,9 +63,9 @@ class CoursController extends CI_Controller
         $entitiesClassLoader->register();
         
         
-        // vérification que le champ intitule est rempli
-        if ($this->input->post('nom_cours') == '') {
-            $this->session->set_flashdata("cours_champ_required", "Veuillez saisir un nom pour le cours");
+        // vérification que des champs requis
+        if (empty($this->input->post('nom_cours')) || empty($this->input->post('classes_ids'))) {
+            $this->session->set_flashdata("cours_champ_required", "Veuillez saisir les champs requis");
             redirect(site_url('cours'));
         }
 
@@ -89,7 +89,7 @@ class CoursController extends CI_Controller
         $this->doctrine->em->flush();
         $this->doctrine->em->commit();
 
-        $this->session->set_flashdata("import", "Le cours a été crée");
+        $this->session->set_flashdata("import", "Le cours a été crée sans documents");
         redirect(site_url("cours"));
         
     }
@@ -135,8 +135,6 @@ class CoursController extends CI_Controller
                 if ($this->upload->do_upload('file')) {
 
                     $import .= 'a été importé';
-                    $this->load->model("cours");
-                    $this->load->model("document");
                     $document = new Document();
 
                     $document->setCours($cours);

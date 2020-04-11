@@ -4,7 +4,7 @@ $this->load->view("page_template/header");
 
 <div class="card" style="width: 60%; margin: 20px auto; margin-bottom: 100px;">
 	<div class="card-body">
-		
+		<h2 class="card-title"><?=($_SESSION["user"] === "admin") ? "Mes cours" : "Les cours de l'enseignante" ?></h2>
 		<div class="list-group">
       <?php foreach ($coursList as $cours): ?>
       		  <list-item lien="index.php?cours=<?=$cours['id']?>" titre="<?=$cours["intitule"]?>" description="Description du cours" class="coursIntitule"></list-item>	
