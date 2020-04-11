@@ -1,5 +1,12 @@
 <?php
 $this->load->view("page_template/header");
+
+$questions = array();
+if(isset($_GET['quiz'])){
+    $questions = $this->QuizDAO->getQuestionsByQuizId($_GET['quiz']);
+    
+}
+
 ?>
 
 <div class="d-flex mt-2 mb-4">
@@ -28,6 +35,30 @@ $this->load->view("page_template/header");
                   <list-item lien="<?=$document["path"]?>" titre="<?=$document["nom"]?>" description="" class="ml-4 documents documentsCours<?=$document['cours_id']?>"></list-item>	
               <?php endif;?>
           <?php endforeach;?>
+          
+          <?php if(isset($_GET['quiz'])): ?>
+              <?php foreach($questions as $question):?>
+                  <div class="card">
+                  	<h4 class="card-title"><?=$question['intitule']?></h4>
+                  	<?php $reponses = $this->QuizDAO->getReponsesByQuestionId($question['id']);?>
+                  	
+              <?php echo form_open('/EnseignementsController/checkQuizAnswers'); ?>
+                      	<?php foreach($reponses as $reponse): ?>
+                      		<div class="radio">
+                              <label><?=$reponse["contenu"]?>
+                              	<input type="radio" name="optradio">
+                              </label>
+                            </div>
+                      	<?php endforeach;?>
+                      	</div>
+                      	
+              <?php endforeach;?>
+              
+              
+              	<input type="submit" class="btn btn-primary mt-4 col-md-5 col-sm-2" name="submit_quiz">
+              
+              <?php echo form_close();?>
+          <?php endif;?>
 		</div>
 	</div>
 </div>
@@ -37,7 +68,7 @@ $this->load->view("page_template/header");
 <h2 class="card-title"><?=($_SESSION["user"] === "admin") ? "Mes quiz" : "Liste des quiz" ?></h2>
 		<div class="list-group group2">
           <?php foreach ($quizzes as $quiz): ?>
-          		  <list-item lien="index.php?quiz=<?=$quiz['id']?>" titre="<?=$quiz['nom']?>" description="Description du cours"></list-item>	
+          		  <list-item lien="/projetL3/index.php/enseignements?quiz=<?=$quiz['id']?>" titre="<?=$quiz['nom']?>" description="Description du cours"></list-item>	
         <?php endforeach;?>
 		</div>
 </div>

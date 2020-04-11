@@ -17,10 +17,12 @@ class EnseignementsController extends CI_Controller
     {
         parent::__construct();
         $this->load->helper('cookie');
+        
         $this->load->library('session');
         $this->load->model("dao/CoursDAO");
         $this->load->model("dao/DocumentDAO");
         $this->load->model("dao/QuizDAO");
+        $this->load->helper('form');
     }
     
     /**
@@ -60,5 +62,9 @@ class EnseignementsController extends CI_Controller
         $data["idsCours"] = $idsCours;
         
         $this->load->view('enseignements', $data);
+    }
+    
+    public function checkQuizAnswers(){
+        var_dump($_REQUEST);
     }
 }
