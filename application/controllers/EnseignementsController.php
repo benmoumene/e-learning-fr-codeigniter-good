@@ -20,6 +20,7 @@ class EnseignementsController extends CI_Controller
         $this->load->library('session');
         $this->load->model("dao/CoursDAO");
         $this->load->model("dao/DocumentDAO");
+        $this->load->model("dao/QuizDAO");
     }
     
     /**
@@ -48,6 +49,8 @@ class EnseignementsController extends CI_Controller
         
         //on recupere les documents par cours(Dictionnaire)
         $data["documents"] = $this->DocumentDAO->getDocumentsList();
+        
+        $data["quizzes"] = $this->QuizDAO->getQuizList();
         
         // on recupere les id des cours de chaque document
         $idsCours = array();

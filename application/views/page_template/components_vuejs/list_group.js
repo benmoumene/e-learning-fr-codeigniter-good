@@ -7,4 +7,6 @@ let listItem = Vue.component('list-item', {
 	}
 });
 
+new Vue({el : ".documents", component: listItem});
 new Vue({el : ".list-group", component: listItem});
+new Vue({el : ".group2", component: listItem});
