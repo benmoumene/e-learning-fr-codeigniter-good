@@ -37,12 +37,19 @@ if (! defined('BASEPATH'))
          * @ManyToMany(targetEntity="Cours", mappedBy="classes")
          */
         private $cours;
+        /**
+         * Many Classe have Many Quiz.
+         * @ManyToMany(targetEntity="Quiz", inversedBy="classes")
+         * @JoinTable(name="quiz_classe")
+         */
+        private $quizzes;
         
-        
+     
         public function __construct()
         {
             $this->etudiants = new ArrayCollection();
             $this->cours = new ArrayCollection();
+            $this->quizzes = new ArrayCollection();
         }
         
         /**
@@ -119,6 +126,22 @@ if (! defined('BASEPATH'))
         {
             $this->cours = $cours;
         }
+        /**
+         * @return array
+         */
+        public function getQuizzes()
+        {
+            return $this->quizzes;
+        }
+    
+        /**
+         * @param array $quizzes
+         */
+        public function setQuizzes($quizzes)
+        {
+            $this->quizzes = $quizzes;
+        }
+     
      
     }
     

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Apr 10, 2020 at 04:16 PM
+-- Generation Time: Apr 11, 2020 at 07:00 PM
 -- Server version: 10.4.10-MariaDB
 -- PHP Version: 7.3.12
 
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `cours` (
   `description` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
   `status` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `cours`
@@ -70,8 +70,7 @@ INSERT INTO `cours` (`id`, `intitule`, `description`, `status`) VALUES
 (70, 'cours IHM 2', 'Pas encore de description pour ce cours', 1),
 (71, 'cours IHM 3', 'Pas encore de description pour ce cours', 1),
 (72, 'ensemble des cours', 'Pas encore de description pour ce cours', 1),
-(77, 'zdq', 'Pas encore de description pour ce cours', 1),
-(81, 'test', 'Pas encore de description pour ce cours', 1);
+(77, 'zdq', 'Pas encore de description pour ce cours', 1);
 
 -- --------------------------------------------------------
 
@@ -95,8 +94,7 @@ CREATE TABLE IF NOT EXISTS `cours_classe` (
 INSERT INTO `cours_classe` (`cours_id`, `classe_id`) VALUES
 (69, 1),
 (77, 1),
-(77, 3),
-(81, 2);
+(77, 3);
 
 -- --------------------------------------------------------
 
@@ -113,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `document` (
   `status` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_211FE8207ECF78B0` (`cours_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `document`
@@ -145,7 +143,14 @@ CREATE TABLE IF NOT EXISTS `eleve` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_2D602AF3E7927C74` (`email`),
   KEY `IDX_2D602AF38F5EA509` (`classe_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=175 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=198 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `eleve`
+--
+
+INSERT INTO `eleve` (`id`, `nom`, `email`, `motDePasse`, `prenom`, `classe_id`, `dateCreation`) VALUES
+(197, 'Gudin', 'mickaelgudin@gmail.com', 'ATQIFlVkVwAAElUJVlMHFVFp', 'Mickael', 1, '2020-04-11 20:57:26');
 
 -- --------------------------------------------------------
 
@@ -169,7 +174,67 @@ CREATE TABLE IF NOT EXISTS `enseignant` (
 --
 
 INSERT INTO `enseignant` (`id`, `nom`, `email`, `motDePasse`, `prenom`) VALUES
-(1, 'Nourhene Ben Rabah', 'tt9814023@gmail.com', 'UzUKMwI9UDkCOA==', '');
+(1, 'Ben Rabah', 'tt9814023@gmail.com', 'UzUKMwI9UDkCOA==', 'Nourhene');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `question`
+--
+
+DROP TABLE IF EXISTS `question`;
+CREATE TABLE IF NOT EXISTS `question` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `quiz_id` int(11) DEFAULT NULL,
+  `intitule` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_4F812B18853CD175` (`quiz_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `quiz`
+--
+
+DROP TABLE IF EXISTS `quiz`;
+CREATE TABLE IF NOT EXISTS `quiz` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nom` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQ_42055AC6C6E55B5` (`nom`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `quiz_classe`
+--
+
+DROP TABLE IF EXISTS `quiz_classe`;
+CREATE TABLE IF NOT EXISTS `quiz_classe` (
+  `classe_id` int(11) NOT NULL,
+  `quiz_id` int(11) NOT NULL,
+  PRIMARY KEY (`classe_id`,`quiz_id`),
+  KEY `IDX_62C34FCF8F5EA509` (`classe_id`),
+  KEY `IDX_62C34FCF853CD175` (`quiz_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reponse`
+--
+
+DROP TABLE IF EXISTS `reponse`;
+CREATE TABLE IF NOT EXISTS `reponse` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `question_id` int(11) DEFAULT NULL,
+  `contenu` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `estVrai` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_900BE75B1E27F6BF` (`question_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Constraints for dumped tables
@@ -193,6 +258,25 @@ ALTER TABLE `document`
 --
 ALTER TABLE `eleve`
   ADD CONSTRAINT `FK_2D602AF38F5EA509` FOREIGN KEY (`classe_id`) REFERENCES `classe` (`id`);
+
+--
+-- Constraints for table `question`
+--
+ALTER TABLE `question`
+  ADD CONSTRAINT `FK_4F812B18853CD175` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`id`);
+
+--
+-- Constraints for table `quiz_classe`
+--
+ALTER TABLE `quiz_classe`
+  ADD CONSTRAINT `FK_62C34FCF853CD175` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_62C34FCF8F5EA509` FOREIGN KEY (`classe_id`) REFERENCES `classe` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `reponse`
+--
+ALTER TABLE `reponse`
+  ADD CONSTRAINT `FK_900BE75B1E27F6BF` FOREIGN KEY (`question_id`) REFERENCES `question` (`id`);
 
 DELIMITER $$
 --
