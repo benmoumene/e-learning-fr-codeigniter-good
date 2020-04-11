@@ -40,5 +40,7 @@ Vue.$toast.error('<?=$_SESSION['unable_to_connect']?>', {
 })
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/@braid/vue-formulate@2.2.7/dist/formulate.min.js"></script>
+
 </body>
 </html>

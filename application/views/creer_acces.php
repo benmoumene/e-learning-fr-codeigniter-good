@@ -1,6 +1,7 @@
 <?php $this->load->view("page_template/header"); 
 	  echo form_open_multipart('/AccesController/import');
 ?>
+
 	<div class="card connexion" style="width: 60%;margin: 20px auto">
     	<div class="card-body">
         	<center>
@@ -49,7 +50,7 @@ else if("<?=$this->session->flashdata('import_success')?>" === "Veuillez sélect
 }
 
 </script>
-     
+    
 </body>
 </html>
 

@@ -84,9 +84,7 @@ class ConnexionController extends CI_Controller
             if ($this->user_model->validate($mail, $password) == FALSE)
                 $hasFailed = true;
 
-            $this->redirect($hasFailed);
         } 
-        $this->redirect();
     }
 
     /**

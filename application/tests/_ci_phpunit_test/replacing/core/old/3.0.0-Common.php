@@ -190,19 +190,14 @@ function show_404($page = '', $log_error = TRUE)
 
 function set_status_header($code = 200, $text = '')
 {
-//	if (is_cli())
-//	{
-//		return;
-//	}
-
-	if (empty($code) OR ! is_numeric($code))
+	if (empty($code) || ! is_numeric($code))
 	{
 		show_error('Status codes must be numeric', 500);
 	}
 
 	if (empty($text))
 	{
-		is_int($code) OR $code = (int) $code;
+		is_int($code) || $code = (int) $code;
 		$stati = array(
 			100	=> 'Continue',
 			101	=> 'Switching Protocols',
@@ -334,7 +329,7 @@ function &get_config(Array $replace = array(), $reset = FALSE)
 		}
 
 		// Does the $config array exist in the file?
-		if ( ! isset($config) OR ! is_array($config))
+		if ( ! isset($config) || ! is_array($config))
 		{
 			set_status_header(503);
 			echo 'Your config file does not appear to be formatted correctly.';
