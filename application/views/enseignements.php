@@ -40,6 +40,7 @@ if(isset($_GET['quiz'])){
           <?php 
                 echo form_open('/EnseignementsController/checkQuizAnswers'); 
               ?>
+              <input type="text" name="quiz_id" value="<?=$_GET['quiz']?>" hidden/>
               <?php foreach($questions as $question):?>
                   <div class="card">
                   	<h4 class="card-title"><?=$question['intitule']?></h4>

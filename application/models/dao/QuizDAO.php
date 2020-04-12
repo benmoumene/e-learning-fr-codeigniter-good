@@ -47,4 +47,14 @@ class QuizDAO extends CI_MODEL
         return $this->db->get()->result_array();
     }
     
+    function getTrueReponsesByQuestionId($id){
+        $this->db->select("*");
+        $this->db->from("reponse");
+        $this->db->where("question_id",$id);
+        $this->db->where("estVrai", 1);
+        
+        return $this->db->get()->result_array();
+    }
+    
+    
 }
