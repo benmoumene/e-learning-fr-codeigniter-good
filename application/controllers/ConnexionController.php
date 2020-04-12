@@ -85,6 +85,8 @@ class ConnexionController extends CI_Controller
                 $hasFailed = true;
 
         } 
+        
+        $this->redirect();
     }
 
     /**

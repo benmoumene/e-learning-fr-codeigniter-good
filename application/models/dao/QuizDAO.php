@@ -22,6 +22,15 @@ class QuizDAO extends CI_MODEL
         return $this->db->get()->result_array();
     }
     
+    function getQuizListByIdClasse($id){
+        $this->db->select("*");
+        $this->db->from("quiz");
+        $this->db->join("quiz_classe", "quiz.id=quiz_classe.quiz_id");
+        $this->db->where("classe_id", $id);
+        
+        return $this->db->get()->result_array();
+    }
+    
     function getQuestionsByQuizId($id){
         $this->db->select("*");
         $this->db->from("question");

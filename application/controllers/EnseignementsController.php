@@ -33,6 +33,7 @@ class EnseignementsController extends CI_Controller
     public function index()
     {
         $this->load->library('encrypt');
+        $idClasse = 0;
         
         if($_SESSION['user'] == 'admin'){
             //on recupere tous les cours
@@ -52,7 +53,12 @@ class EnseignementsController extends CI_Controller
         //on recupere les documents par cours(Dictionnaire)
         $data["documents"] = $this->DocumentDAO->getDocumentsList();
         
-        $data["quizzes"] = $this->QuizDAO->getQuizList();
+        if($idClasse == 0){
+            $data["quizzes"] = $this->QuizDAO->getQuizList();
+        }
+        else{
+            $data["quizzes"] = $this->QuizDAO->getQuizListByIdClasse($idClasse);
+        }
         
         // on recupere les id des cours de chaque document
         $idsCours = array();
@@ -65,6 +71,18 @@ class EnseignementsController extends CI_Controller
     }
     
     public function checkQuizAnswers(){
-        var_dump($_REQUEST);
+        
+        foreach($_POST as $k => $p){
+            
+            if($k === 'submit_quiz') break;
+            
+            $k = str_replace('optradio', '', $k);
+            $k = explode('-', $k);
+            $questionNumber = $k[0];
+            $reponseNumber = $k[1];
+            echo 'question : '.$questionNumber .'<br>Reponse: '. $reponseNumber.'<br><br>';    
+        
+       }
     }
+    
 }
