@@ -64,7 +64,6 @@ class AccesController extends CI_Controller
          */
         $inputFileType = 'Xlsx';
         $inputFileName = $_FILES['file']['tmp_name'];
-
         /**
          * Idenfication du type de $inputFileName *
          */
@@ -75,41 +74,12 @@ class AccesController extends CI_Controller
             redirect(site_url("acces"));
         }
 
-        /**
-         * Creation d'un Reader du type identifiee *
-         */
+        /* Creation d'un Reader du type identifiee */
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($inputFileType);
-
-        /**
-         * Chargement de $inputFileName dans un objet Spreadsheet *
-         */
         $spreadsheet = $reader->load($inputFileName);
-
-        /**
-         * Conversion de la feuille de calcul en un tableau *
-         */
         $eleves = $spreadsheet->getActiveSheet()->toArray();
 
-        $schemaTool = new \Doctrine\ORM\Tools\SchemaTool($this->doctrine->em);
-        $classes = $this->doctrine->em->getMetadataFactory()->getAllMetadata();
-        $schemaTool->updateSchema($classes);
-
-        $entitiesClassLoader = new ClassLoader('models', rtrim(APPPATH, "/"));
-
-        $entitiesClassLoader->register();
-
-        /*
-         * PERMET D'INSERER L'ENSEIGNANTE,
-         * DECOMMENTER CE CODE UNIQUEMENT SI BESOIN
-         * $enseignant = new Enseignant();
-         * $enseignant->setNom("Nourhene Ben Rabah");
-         * $enseignant->setEmail("tt9814023@gmail.com");
-         *
-         * $this->load->library('encrypt');
-         * $mdp = $this->encrypt->encode('admin');
-         * $enseignant->setMotDePasse($mdp);
-         * $this->em->persist($enseignant);
-         */
+        $this->doctrine->refreshSchema();
 
         $emailSent = true;
         $i = 0;
@@ -130,20 +100,12 @@ class AccesController extends CI_Controller
             
             else if ($i > 0) {
                 if (isset($eleve[0]) && isset($eleve[1]) && isset($eleve[2])) {
-                    $nouvelEleve = new Eleve();
-                    $nouvelEleve->setNom($eleve[0]);
-                    $nouvelEleve->setPrenom($eleve[1]);
-                    $nouvelEleve->setEmail($eleve[2]);
-                    
                     $classe = $this->doctrine->em->find("Classe", $_POST["classe_id"]);
-                    $nouvelEleve->setClasse($classe);
+                    $nouvelEleve = new Eleve($eleve[0], $eleve[1], $eleve[2], $classe);
                     /* Le mot de passe sera genere par le helper appelle dans la methode set */
-
                     $this->load->library('encrypt');
                     $mdpBeforeEncryption = $nouvelEleve->get_random_password();
                     $nouvelEleve->setMotDePasse($this->encrypt->encode($mdpBeforeEncryption));
-
-                    echo ($mdpBeforeEncryption . '<br>');
 
                     /* On capture les exception afin de ne pas afficher les logs de doctrine à l'utilisateur */
                     try {

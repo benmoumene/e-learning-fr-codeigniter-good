@@ -55,13 +55,7 @@ class CoursController extends CI_Controller
      */
     public function creer_cours()
     {
-        $schemaTool = new \Doctrine\ORM\Tools\SchemaTool($this->doctrine->em);
-        $classes = $this->doctrine->em->getMetadataFactory()->getAllMetadata();
-        $schemaTool->updateSchema($classes);
-        
-        $entitiesClassLoader = new ClassLoader('models', rtrim(APPPATH, "/"));
-        $entitiesClassLoader->register();
-        
+        $this->doctrine->refreshSchema();
         
         // vérification que des champs requis
         if (empty($this->input->post('nom_cours')) || empty($this->input->post('classes_ids'))) {

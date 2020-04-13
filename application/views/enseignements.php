@@ -2,28 +2,32 @@
 $this->load->view("page_template/header");
 
 $questions = array();
-if(isset($_GET['quiz'])){
+$evaluation = null;
+if (isset($_GET['quiz'])) {
     $questions = $this->QuizDAO->getQuestionsByQuizId($_GET['quiz']);
-    
+    $evaluation = $this->EvaluationDAO->getEvaluationByQuizAndByEleve($_GET['quiz'], $this->EleveDAO->getIdByEmail($this->encrypt->decode(get_cookie('ux_e189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'))));
 }
 
 ?>
 
 <div class="d-flex mt-2 mb-4">
-<div class="card p-2 mr-4" >
-	<div class="card-body">
-		<h2 class="card-title"><?=($_SESSION["user"] === "admin") ? "Mes cours" : "Les cours de l'enseignante" ?></h2>
-		<div class="list-group mb-2">
+	<div class="card p-2 mr-4">
+		<div class="card-body">
+			<h2 class="card-title"><?=($_SESSION["user"] === "admin") ? "Mes cours" : "Les cours de l'enseignante" ?></h2>
+			<div class="list-group mb-2">
       <?php foreach ($coursList as $cours): ?>
-      		  <list-item lien="/projetL3/index.php/enseignements?cours=<?=$cours['id']?>" titre="<?=$cours['intitule']?>" description="Description du cours" class="coursIntitule"></list-item>	
+      		  <list-item
+					lien="/projetL3/index.php/enseignements?cours=<?=$cours['id']?>"
+					titre="<?=$cours['intitule']?>" description="Description du cours"
+					class="coursIntitule"></list-item>	
   	<?php endforeach;?>
 		</div>
+		</div>
 	</div>
-</div>
 
 
-<div class="card p-2 mr-4 w-50" style="background-color: white;">
-	<div class="card-body">
+	<div class="card p-2 mr-4 w-50" style="background-color: white;">
+		<div class="card-body">
 		<?php foreach ($coursList as $cours):?>
 		    <?php if(isset($_GET['cours']) && $cours['id'] === $_GET['cours']): ?>
 		       <h2 class="card-title mb-4"><?=$cours["intitule"]?></h2>
@@ -32,60 +36,73 @@ if(isset($_GET['quiz'])){
 		<div class="list-group documents">
      	 <?php foreach($documents as $document):?>
               <?php if(isset($_GET['cours']) && $document['cours_id'] == $_GET['cours']): ?>    
-                  <list-item lien="<?=$document["path"]?>" titre="<?=$document["nom"]?>" description="" class="ml-4 documents documentsCours<?=$document['cours_id']?>"></list-item>	
+                  <list-item lien="<?=$document["path"]?>"
+					titre="<?=$document["nom"]?>" description=""
+					class="ml-4 documents documentsCours<?=$document['cours_id']?>"></list-item>	
               <?php endif;?>
           <?php endforeach;?>
           
           <?php if(isset($_GET['quiz'])): ?>
-          <?php 
-                echo form_open('/EnseignementsController/checkQuizAnswers'); 
-              ?>
-              <input type="text" name="quiz_id" value="<?=$_GET['quiz']?>" hidden/>
-              <?php foreach($questions as $question):?>
-                  <div class="card">
-                  	<h4 class="card-title"><?=$question['intitule']?></h4>
-                  	<?php $reponses = $this->QuizDAO->getReponsesByQuestionId($question['id']);?>
-                  	
-              
-                      	<?php foreach($reponses as $reponse): ?>
-                      		<div class="radio">
-                              <label><?=$reponse["contenu"]?>
-                              	<input type="radio" name="optradio<?=$question['id'].'-'.$reponse['id']?>">
-                              </label>
-                            </div>
-                      	<?php endforeach;?>
-                      	</div>
+ 			<?php if(empty($evaluation)): ?>       
+              <?php
+                echo form_open('/EnseignementsController/checkQuizAnswers');
+                ?>
+                  <input type="text" name="quiz_id"
+					value="<?=$_GET['quiz']?>" hidden /> <input type="text"
+					name="nombre_question" value="<?=sizeof($questions)?>" hidden />
+                  <?php foreach($questions as $question):?>
+                      <div class="card">
+					<h4 class="card-title"><?=$question['intitule']?></h4>
+                      	<?php $reponses = $this->QuizDAO->getReponsesByQuestionId($question['id']);?>
                       	
-              <?php endforeach;?>
-              
-              	<input type="submit" class="btn btn-primary mt-4 col-md-5 col-sm-2" name="submit_quiz">
-              
-              <?php 
+                  
+                          	<?php foreach($reponses as $reponse): ?>
+                          		<div class="radio">
+							<label><?=$reponse["contenu"]?>
+                                  	<input type="radio"
+							name="optradio<?=$question['id'].'-'.$reponse['id']?>"> </label>
+							</div>
+                          	<?php endforeach;?>
+                          	</div>
+                          	
+                  <?php endforeach;?>
+                  
+                  	<input type="submit"
+					class="btn btn-primary mt-4 col-md-5 col-sm-2" name="submit_quiz">
+                  
+                  <?php
                 echo form_close();
-              ?>
+                ?>
+                <?php else: ?>
+                	<h2 class="card-title">Résultat</h2>
+                	<p><?=$evaluation[0]["note"]?></p>
+             <?php endif;?>
           <?php endif;?>
 		</div>
+		</div>
 	</div>
-</div>
 
-<div class="card p-2 ml-auto ">
-        <div class="card-body">
-<h2 class="card-title"><?=($_SESSION["user"] === "admin") ? "Mes quiz" : "Liste des quiz" ?></h2>
+	<div class="card p-2 ml-auto ">
+		<div class="card-body">
+			<h2 class="card-title"><?=($_SESSION["user"] === "admin") ? "Mes quiz" : "Liste des quiz" ?></h2>
 	<?php if(sizeof($quizzes) === 0): ?>
 		<p>Pas encore de quiz diponible</p>
 		<?php else: ?>
 		<div class="list-group group2">
         <?php foreach ($quizzes as $quiz): ?>
-          		  <list-item lien="/projetL3/index.php/enseignements?quiz=<?=$quiz['id']?>" titre="<?=$quiz['nom']?>" description="Description du cours"></list-item>	
+          		  <list-item
+					lien="/projetL3/index.php/enseignements?quiz=<?=$quiz['id']?>"
+					titre="<?=$quiz['nom']?>" description="Description du cours"></list-item>	
         <?php endforeach;?>
 		</div>
 	<?php endif;?>
 </div>
-</div>
+	</div>
 
 </div>
 
-<script src="/projetL3/application/views/page_template/components_vuejs/list_group.js"></script>
+<script
+	src="/projetL3/application/views/page_template/components_vuejs/list_group.js"></script>
 
 
 <?php $this->load->view("page_template/footer");?>

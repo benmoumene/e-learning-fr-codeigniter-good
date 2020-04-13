@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
+use Doctrine\Common\ClassLoader;
 
 /**
  * Ce controller est le controller de la rubrique enseignements
@@ -22,6 +23,9 @@ class EnseignementsController extends CI_Controller
         $this->load->model("dao/CoursDAO");
         $this->load->model("dao/DocumentDAO");
         $this->load->model("dao/QuizDAO");
+        $this->load->model("dao/EleveDAO");
+        $this->load->model("dao/EvaluationDAO");
+        $this->load->library("encrypt");
         $this->load->helper('form');
     }
 
@@ -77,7 +81,7 @@ class EnseignementsController extends CI_Controller
         $score = 0;
 
         foreach ($_POST as $k => $p) {
-            if ($k === 'quiz_id')
+            if ($k === 'nombre_question' || $k === 'quiz_id')
                 continue;
 
             else if ($k === 'submit_quiz')
@@ -93,8 +97,6 @@ class EnseignementsController extends CI_Controller
             }
             array_push($reponsesByQuestionId[$questionNumber], $reponseNumber);
         }
-        
-        var_dump($reponsesByQuestionId);
 
         foreach ($reponsesByQuestionId as $k => $question) {
             $reponses = $this->QuizDAO->getTrueReponsesByQuestionId($k);
@@ -103,10 +105,10 @@ class EnseignementsController extends CI_Controller
             $i = 0;
             foreach ($question as $reponse) {
 
-                if ($reponse === $reponses[$i++]["id"]) {
+                if ($reponse === $reponses[$i ++]["id"]) {
                     $count ++;
-                } else{
-                    $count--;
+                } else {
+                    $count --;
                 }
             }
 
@@ -115,6 +117,17 @@ class EnseignementsController extends CI_Controller
             }
         }
 
-        echo "Score : $score / " . sizeof($reponsesByQuestionId);
+        $this->doctrine->em->beginTransaction();
+        $this->doctrine->refreshSchema();
+        
+        $evaluation = new Evaluation();
+        $evaluation->setNote("$score/" . $_POST['nombre_question']);
+        $evaluation->setQuiz($this->doctrine->em->find("Quiz", intval($_POST['quiz_id'])));
+        $evaluation->setEleve($this->EleveDAO->getEleveByEmail($this->encrypt->decode(get_cookie('ux_e189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'))));
+        
+        $this->load->model("dao/EvaluationDAO");
+        $this->EvaluationDAO->persistEvaluation($evaluation);
+        
+        redirect(site_url("enseignements?quiz=".$_POST['quiz_id']));
     }
 }

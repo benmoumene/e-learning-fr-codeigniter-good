@@ -42,4 +42,12 @@ class Doctrine
         // Create EntityManager
         $this->em = EntityManager::create($connectionOptions, $config);
     }
+    
+    function refreshSchema(){
+        $schemaTool = new \Doctrine\ORM\Tools\SchemaTool($this->em);
+        $classes = $this->em->getMetadataFactory()->getAllMetadata();
+        $schemaTool->updateSchema($classes);
+        $entitiesClassLoader = new ClassLoader('models', rtrim(APPPATH, "/"));
+        $entitiesClassLoader->register();
+    }
 }
