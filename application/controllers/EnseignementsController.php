@@ -71,12 +71,16 @@ class EnseignementsController extends CI_Controller
             array_push($idsCours, $document['cours_id']);
         }
         $data["idsCours"] = $idsCours;
-
+            
         $this->load->view('enseignements', $data);
     }
 
     public function checkQuizAnswers()
     {
+        if($_SESSION['user'] !== 'etudiant'){
+            redirect(site_url("enseignements?quiz=".$_POST['quiz_id']));
+        }
+        
         $reponsesByQuestionId = array();
         $score = 0;
 

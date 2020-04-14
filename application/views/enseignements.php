@@ -3,9 +3,11 @@ $this->load->view("page_template/header");
 
 $questions = array();
 $evaluation = null;
-if (isset($_GET['quiz'])) {
+if (isset($_GET['quiz']) ) {
     $questions = $this->QuizDAO->getQuestionsByQuizId($_GET['quiz']);
-    $evaluation = $this->EvaluationDAO->getEvaluationByQuizAndByEleve($_GET['quiz'], $this->EleveDAO->getIdByEmail($this->encrypt->decode(get_cookie('ux_e189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'))));
+    if($_SESSION['user'] === 'etudiant'){
+        $evaluation = $this->EvaluationDAO->getEvaluationByQuizAndByEleve($_GET['quiz'], $this->EleveDAO->getIdByEmail($this->encrypt->decode(get_cookie('ux_e189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'))));
+    }
 }
 
 ?>
@@ -60,7 +62,7 @@ if (isset($_GET['quiz'])) {
                           		<div class="radio">
 							<label><?=$reponse["contenu"]?>
                                   	<input type="radio"
-							name="optradio<?=$question['id'].'-'.$reponse['id']?>"> </label>
+							name="optradio<?=$question['id'].'-'.$reponse['id']?>" <?=($_SESSION['user'] === 'admin' && $reponse['estVrai'] == 1) ? "checked" : ""?> > </label>
 							</div>
                           	<?php endforeach;?>
                           	</div>
@@ -103,7 +105,6 @@ if (isset($_GET['quiz'])) {
 
 <script
 	src="/projetL3/application/views/page_template/components_vuejs/list_group.js"></script>
-
 
 <?php $this->load->view("page_template/footer");?>
 </body>

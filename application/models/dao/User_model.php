@@ -102,20 +102,34 @@ class User_model extends CI_MODEL
      * @param string $newmail
      *
      * @uses $this->_getUserFromTable()
-     * @uses $this->updateEmail()
+     * @uses $this->changeEmail()
+     * @uses $this->changePassword()
      */
-    public function updateUserDetails(string $oldmail, string $newmail){
+    public function updateUserDetails(string $oldmail, string $newmail, string $newPassword){
         $user = $this->_getUserFromTable('eleve', $oldmail);
         
         if($user != null){
             //alors on update l'email d'un eleve
-            $this->updateEmail($oldmail, "eleve", $newmail);
+            if($newPassword !== ''){
+                $this->changePassword('eleve', $oldmail, $newPassword);
+            }
+                
+            if($newmail !== ''){
+                $this->changeEmail($oldmail, "eleve", $newmail);
+            }
         } else{
             $user = $this->_getUserFromTable('enseignant', $oldmail);
             
             if($user != null){         
                 //alors on update l'email d'un enseignant
-                $this->updateEmail($oldmail, "enseignant", $newmail);
+                if($newPassword !== ''){
+                    $this->changePassword('enseignant', $oldmail, $newPassword);
+                }
+                
+                if($newmail !== ''){
+                    $this->changeEmail($oldmail, "enseignant", $newmail);
+                }
+                
             }
         }
     }
@@ -128,7 +142,7 @@ class User_model extends CI_MODEL
      * @param string $table
      * @param string $newmail
      */
-    private function updateEmail(string $oldmail, string $table, string $newmail){
+    private function changeEmail(string $oldmail, string $table, string $newmail){
         $this->db->where('email', $oldmail);
         $updateUser = $this->db->update($table, array(
             'email' => $newmail
@@ -138,10 +152,28 @@ class User_model extends CI_MODEL
         $cookie['name'] = "189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD";
         $cookie['value'] = $this->encrypt->encode($newmail);
         if($updateUser){
+            //on modifie les cookie de connexion
             delete_cookie("189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD");
             delete_cookie("189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD", '', '/', "ux_e");
             $cookie['prefix'] = ($table === "eleve") ? "ux_e": "ux_ad_";
             set_cookie($cookie);
         }
+    }
+    
+    /**
+     * Permet de changer le mot de passe
+     * d'un utilisateur(Eleve ou Enseignant)
+     * 
+     * @param string $table
+     * @param string $oldmail
+     * @param string $newPassword
+     */
+    private function changePassword(string $table, string $oldmail, string $newPassword){
+        $data = array(
+            'motDePasse' => $this->encrypt->encode($newPassword)
+        );
+        
+        $this->db->where('email', $oldmail);
+        $this->db->update($table, $data);
     }
 }

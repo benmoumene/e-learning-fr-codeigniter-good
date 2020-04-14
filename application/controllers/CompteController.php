@@ -23,7 +23,6 @@ class CompteController extends CI_Controller
         
         $this->load->helper('cookie');
         $this->load->library('encrypt');
-
         $this->load->library('session');
         $this->load->helper('form');
     }
@@ -56,16 +55,32 @@ class CompteController extends CI_Controller
             $results   = $validator->validate();
             
             if($results[$this->input->post("email")]){
-                //l'adresse mail renseignée peut recevoir des mails
+                //on change l'adresse mail
                 $this->changeEmail($this->input->post('email'));
-                redirect(site_url("compte"));
             }
             else{
                 redirect(site_url("compte"));
             }
-        } else {
-            redirect(site_url("compte"));
+        } 
+        
+        $this->load->model('dao/user_model');
+        /*on change le mot de passe si il existe un user
+        (Eleve ou Enseignant) avec les identifiants 
+        renseignées*/
+        if($this->user_model->validate($this->input->post('email'), $this->input->post('oldpassword'))){
+            if($_POST['newpassword'] === $_POST['checknewpassword']){
+                //on change le mot de passe
+                $this->user_model->updateUserDetails($this->input->post('email'), '', $_POST['newpassword']);
+                $_SESSION['retour_modification'] = "Le mot de passe a été changé";
+            } else{
+                $_SESSION['retour_modification'] = "Veuillez saisir le même mot de passe";
+            }
+        } 
+        
+        else {
+            $_SESSION['retour_modification'] = "Vérifiez l'email ou le mot de passe";
         }
+        redirect(site_url("compte"));
     }
 
     /**
@@ -85,6 +100,6 @@ class CompteController extends CI_Controller
             /* l'utilisateur connecté est un enseignant */
             $oldmail = $this->encrypt->decode(get_cookie('ux_ad_189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'));
         }
-        $this->user_model->updateUserDetails($oldmail, $newmail);
+        $this->user_model->updateUserDetails($oldmail, $newmail, '');
     }
 }
