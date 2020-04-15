@@ -1,11 +1,17 @@
 <?php
 $this->load->view("page_template/header");
 
+/* sert a stocker les question du quiz selectionné */
 $questions = array();
+/*
+ * evaluation sert a determiner si le quiz a deja ete fait
+ * par l'eleve, si il a ete fait par l'eleve on affiche
+ * le score
+ */
 $evaluation = null;
-if (isset($_GET['quiz']) ) {
+if (isset($_GET['quiz'])) {
     $questions = $this->QuizDAO->getQuestionsByQuizId($_GET['quiz']);
-    if($_SESSION['user'] === 'etudiant'){
+    if ($_SESSION['user'] === 'etudiant') {
         $evaluation = $this->EvaluationDAO->getEvaluationByQuizAndByEleve($_GET['quiz'], $this->EleveDAO->getIdByEmail($this->encrypt->decode(get_cookie('ux_e189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'))));
     }
 }
@@ -28,7 +34,7 @@ if (isset($_GET['quiz']) ) {
 	</div>
 
 
-	<div class="card p-2 mr-4 w-50" style="background-color: white;">
+	<div class="card p-2 mr-4 w-50">
 		<div class="card-body">
 		<?php foreach ($coursList as $cours):?>
 		    <?php if(isset($_GET['cours']) && $cours['id'] === $_GET['cours']): ?>
@@ -49,9 +55,8 @@ if (isset($_GET['quiz']) ) {
               <?php
                 echo form_open('/EnseignementsController/checkQuizAnswers');
                 ?>
-                  <input type="text" name="quiz_id"
-					value="<?=$_GET['quiz']?>" hidden /> <input type="text"
-					name="nombre_question" value="<?=sizeof($questions)?>" hidden />
+                  <input type="text" name="quiz_id" value="<?=$_GET['quiz']?>" hidden /> 
+				  <input type="text" name="nombre_question" value="<?=sizeof($questions)?>" hidden />
                   <?php foreach($questions as $question):?>
                       <div class="card">
 					<h4 class="card-title"><?=$question['intitule']?></h4>
@@ -60,15 +65,38 @@ if (isset($_GET['quiz']) ) {
                   
                           	<?php foreach($reponses as $reponse): ?>
                           		<div class="radio">
-							<label><?=$reponse["contenu"]?>
+						<label><?=$reponse["contenu"]?>
                                   	<input type="radio"
-							name="optradio<?=$question['id'].'-'.$reponse['id']?>" <?=($_SESSION['user'] === 'admin' && $reponse['estVrai'] == 1) ? "checked" : ""?> > </label>
-							</div>
+							name="optradio<?=$question['id'].'-'.$reponse['id']?>"
+							<?=($_SESSION['user'] === 'admin' && $reponse['estVrai'] == 1) ? "checked" : ""?>>
+						</label>
+					</div>
                           	<?php endforeach;?>
                           	</div>
                           	
                   <?php endforeach;?>
-                  
+                  	
+                  	
+                  	<?php if($_GET['quiz'] === 'add'): ?>
+						<label class="required">Nom du Quiz</label>
+						<input type="text" name="quiz_name"><br>
+						
+						<h3>Questions</h3>
+						<label class="required">Question 1</label>
+						<input type="text" name="question 1" class="questionInput"><br><br>
+						
+							<label class="required">Reponse 1</label>
+    						<input type="text" name="reponse-1-1"> <label>Vrai ?</label>
+    						<input type="radio" name="estvrai-1-1"/><br>
+    					
+    						<label class="required">Reponse 2</label>
+    						<input type="text" name="reponse-1-2"> 
+    						<label>Vrai ?</label>
+    						<input type="radio" name="estvrai-1-2"/><br>
+    						
+						<button class="btn btn-primary mt-4 col-md-5 col-sm-2 addReponse">Ajouter une reponse</button>                  
+                  		<button class="btn btn-primary mt-4 col-md-5 col-sm-2 addQuestion">Ajouter une question</button>                  
+                  	<?php endif;?>
                   	<input type="submit"
 					class="btn btn-primary mt-4 col-md-5 col-sm-2" name="submit_quiz">
                   
@@ -77,7 +105,7 @@ if (isset($_GET['quiz']) ) {
                 ?>
                 <?php else: ?>
                 	<h2 class="card-title">Résultat</h2>
-                	<p><?=$evaluation[0]["note"]?></p>
+				<p><?=$evaluation[0]["note"]?></p>
              <?php endif;?>
           <?php endif;?>
 		</div>
@@ -92,10 +120,11 @@ if (isset($_GET['quiz']) ) {
 		<?php else: ?>
 		<div class="list-group group2">
         <?php foreach ($quizzes as $quiz): ?>
-          		  <list-item
-					lien="/projetL3/index.php/enseignements?quiz=<?=$quiz['id']?>"
-					titre="<?=$quiz['nom']?>" description="Description du cours"></list-item>	
+          		  <list-item lien="/projetL3/index.php/enseignements?quiz=<?=$quiz['id']?>" titre="<?=$quiz['nom']?>" description="Description du cours"></list-item>	
         <?php endforeach;?>
+        <?php if($_SESSION['user'] === 'admin'): ?>
+        		<list-item lien="/projetL3/index.php/enseignements?quiz=add" titre="+" description=""></list-item>
+		<?php endif;?>
 		</div>
 	<?php endif;?>
 </div>
@@ -105,6 +134,82 @@ if (isset($_GET['quiz']) ) {
 
 <script
 	src="/projetL3/application/views/page_template/components_vuejs/list_group.js"></script>
+
+<script>
+	/* variable qui vont nous servir a distinguer les different input pour les question 
+	et reponses */
+	var cptReponse = 3;
+    var cptQuestion = 1;
+
+    //on ecoute le click du bouton 'ajouter une reponse'
+	var boutonReponse = document.querySelector('.addReponse');
+	boutonReponse.addEventListener('click', ajoutReponse);
+
+	//on ecoute le click du bouton 'ajouter une question'
+	var boutonQuestion = document.querySelector('.addQuestion');
+	boutonQuestion.addEventListener('click', ajoutQuestion);
+
+	function ajoutQuestion(e){
+		e.preventDefault();
+		cptReponse = 1;
+		cptQuestion++;
+		/*On cree les elements necessaires à l'ajout d'une question*/
+		let labelQuestion = document.createElement("label");
+		labelQuestion.classList = "required";
+		labelQuestion.innerHTML = "Question "+cptQuestion;
+
+		let inputTextQuestion = document.createElement("input");
+		inputTextQuestion.type = "text";
+		inputTextQuestion.name = "Question-"+cptQuestion;
+		inputTextQuestion.classList = "questionInput";
+
+		let br = document.createElement("br");
+		
+		let documents = document.querySelector('.documents');
+		documents.children[0].insertBefore(br, boutonReponse);
+		documents.children[0].insertBefore(labelQuestion, boutonReponse);
+		documents.children[0].insertBefore(inputTextQuestion, boutonReponse);
+		documents.children[0].insertBefore(br, boutonReponse);
+
+	}
+	
+	function ajoutReponse(e){
+		e.preventDefault();
+
+		/*On cree les elements necessaires à l'ajout d'une reponse*/
+		let labelReponse = document.createElement("label");
+		labelReponse.classList = "required";
+		labelReponse.innerHTML = "Reponse "+cptReponse;
+
+		let labelVrai = document.createElement("label");
+		labelVrai.innerHTML = "Vrai ?";
+		
+		let inputTextReponse = document.createElement("input");
+		inputTextReponse.type = "text";
+		inputTextReponse.name = "reponse-"+cptQuestion+"-"+(cptReponse);
+
+		let inputRadio = document.createElement("input");
+		inputRadio.type = "radio";
+		inputRadio.name = "estVrai-"+cptQuestion+"-"+(cptReponse++);		
+		
+		let br = document.createElement("br");
+
+		//on ajoute les elements pour une nouvelle reponse
+		let documents = document.querySelector('.documents');
+		documents.children[0].insertBefore(labelReponse, this);		
+		documents.children[0].insertBefore(inputTextReponse, this);
+		documents.children[0].insertBefore(labelVrai, this);
+		documents.children[0].insertBefore(inputRadio, this);
+		documents.children[0].insertBefore(br, this);
+	}
+</script>
+
+<style>
+ .questionInput{
+    margin-top: 20px;
+    margin-bottom : 20px;
+ }   
+</style>
 
 <?php $this->load->view("page_template/footer");?>
 </body>
