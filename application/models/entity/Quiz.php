@@ -20,8 +20,9 @@ class Quiz
      */
     private $nom;
     /**
-     * Many Classe have Many Cours.
-     * @ManyToMany(targetEntity="Classe", mappedBy="quizzes")
+     * Many Quiz have Many Classe.
+     * @ManyToMany(targetEntity="Classe", inversedBy="quizzes")
+     * @JoinTable(name="quiz_classe")
      */
     private $classes;
     /**
@@ -79,7 +80,7 @@ class Quiz
     }
 
     /**
-     * @param mixed $classes
+     * @param array $classes
      */
     public function setClasses($classes)
     {

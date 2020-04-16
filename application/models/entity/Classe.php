@@ -37,10 +37,10 @@ if (! defined('BASEPATH'))
          * @ManyToMany(targetEntity="Cours", mappedBy="classes")
          */
         private $cours;
+        
         /**
-         * Many Classe have Many Quiz.
-         * @ManyToMany(targetEntity="Quiz", inversedBy="classes")
-         * @JoinTable(name="quiz_classe")
+         * Many Classe have Many Cours.
+         * @ManyToMany(targetEntity="Quiz", mappedBy="classes")
          */
         private $quizzes;
         

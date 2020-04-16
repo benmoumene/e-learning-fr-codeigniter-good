@@ -72,24 +72,25 @@ class EnseignementsController extends CI_Controller
         }
         $data["idsCours"] = $idsCours;
             
+        $this->load->model("dao/ClasseDAO");
+        $data['classeList'] = $this->ClasseDAO->getListClasse();
+        
         $this->load->view('enseignements', $data);
     }
 
     public function checkQuizAnswers()
     {
-        if($_SESSION['user'] !== 'etudiant'){
-            redirect(site_url("enseignements?quiz=".$_POST['quiz_id']));
-        }
-        
         $reponsesByQuestionId = array();
         $score = 0;
 
         foreach ($_POST as $k => $p) {
-            if ($k === 'nombre_question' || $k === 'quiz_id')
+            if (in_array($k, array('nombre_question', 'quiz_id'))){
                 continue;
+            }
 
-            else if ($k === 'submit_quiz')
+            else if ($k === 'submit_quiz'){
                 break;
+            }
 
             $k = str_replace('optradio', '', $k);
             $k = explode('-', $k);
@@ -108,12 +109,7 @@ class EnseignementsController extends CI_Controller
 
             $i = 0;
             foreach ($question as $reponse) {
-
-                if ($reponse === $reponses[$i ++]["id"]) {
-                    $count ++;
-                } else {
-                    $count --;
-                }
+                $count = ($reponse === $reponses[$i ++]["id"]) ?  $count+=1 : $count-=1;
             }
 
             if ($count === sizeof($reponses)) {
@@ -134,4 +130,72 @@ class EnseignementsController extends CI_Controller
         
         redirect(site_url("enseignements?quiz=".$_POST['quiz_id']));
     }
+    
+    public function saveNewQuiz(){
+        //insert new quiz
+        if($this->input->post('quiz_id') === null || empty($_POST['classe_ids'])){
+            $this->session->set_flashdata("creation_quiz", "Veuillez renseigner les champs");
+            redirect(site_url("enseignements?quiz=".$_POST['quiz_id']));
+        }
+        
+        $this->doctrine->em->beginTransaction();
+        $this->doctrine->refreshSchema();
+        
+        $quiz = new Quiz();
+        $quiz->setNom($_POST['quiz_name']);
+        
+        /*on prend les classes selectionnes pour le quiz 
+          et on lui affecte*/
+        $classes = array();
+        for($i=0; $i<sizeof($_POST['classe_ids']); $i++){
+            $classe = $this->doctrine->em->find("Classe", $_POST['classe_ids'][$i]);
+            array_push($classes, $classe);
+        }
+        $quiz->setClasses($classes);
+        $this->doctrine->em->persist($quiz);
+        
+        $questions = array();
+        $reponses = array();
+        
+        //on recupere les reponses et les question
+        foreach($_POST as $k => $p){
+            if($k != 'nombre_question' && strpos($k, 'question') !== FALSE){
+                $question = new Question();
+                $question->setId(explode('_', $k)[1]);
+                $question->setIntitule($_POST[$k]);
+                $question->setQuiz($quiz);
+                array_push($questions, $question);        
+            }
+            else if(strpos($k, 'reponse') !== FALSE){
+                $reponse = new Reponse();
+                $reponse->setContenu($_POST[$k]);
+                
+                $reponsesElements = explode('-', $k);
+                $reponse->setQuestion($reponsesElements[1]);
+                (isset($_POST['estvrai-'.$reponsesElements[1].'-'.$reponsesElements[2]]))? $reponse->setEstVrai(true) : $reponse->setEstVrai(false);
+                
+                array_push($reponses, $reponse);
+            }
+        }
+        
+        //on insere les questions et leurs reponses
+        foreach ($questions as $question){
+            $id_question = $question->getId();
+            $this->doctrine->em->persist($question);
+            foreach($reponses as $reponse){
+                if($id_question == $reponse->getQuestion()){
+                    $reponse->setQuestion($question);
+                    $this->doctrine->em->persist($reponse);
+                }
+            }
+        }
+        
+        $this->doctrine->em->flush();
+        $this->doctrine->em->commit();
+        
+        $this->session->set_flashdata("creation_quiz", "Le quiz a été crée");
+        redirect(site_url("enseignements?quiz=".$_POST['quiz_id']));
+    
+    }
+    
 }

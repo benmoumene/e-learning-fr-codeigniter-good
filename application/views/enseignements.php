@@ -15,7 +15,6 @@ if (isset($_GET['quiz'])) {
         $evaluation = $this->EvaluationDAO->getEvaluationByQuizAndByEleve($_GET['quiz'], $this->EleveDAO->getIdByEmail($this->encrypt->decode(get_cookie('ux_e189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'))));
     }
 }
-
 ?>
 
 <div class="d-flex mt-2 mb-4">
@@ -53,7 +52,12 @@ if (isset($_GET['quiz'])) {
           <?php if(isset($_GET['quiz'])): ?>
  			<?php if(empty($evaluation)): ?>       
               <?php
-                echo form_open('/EnseignementsController/checkQuizAnswers');
+                  if($_SESSION['user'] === 'admin'){
+                      echo form_open('/EnseignementsController/saveNewQuiz');
+                  }
+                  else{
+                    echo form_open('/EnseignementsController/checkQuizAnswers');
+                  }
                 ?>
                   <input type="text" name="quiz_id" value="<?=$_GET['quiz']?>" hidden /> 
 				  <input type="text" name="nombre_question" value="<?=sizeof($questions)?>" hidden />
@@ -80,6 +84,13 @@ if (isset($_GET['quiz'])) {
                   	<?php if($_GET['quiz'] === 'add'): ?>
 						<label class="required">Nom du Quiz</label>
 						<input type="text" name="quiz_name"><br>
+						
+						<label class="required" style="font-weight:bold">Classes</label>
+                    	<select name="classe_ids[]" multiple>
+                    		<?php foreach($classeList as $classe): ?>
+                    			<option value="<?=$classe['id']?>"><?=$classe['nom']?></option>
+                    		<?php endforeach;?>
+                    	</select><br><br>
 						
 						<h3>Questions</h3>
 						<label class="required">Question 1</label>
@@ -160,7 +171,7 @@ if (isset($_GET['quiz'])) {
 
 		let inputTextQuestion = document.createElement("input");
 		inputTextQuestion.type = "text";
-		inputTextQuestion.name = "Question-"+cptQuestion;
+		inputTextQuestion.name = "question_"+cptQuestion;
 		inputTextQuestion.classList = "questionInput";
 
 		let br = document.createElement("br");
@@ -190,7 +201,7 @@ if (isset($_GET['quiz'])) {
 
 		let inputRadio = document.createElement("input");
 		inputRadio.type = "radio";
-		inputRadio.name = "estVrai-"+cptQuestion+"-"+(cptReponse++);		
+		inputRadio.name = "estvrai-"+cptQuestion+"-"+(cptReponse++);		
 		
 		let br = document.createElement("br");
 
@@ -204,6 +215,7 @@ if (isset($_GET['quiz'])) {
 	}
 </script>
 
+
 <style>
  .questionInput{
     margin-top: 20px;
@@ -212,4 +224,21 @@ if (isset($_GET['quiz'])) {
 </style>
 
 <?php $this->load->view("page_template/footer");?>
+
+<script>
+Vue.use(VueToast);
+if('<?=$_SESSION['creation_quiz']?>' === 'Veuillez renseigner les champs'){
+    Vue.$toast.error('<?=$_SESSION['creation_quiz']?>', {
+    	  position: 'top',
+    	  duration: 8000	  
+    })
+}
+else if('<?=$_SESSION['creation_quiz']?>' === 'Le quiz a été crée'){
+    Vue.$toast.success('<?=$_SESSION['creation_quiz']?>', {
+    	  position: 'top',
+    	  duration: 8000	  
+    })
+}
+</script>
+
 </body>
