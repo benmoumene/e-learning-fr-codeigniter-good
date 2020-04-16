@@ -49,28 +49,29 @@ class CompteController extends CI_Controller
      */
     public function hasChange()
     {
-        if (filter_var($this->input->post('email'), FILTER_VALIDATE_EMAIL)) {
+        $email = $this->input->post("email");
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
             
-            $validator = new SmtpEmailValidator($this->input->post("email"), "tt9814023@gmail.com");
+            $validator = new SmtpEmailValidator($email, "tt9814023@gmail.com");
             $results   = $validator->validate();
             
-            if($results[$this->input->post("email")]){
+            if($results[$email]){
                 //on change l'adresse mail
-                $this->changeEmail($this->input->post('email'));
+                $this->changeEmail($email);
             }
             else{
                 redirect(site_url("compte"));
             }
         } 
         
-        $this->load->model('dao/user_model');
+        $this->load->model('dao/UserModel');
         /*on change le mot de passe si il existe un user
         (Eleve ou Enseignant) avec les identifiants 
         renseignées*/
-        if($this->user_model->validate($this->input->post('email'), $this->input->post('oldpassword'))){
+        if($this->UserModel->validate($email, $this->input->post('oldpassword'))){
             if($_POST['newpassword'] === $_POST['checknewpassword']){
                 //on change le mot de passe
-                $this->user_model->updateUserDetails($this->input->post('email'), '', $_POST['newpassword']);
+                $this->UserModel->updateUserDetails($this->input->post('email'), '', $_POST['newpassword']);
                 $_SESSION['retour_modification'] = "Le mot de passe a été changé";
             } else{
                 $_SESSION['retour_modification'] = "Veuillez saisir le même mot de passe";
@@ -92,7 +93,7 @@ class CompteController extends CI_Controller
      */
     public function changeEmail(string $newmail)
     {
-        $this->load->model('dao/user_model');
+        $this->load->model('dao/UserModel');
         /* si l'utilisateur connecté est un eleve alors le cookie(contenant email) commence par ux_e */
         $oldmail = $this->encrypt->decode(get_cookie('ux_e189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'));
 
@@ -100,6 +101,6 @@ class CompteController extends CI_Controller
             /* l'utilisateur connecté est un enseignant */
             $oldmail = $this->encrypt->decode(get_cookie('ux_ad_189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'));
         }
-        $this->user_model->updateUserDetails($oldmail, $newmail, '');
+        $this->UserModel->updateUserDetails($oldmail, $newmail, '');
     }
 }

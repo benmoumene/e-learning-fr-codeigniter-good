@@ -36,7 +36,7 @@ class AccesController extends CI_Controller
     {
         $this->load->helper('cookie');
         $this->load->helper('form');
-        $import = $this->session->flashdata('import_success');
+        $this->session->flashdata('import_success');
         
         $this->load->model("dao/ClasseDAO");
         $data['classeList'] = $this->ClasseDAO->getListClasse();
@@ -78,28 +78,25 @@ class AccesController extends CI_Controller
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($inputFileType);
         $spreadsheet = $reader->load($inputFileName);
         $eleves = $spreadsheet->getActiveSheet()->toArray();
-
+        
+        /*verification que la premiere ligne(entete)
+         *corresponde au modèle du fichier
+         *d'importation disponible dans la rubrique
+         *compte de l'enseignante connecté
+         **/
+        if($eleves[0][0] != "nom" || $eleves[0][1] != "prenom" || $eleves[0][2] != "email"){
+            $this->session->set_flashdata("import_success", "Veuillez vérifier la syntaxe du fichier d'importation.");
+            redirect(site_url("acces"));
+        }
+        
         $this->doctrine->refreshSchema();
 
+        
         $emailSent = true;
+        
         $i = 0;
         foreach ($eleves as $eleve) {
-            if($i == 0){
-                /*verification que la premiere ligne(entete)
-                 *corresponde au modèle du fichier 
-                 *d'importation disponible dans la rubrique
-                 *compte de l'enseignante connecté
-                 **/
-                if(isset($eleve[0]) && isset($eleve[1]) && isset($eleve[2])){
-                    if($eleve[0] != "nom" || $eleve[1]!="prenom" || $eleve[2] != "email"){
-                        $this->session->set_flashdata("import_success", "Veuillez vérifier la syntaxe du fichier d'importation.");
-                        redirect(site_url("acces"));
-                    }
-                }
-            }
-            
-            else if ($i > 0) {
-                if (isset($eleve[0]) && isset($eleve[1]) && isset($eleve[2])) {
+            if ($i > 0 && isset($eleve[0]) && isset($eleve[1]) && isset($eleve[2]) ) {
                     $classe = $this->doctrine->em->find("Classe", $_POST["classe_id"]);
                     $nouvelEleve = new Eleve($eleve[0], $eleve[1], $eleve[2], $classe);
                     /* Le mot de passe sera genere par le helper appelle dans la methode set */
@@ -120,7 +117,7 @@ class AccesController extends CI_Controller
                     if (! ($this->send_email_to_students($nouvelEleve->getEmail(), $mdpBeforeEncryption))) {
                         $emailSent = false;
                     }
-                }
+                
             }
             
             $i++;

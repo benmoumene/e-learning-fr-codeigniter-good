@@ -34,7 +34,7 @@ class ConnexionController extends CI_Controller
          * MODEL USER PERMETTANT DE VERIFIER SI LES IDENTIFIANTS
          * CORRESPONDENT A UN ETUDIANT OU A LA PROFESSEUR
          */
-        $this->load->model('dao/user_model');
+        $this->load->model('dao/UserModel');
     }
 
     /**
@@ -57,7 +57,7 @@ class ConnexionController extends CI_Controller
      * @uses $this->setCookieForUser
      * @uses $this->redirect()
      * @uses get_cookie()
-     * @uses $this->user_model->validate()
+     * @uses $this->UserModel->validate()
      *      
      * @return void
      */
@@ -65,7 +65,7 @@ class ConnexionController extends CI_Controller
     {
         if ($this->input->post('email', TRUE) && $this->input->post('password', TRUE)) {
             
-            if ($this->user_model->validate($this->input->post('email'), $this->input->post('password'))) {
+            if ($this->UserModel->validate($this->input->post('email'), $this->input->post('password'))) {
                 /* --ON INITIALISE LES COOKIES-- */
                 $this->setCookieForUser('name', $this->input->post('email'));
                 $this->setCookieForUser('password', $this->input->post('password'));
@@ -81,9 +81,9 @@ class ConnexionController extends CI_Controller
             $password = $this->encrypt->decode(get_cookie($this->config->item('cookie_prefix') . $this->_cookiesId['password']));
 
             $hasFailed = false;
-            if ($this->user_model->validate($mail, $password) == FALSE)
+            if (!($this->UserModel->validate($mail, $password))){
                 $hasFailed = true;
-
+            }
         } 
         
         $this->redirect();
@@ -105,8 +105,9 @@ class ConnexionController extends CI_Controller
      */
     private function redirect($hasFailed = true, $url = "connexion")
     {
-        if ($hasFailed)
+        if ($hasFailed){
             $this->session->set_flashdata("unable_to_connect", "La connexion a échouée");
+        }
         redirect(site_url($url));
     }
 
@@ -127,7 +128,7 @@ class ConnexionController extends CI_Controller
         $cookie['name'] = $cookieId[$typeCookie];
         $cookie['value'] = $this->encrypt->encode($inputValue);
 
-        $cookie['prefix'] = ($this->user_model->type === "enseignant") ? $this->config->item('cookie_prefix') : "ux_e";
+        $cookie['prefix'] = ($this->UserModel->type === "enseignant") ? $this->config->item('cookie_prefix') : "ux_e";
         set_cookie($cookie);
     }
 }

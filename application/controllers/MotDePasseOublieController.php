@@ -49,18 +49,18 @@ class MotDePasseOublieController extends CI_Controller
      * à celui d'un eleve
      *
      * @uses $this->load->model()
-     * @uses $this->user_model->_getUser()
+     * @uses $this->UserModel->_getUser()
      * @uses $this->sendEmail()
      *      
      */
     public function send_password()
     {
-        $this->load->model('dao/user_model');
+        $this->load->model('dao/UserModel');
         /*
-         * user_model a une methode permettant de retourner
+         * UserModel a une methode permettant de retourner
          * le mot de passe d'un user(etudiant ou enseignant)
          */
-        $user = $this->user_model->_getUser($this->input->post("email"));
+        $user = $this->UserModel->_getUser($this->input->post("email"));
 
         if ($user) {
             $validator = new SmtpEmailValidator($this->input->post("email"), "tt9814023@gmail.com");

@@ -1,7 +1,8 @@
 <?php
 
-if (! defined('BASEPATH'))
+if (! defined('BASEPATH')){
     exit('No direct script access allowed');
+}
 
 /**
  * Ce model sert à gérer la partie connexion(vérifier les identifiants)
@@ -10,7 +11,7 @@ if (! defined('BASEPATH'))
  *
  * @author Mickael GUDIN <mickaelgudin@gmail.com>
  */
-class User_model extends CI_MODEL
+class UserModel extends CI_MODEL
 {
     private $_cookie = array(
         'expire' => '86500',
