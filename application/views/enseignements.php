@@ -68,9 +68,9 @@ if (isset($_GET['quiz'])) {
                       	
                   
                           	<?php foreach($reponses as $reponse): ?>
-                          		<div class="radio">
+                          		<div class="checkbox">
 						<label><?=$reponse["contenu"]?>
-                                  	<input type="radio"
+                                  	<input type="checkbox"
 							name="optradio<?=$question['id'].'-'.$reponse['id']?>"
 							<?=($_SESSION['user'] === 'admin' && $reponse['estVrai'] == 1) ? "checked" : ""?>>
 						</label>
@@ -98,12 +98,12 @@ if (isset($_GET['quiz'])) {
 						
 							<label class="required">Reponse 1</label>
     						<input type="text" name="reponse-1-1"> <label>Vrai ?</label>
-    						<input type="radio" name="estvrai-1-1"/><br>
+    						<input type="checkbox" name="estvrai-1-1"/><br>
     					
     						<label class="required">Reponse 2</label>
     						<input type="text" name="reponse-1-2"> 
     						<label>Vrai ?</label>
-    						<input type="radio" name="estvrai-1-2"/><br>
+    						<input type="checkbox" name="estvrai-1-2"/><br>
     						
 						<button class="btn btn-primary mt-4 col-md-5 col-sm-2 addReponse">Ajouter une reponse</button>                  
                   		<button class="btn btn-primary mt-4 col-md-5 col-sm-2 addQuestion">Ajouter une question</button>                  
@@ -199,9 +199,9 @@ if (isset($_GET['quiz'])) {
 		inputTextReponse.type = "text";
 		inputTextReponse.name = "reponse-"+cptQuestion+"-"+(cptReponse);
 
-		let inputRadio = document.createElement("input");
-		inputRadio.type = "radio";
-		inputRadio.name = "estvrai-"+cptQuestion+"-"+(cptReponse++);		
+		let inputCheckbox = document.createElement("input");
+		inputCheckbox.type = "checkbox";
+		inputCheckbox.name = "estvrai-"+cptQuestion+"-"+(cptReponse++);		
 		
 		let br = document.createElement("br");
 
@@ -210,7 +210,7 @@ if (isset($_GET['quiz'])) {
 		documents.children[0].insertBefore(labelReponse, this);		
 		documents.children[0].insertBefore(inputTextReponse, this);
 		documents.children[0].insertBefore(labelVrai, this);
-		documents.children[0].insertBefore(inputRadio, this);
+		documents.children[0].insertBefore(inputCheckbox, this);
 		documents.children[0].insertBefore(br, this);
 	}
 </script>
