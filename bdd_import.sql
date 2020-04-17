@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Apr 11, 2020 at 07:00 PM
+-- Generation Time: Apr 17, 2020 at 09:12 PM
 -- Server version: 10.4.10-MariaDB
 -- PHP Version: 7.3.12
 
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `cours` (
 --
 
 INSERT INTO `cours` (`id`, `intitule`, `description`, `status`) VALUES
-(69, 'cours IHM 1', 'Pas encore de description pour ce cours', 1),
+(69, 'cours IHM 1', 'Ceci est le premiere cours d\'IHM', 1),
 (70, 'cours IHM 2', 'Pas encore de description pour ce cours', 1),
 (71, 'cours IHM 3', 'Pas encore de description pour ce cours', 1),
 (72, 'ensemble des cours', 'Pas encore de description pour ce cours', 1),
@@ -143,14 +143,14 @@ CREATE TABLE IF NOT EXISTS `eleve` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_2D602AF3E7927C74` (`email`),
   KEY `IDX_2D602AF38F5EA509` (`classe_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=198 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=207 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `eleve`
 --
 
 INSERT INTO `eleve` (`id`, `nom`, `email`, `motDePasse`, `prenom`, `classe_id`, `dateCreation`) VALUES
-(197, 'Gudin', 'mickaelgudin@gmail.com', 'ATQIFlVkVwAAElUJVlMHFVFp', 'Mickael', 1, '2020-04-11 20:57:26');
+(206, 'Gudin', 'mickaelgudin@gmail.com', 'AGIMPVViCnxebw==', 'Mickael', 1, '2020-04-13 14:02:29');
 
 -- --------------------------------------------------------
 
@@ -174,7 +174,33 @@ CREATE TABLE IF NOT EXISTS `enseignant` (
 --
 
 INSERT INTO `enseignant` (`id`, `nom`, `email`, `motDePasse`, `prenom`) VALUES
-(1, 'Ben Rabah', 'tt9814023@gmail.com', 'UzUKMwI9UDkCOA==', 'Nourhene');
+(1, 'Ben Rabah', 'tt9814023@gmail.com', 'BGIPNlFuVD0AOg==', 'Nourhene');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `evaluation`
+--
+
+DROP TABLE IF EXISTS `evaluation`;
+CREATE TABLE IF NOT EXISTS `evaluation` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `quiz_id` int(11) DEFAULT NULL,
+  `date` datetime NOT NULL,
+  `appreciation` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `note` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `eleve_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQ_5C7EA6A5853CD175` (`quiz_id`),
+  KEY `IDX_5C7EA6A5A6CC7B2` (`eleve_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `evaluation`
+--
+
+INSERT INTO `evaluation` (`id`, `quiz_id`, `date`, `appreciation`, `note`, `eleve_id`) VALUES
+(18, 1, '2020-04-13 14:34:03', NULL, '1/2', 206);
 
 -- --------------------------------------------------------
 
@@ -189,7 +215,17 @@ CREATE TABLE IF NOT EXISTS `question` (
   `intitule` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_4F812B18853CD175` (`quiz_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `question`
+--
+
+INSERT INTO `question` (`id`, `quiz_id`, `intitule`) VALUES
+(1, 1, 'Quelle library a remplacé JavaFX a t-il remplacé ?'),
+(2, 1, 'Quelle IDE est préférable pour JavaFX ?'),
+(20, 11, 'question1'),
+(21, 11, 'question2');
 
 -- --------------------------------------------------------
 
@@ -203,7 +239,15 @@ CREATE TABLE IF NOT EXISTS `quiz` (
   `nom` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_42055AC6C6E55B5` (`nom`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `quiz`
+--
+
+INSERT INTO `quiz` (`id`, `nom`) VALUES
+(1, 'QCM1'),
+(11, 'quiz1');
 
 -- --------------------------------------------------------
 
@@ -215,10 +259,19 @@ DROP TABLE IF EXISTS `quiz_classe`;
 CREATE TABLE IF NOT EXISTS `quiz_classe` (
   `classe_id` int(11) NOT NULL,
   `quiz_id` int(11) NOT NULL,
-  PRIMARY KEY (`classe_id`,`quiz_id`),
+  PRIMARY KEY (`quiz_id`,`classe_id`),
   KEY `IDX_62C34FCF8F5EA509` (`classe_id`),
   KEY `IDX_62C34FCF853CD175` (`quiz_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `quiz_classe`
+--
+
+INSERT INTO `quiz_classe` (`classe_id`, `quiz_id`) VALUES
+(1, 1),
+(1, 11),
+(2, 11);
 
 -- --------------------------------------------------------
 
@@ -234,7 +287,24 @@ CREATE TABLE IF NOT EXISTS `reponse` (
   `estVrai` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_900BE75B1E27F6BF` (`question_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `reponse`
+--
+
+INSERT INTO `reponse` (`id`, `question_id`, `contenu`, `estVrai`) VALUES
+(13, 1, 'AWT', 1),
+(14, 1, 'SWING', 1),
+(15, 1, 'Je ne sais pas', 0),
+(16, 2, 'Eclipse', 0),
+(17, 2, 'NetBeans', 1),
+(18, 2, 'Tous', 0),
+(52, 20, 'reponse1', 0),
+(53, 20, 'reponse2', 1),
+(54, 20, 'reponse3', 1),
+(55, 21, 'reponse 2 1', 0),
+(56, 21, 'reponse 2 2', 1);
 
 --
 -- Constraints for dumped tables
@@ -258,6 +328,13 @@ ALTER TABLE `document`
 --
 ALTER TABLE `eleve`
   ADD CONSTRAINT `FK_2D602AF38F5EA509` FOREIGN KEY (`classe_id`) REFERENCES `classe` (`id`);
+
+--
+-- Constraints for table `evaluation`
+--
+ALTER TABLE `evaluation`
+  ADD CONSTRAINT `FK_5C7EA6A5853CD175` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`id`),
+  ADD CONSTRAINT `FK_5C7EA6A5A6CC7B2` FOREIGN KEY (`eleve_id`) REFERENCES `eleve` (`id`);
 
 --
 -- Constraints for table `question`
