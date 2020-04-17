@@ -2,31 +2,28 @@
 	  echo form_open_multipart('/AccesController/import');
 ?>
 
-	<div class="card connexion" style="width: 60%;margin: 20px auto">
-    	<div class="card-body">
-        	<center>
-            		<h5 class="card-title mb-4">Création des comptes pour les étudiants</h5>
-                <div class="justify-content-md-center">
-                    <div class="col-md-4 form-group mb-2">
-                    	<label class="required" style="font-weight:bold">Classe</label>
-                    	<select name="classe_id">
-                    		<?php foreach($classeList as $classe): ?>
-                    			<option value="<?=$classe['id']?>"><?=$classe['nom']?></option>
-                    		<?php endforeach;?>
-                    	</select><br><br>
-                    	
-                    	<label class="required" style="font-weight:bold">Fichier d'importation</label>
-                    	<input type="file" class="form-control" id="id" name="file" /><br><br>
-                       	
-                        <input class="btn btn-primary" type="submit" name="import" value="Importer" /><br><br>
-        			</div>
-        		</div>
-        	</center>
-        </div>
-        <center>
-        	<p>Le fichier d'importation est un fichier excel(.xslx), le modèle est disponible dans la rubrique compte</p>
-    	</center>
-    </div>
+<div id="body">
+    <center>
+	<card class="connexion" title="Création des comptes pour les étudiants" style="width: 60%;margin: 20px auto">
+		<div class="justify-content-md-center">
+            <div class="col-md-4 form-group mb-2">
+            	<label class="required" style="font-weight:bold">Classe</label>
+            	<select name="classe_id">
+            		<?php foreach($classeList as $classe): ?>
+            			<option value="<?=$classe['id']?>"><?=$classe['nom']?></option>
+            		<?php endforeach;?>
+            	</select><br><br>
+            	
+            	<label class="required" style="font-weight:bold">Fichier d'importation</label>
+            	<input type="file" class="form-control" id="id" name="file" /><br><br>
+               	
+                <input class="btn btn-primary" type="submit" name="import" value="Importer" /><br><br>
+			</div>
+		</div>
+		  <p>Le fichier d'importation est un fichier excel(.xslx), le modèle est disponible dans Compte</p>
+    </card>
+    </center>
+</div>
 	
 <?php
 echo form_close();

@@ -1,21 +1,29 @@
-<?php $this->load->view("page_template/header");
-?>
+<?php
 
-<div class="card connexion" style="width: 60%;margin: 20px auto">
-    <div class="card-body">
-    <?php
+$this->load->view("page_template/header");
+?>
+<center>
+	<div id="body">
+		<card class="card connexion" title="Mot de passe oublié ?"
+			style="width: 60%;margin: 20px auto">
+        
+        <?php
         echo form_open('/MotDePasseOublieController/send_password');
-    	?>
-    <center>	
-    	<div col-md-4 form-group mb-2>
-    		<h5 class="card-title">Mot de passe oublié ?</h5>
-    		<input type="email" class="form-control" style="width: 30%;" id="email" name="email" placeholder="Email (*)"/><br>
-    	 	<input class="btn btn-primary" type="submit" name="connexion" value="Envoyer mot de passe" /><br><br>
-    	</div>
-	</center>
-	<?php echo  form_close();?>
+        ?>
+        	
+        	<div col-md-4 form-group mb-2>
+			<input type="email" class="form-control" style="width: 30%;"
+				id="email" name="email" placeholder="Email (*)" /><br> 
+			<input
+				class="btn btn-primary" type="submit" name="connexion"
+				value="Envoyer mot de passe" /><br><br>
+			</div>
+    	
+    	<?php echo  form_close();?>
+    	
+    	</card>
 	</div>
-</div>
+</center>
 
 <?php $this->load->view("page_template/footer");?>
 

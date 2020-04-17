@@ -1,14 +1,11 @@
 <?php $this->load->view("page_template/header"); ?>
 
-<div class="card connexion" style="width: 60%;margin: 20px auto">
-    <div class="card-body">
-        
-    	<?php
-        echo form_open('/ConnexionController/connexion');
-    	?>    
-
-    <center>
-    	  <h5 class="card-title">Se connecter</h5>
+<center>
+    <div id="body">
+        <card class="connexion" title="Se connecter" style="width: 60%;margin: 20px auto">
+        	<?php
+            echo form_open('/ConnexionController/connexion');
+        	?>    
           <div class="justify-content-md-center">
             <div class="col-md-4 form-group mb-2">
               <input type="email" name="email" class="form-control" placeholder="Email (*)">
@@ -21,14 +18,13 @@
           </div>
           <br>
            <input class="btn btn-primary col-md-2 col-sm-2" type="submit" name="connexion" value="Connexion" />
-    </center>  
-
-    <?php
-    echo form_close();
-    ?>
-    
-</div>
-</div>
+        
+            <?php
+            echo form_close();
+            ?>
+        </card>
+    </div>
+</center>
 
 <?php $this->load->view("page_template/footer");?>
 

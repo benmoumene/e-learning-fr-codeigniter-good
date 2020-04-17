@@ -24,7 +24,7 @@ $_SESSION['user'] = $user;
     <title>Site UX</title>
 </head>
 
-<body >
+<body>
 <!-- AFFICHER LE MENU -->
 	<menu class="navbar navbar-expand-lg navbar-light">
     	<?php foreach($menuItems as $n): ?>

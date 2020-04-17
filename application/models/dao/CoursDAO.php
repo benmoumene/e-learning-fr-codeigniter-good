@@ -22,6 +22,14 @@ class CoursDAO extends CI_MODEL
         return $this->db->get()->result_array();
     }
     
+    function getCoursById($id){
+        $this->db->select("*");
+        $this->db->from("cours");
+        $this->db->where("id", $id);
+        
+        return $this->db->get()->result_array()[0];
+    }
+    
     function getListCoursByIdClasse($idClasse){
         $this->db->select("*");
         $this->db->from("cours");

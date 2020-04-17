@@ -7,26 +7,28 @@ else if($_SESSION['user'] === 'admin')
     $email = $this->encrypt->decode(get_cookie('ux_ad_189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'));
     
 ?>
-<div class="card mb-4" style="width: 60%;margin: 20px auto">
-    <div class="card-body">
+<div id="body">
+<card class="mb-4" style="width: 60%;margin: 20px auto">
+   
 		<?php echo form_open('/CompteController/hasChange');?>
+		
 		<center>
     	<h5 class="card-title">Mon compte</h5>
-    		<div class="justify-content-md-center">
-                <div class="col-md-4 form-group mb-2">
-            		<label style="font-weight:bold">Email</label> 
-            		<input type="email" class="form-control"name="email" value=<?=$email?>><br>
-            		<label style="font-weight:bold">Saisissez votre mot de passe actuel</label> 
-            		<input type="password" class="form-control"name="oldpassword"><br>
-            		<label style="font-weight:bold">Saisissez votre nouveau mot de passe</label> 
-            		<input type="password" class="form-control"name="newpassword"><br>
-            		<label style="font-weight:bold">Resaisissez votre nouveau mot de passe</label> 
-            		<input type="password" class="form-control"name="checknewpassword"><br>
-            		
-            		<input class="btn btn-primary" type="submit" name="modifier" value="Modifier" /><br><br>
-    			</div>
-    		</div>
-		</center>
+		<div class="justify-content-md-center">
+            <div class="col-md-4 form-group mb-2">
+        		<label style="font-weight:bold">Email</label> 
+        		<input type="email" class="form-control"name="email" value=<?=$email?>><br>
+        		<label style="font-weight:bold">Saisissez votre mot de passe actuel</label> 
+        		<input type="password" class="form-control"name="oldpassword"><br>
+        		<label style="font-weight:bold">Saisissez votre nouveau mot de passe</label> 
+        		<input type="password" class="form-control"name="newpassword"><br>
+        		<label style="font-weight:bold">Resaisissez votre nouveau mot de passe</label> 
+        		<input type="password" class="form-control"name="checknewpassword"><br>
+        		
+        		<input class="btn btn-primary" type="submit" name="modifier" value="Modifier" /><br><br>
+			</div>
+		</div>
+		
 		
 		<?php if($_SESSION['user'] == 'admin'): ?>
     		<a id="fichierImportation" href="/projetL3/uploads/modele_insertion/modele_importation.xlsx">
@@ -35,7 +37,8 @@ else if($_SESSION['user'] === 'admin')
 		<?php endif;?>
 		
 		<?php echo form_close();?>
-</div>
+		</center>
+</card>
 </div>
 
 </body>
