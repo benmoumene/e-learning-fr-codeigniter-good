@@ -34,7 +34,7 @@ class Eleve extends Personne
     private $evaluations;
 
     
-    public function __construct($nom, $prenom, $email, $classe)
+    public function __construct($nom = "", $prenom = "", $email = "", $classe = "")
     {
         date_default_timezone_set('Europe/Paris');
         $this->dateCreation = new DateTime();

@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="Eleve_test" file="C:\wamp64\www\projetL3\application\tests\models\Eleve_test.php" tests="4" assertions="4" failures="0" errors="0" time="0.048602">
-    <testcase name="test_get_random_password" class="Eleve_test" file="C:\wamp64\www\projetL3\application\tests\models\Eleve_test.php" line="11" assertions="1" time="0.022101"/>
-    <testcase name="test_get_email" class="Eleve_test" file="C:\wamp64\www\projetL3\application\tests\models\Eleve_test.php" line="23" assertions="1" time="0.015217"/>
-    <testcase name="test_get_nom" class="Eleve_test" file="C:\wamp64\www\projetL3\application\tests\models\Eleve_test.php" line="30" assertions="1" time="0.005957"/>
-    <testcase name="test_get_prenom" class="Eleve_test" file="C:\wamp64\www\projetL3\application\tests\models\Eleve_test.php" line="37" assertions="1" time="0.005327"/>
+  <testsuite name="EmailSender_test" file="C:\wamp64\www\projetL3\application\tests\libraries\EmailSender_test.php" tests="1" assertions="0" failures="0" errors="1" time="0.025074">
+    <testcase name="test_sendMail" class="EmailSender_test" file="C:\wamp64\www\projetL3\application\tests\libraries\EmailSender_test.php" line="10" assertions="0" time="0.025074">
+      <error type="CIPHPUnitTestShowErrorException">EmailSender_test::test_sendMail&#13;
+CIPHPUnitTestShowErrorException: Unable to load the requested class: EmailSender
+&#13;
+C:\wamp64\www\projetL3\application\tests\_ci_phpunit_test\replacing\core\Common.php:174
+C:\wamp64\www\projetL3\application\tests\_ci_phpunit_test\replacing\core\Loader.php:1148
+C:\wamp64\www\projetL3\application\tests\_ci_phpunit_test\replacing\core\Loader.php:226
+C:\wamp64\www\projetL3\application\tests\libraries\EmailSender_test.php:7
+</error>
+    </testcase>
   </testsuite>
 </testsuites>
