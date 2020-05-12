@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="EleveDAO_test" file="C:\wamp64\www\projetL3\application\tests\models\EleveDAO_test.php" tests="1" assertions="3" failures="0" errors="0" time="1.921473">
-    <testcase name="test_getEleveByEmail" class="EleveDAO_test" file="C:\wamp64\www\projetL3\application\tests\models\EleveDAO_test.php" line="10" assertions="3" time="1.921473"/>
+  <testsuite name="UserModel_test" file="C:\wamp64\www\projetL3\application\tests\models\UserModel_test.php" tests="1" assertions="2" failures="0" errors="0" time="0.033324">
+    <testcase name="test_validate" class="UserModel_test" file="C:\wamp64\www\projetL3\application\tests\models\UserModel_test.php" line="15" assertions="2" time="0.033324"/>
   </testsuite>
 </testsuites>
