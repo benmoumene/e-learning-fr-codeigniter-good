@@ -35,7 +35,5 @@ Vue.$toast.error('<?=$_SESSION['unable_to_connect']?>', {
 	  duration: 8000	  
 })
 </script>
-
-
 </body>
 </html>

@@ -22,7 +22,7 @@ class Eleve extends Personne
      * Un document concerne un cours
      *
      * @ManyToOne(targetEntity="Classe", inversedBy="etudiants")
-     * @JoinColumn(nullable=true, name="classe_id", referencedColumnName="id")
+     * @JoinColumn(nullable=true, name="classe_id", onDelete="CASCADE", referencedColumnName="id")
      */
     private $classe;
 
@@ -34,7 +34,7 @@ class Eleve extends Personne
     private $evaluations;
 
     
-    public function __construct($nom, $prenom, $email, $classe)
+    public function __construct($nom = "", $prenom = "", $email = "", $classe = "")
     {
         date_default_timezone_set('Europe/Paris');
         $this->dateCreation = new DateTime();

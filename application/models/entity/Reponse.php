@@ -25,7 +25,7 @@ class Reponse
      * Une question concerne un quiz
      *
      * @ManyToOne(targetEntity="Question", inversedBy="reponses")
-     * @JoinColumn(nullable=true, name="question_id", referencedColumnName="id")
+     * @JoinColumn(nullable=true, name="question_id", onDelete="CASCADE", referencedColumnName="id")
      */
     private $question;
     

@@ -38,7 +38,7 @@ class Document
      * Un document concerne un cours
      *
      * @ManyToOne(targetEntity="Cours", inversedBy="documents")
-     * @JoinColumn(nullable=true, name="cours_id", referencedColumnName="id")
+     * @JoinColumn(nullable=true, name="cours_id", onDelete="CASCADE", referencedColumnName="id")
      */
     private $cours;
     

@@ -23,7 +23,7 @@ class Question
      * Une question concerne un quiz
      *
      * @ManyToOne(targetEntity="Quiz", inversedBy="questions")
-     * @JoinColumn(nullable=true, name="quiz_id", referencedColumnName="id")
+     * @JoinColumn(nullable=true, name="quiz_id", onDelete="CASCADE", referencedColumnName="id")
      */
     private $quiz;
     /**

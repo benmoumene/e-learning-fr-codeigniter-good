@@ -1,9 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="Eleve_test" file="C:\wamp64\www\projetL3\application\tests\models\Eleve_test.php" tests="4" assertions="4" failures="0" errors="0" time="0.048602">
-    <testcase name="test_get_random_password" class="Eleve_test" file="C:\wamp64\www\projetL3\application\tests\models\Eleve_test.php" line="11" assertions="1" time="0.022101"/>
-    <testcase name="test_get_email" class="Eleve_test" file="C:\wamp64\www\projetL3\application\tests\models\Eleve_test.php" line="23" assertions="1" time="0.015217"/>
-    <testcase name="test_get_nom" class="Eleve_test" file="C:\wamp64\www\projetL3\application\tests\models\Eleve_test.php" line="30" assertions="1" time="0.005957"/>
-    <testcase name="test_get_prenom" class="Eleve_test" file="C:\wamp64\www\projetL3\application\tests\models\Eleve_test.php" line="37" assertions="1" time="0.005327"/>
+  <testsuite name="EmailSender_test" file="C:\wamp64\www\projetL3\application\tests\libraries\EmailSender_test.php" tests="1" assertions="1" failures="1" errors="0" time="0.296421">
+    <testcase name="test_send" class="EmailSender_test" file="C:\wamp64\www\projetL3\application\tests\libraries\EmailSender_test.php" line="8" assertions="1" time="0.296421">
+      <failure type="PHPUnit_Framework_ExpectationFailedException">EmailSender_test::test_send&#13;
+Failed asserting that CI_Loader Object &amp;00000000454070e4000000007b32a8c4 (
+    '_ci_ob_level' =&gt; 1
+    '_ci_view_paths' =&gt; Array &amp;0 (
+        'C:\wamp64\www\projetL3\application\views\' =&gt; true
+    )
+    '_ci_library_paths' =&gt; Array &amp;1 (
+        0 =&gt; 'C:\wamp64\www\projetL3\application\'
+        1 =&gt; 'C:\wamp64\www\projetL3\system\'
+    )
+    '_ci_model_paths' =&gt; Array &amp;2 (
+        0 =&gt; 'C:\wamp64\www\projetL3\application\'
+    )
+    '_ci_helper_paths' =&gt; Array &amp;3 (
+        0 =&gt; 'C:\wamp64\www\projetL3\application\'
+        1 =&gt; 'C:\wamp64\www\projetL3\system\'
+    )
+    '_ci_cached_vars' =&gt; Array &amp;4 ()
+    '_ci_classes' =&gt; Array &amp;5 (
+        'benchmark' =&gt; 'Benchmark'
+        'hooks' =&gt; 'Hooks'
+        'config' =&gt; 'Config'
+        'uri' =&gt; 'URI'
+        'router' =&gt; 'Router'
+        'output' =&gt; 'Output'
+        'security' =&gt; 'Security'
+        'input' =&gt; 'Input'
+        'lang' =&gt; 'Lang'
+        'loader' =&gt; 'Loader'
+        'doctrine' =&gt; 'Doctrine'
+        'emailsender' =&gt; 'EmailSender'
+        'email' =&gt; 'Email'
+    )
+    '_ci_models' =&gt; Array &amp;6 ()
+    '_ci_helpers' =&gt; Array &amp;7 (
+        'url_helper' =&gt; true
+    )
+    '_ci_varmap' =&gt; Array &amp;8 (
+        'unit_test' =&gt; 'unit'
+        'user_agent' =&gt; 'agent'
+    )
+) is true.
+&#13;
+C:\wamp64\www\projetL3\application\tests\libraries\EmailSender_test.php:14
+</failure>
+    </testcase>
   </testsuite>
 </testsuites>

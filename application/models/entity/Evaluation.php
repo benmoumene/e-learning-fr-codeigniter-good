@@ -29,14 +29,14 @@ class Evaluation
     /**
      * une Evalutation peut avoir un Quiz.
      * @OneToOne(targetEntity="Quiz")
-     * @JoinColumn(name="quiz_id", referencedColumnName="id", nullable = true)
+     * @JoinColumn(name="quiz_id", referencedColumnName="id", nullable = true, onDelete="CASCADE")
      */
     private $quiz;
     /**
      * Une Evaluation concerne un Eleve
      *
      * @ManyToOne(targetEntity="Eleve", inversedBy="evaluations")
-     * @JoinColumn(name="eleve_id", referencedColumnName="id", nullable=true)
+     * @JoinColumn(name="eleve_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
      */
     private $eleve;
     
