@@ -40,7 +40,7 @@ if (! defined('BASEPATH'))
         
         /**
          * Many Classe have Many Cours.
-         * @ManyToMany(targetEntity="Quiz", mappedBy="classes")
+         * @ManyToMany(targetEntity="Quiz", mappedBy="classes", cascade="persist")
          */
         private $quizzes;
         

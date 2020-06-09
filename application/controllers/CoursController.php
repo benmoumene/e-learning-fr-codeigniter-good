@@ -11,13 +11,17 @@ class CoursController extends CI_Controller
         parent::__construct();
         $this->load->helper('cookie');
         $this->load->library('session');
-        /* REDIRECT IF CURRENT USER IS NOT ADMIN */
-        if ($_SESSION['user'] != 'admin') {
-            redirect(site_url("accueil"));
-        }
-        
         $this->load->helper('form');
         $this->doctrine->em->beginTransaction();
+        
+        $this->load->helper('cookie');
+        
+        $this->load->model("dao/CoursDAO");
+        $this->load->model("dao/DocumentDAO");
+        $this->load->model("dao/QuizDAO");
+        $this->load->model("dao/EleveDAO");
+        $this->load->model("dao/EvaluationDAO");
+        $this->load->helper('form');
     }
 
     /**
@@ -32,10 +36,43 @@ class CoursController extends CI_Controller
      */
     public function index()
     {
-        $this->load->helper('cookie');
-        $this->load->helper('form');
         $this->load->model("dao/ClasseDAO");
         $data['classeList'] = $this->ClasseDAO->getListClasse();
+        
+        
+        $this->load->library('encrypt');
+        $idClasse = 0;
+        
+        if ($_SESSION['user'] == 'admin') {
+            // on recupere tous les cours
+            $data["coursList"] = $this->CoursDAO->getListCours();
+        } else if ($_SESSION['user'] == 'etudiant') {
+            /*
+             * on recupere seulement les cours
+             * de la classe de l'etudiant connecté
+             */
+            $email = $this->encrypt->decode(get_cookie('ux_e189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'));
+            $this->db->select("classe_id");
+            $this->db->from("eleve");
+            $this->db->where("email", $email);
+            $idClasse = intval($this->db->get()->result_array()[0]["classe_id"], 10);
+            
+            $data["coursList"] = $this->CoursDAO->getListCoursByIdClasse($idClasse);
+        }
+        
+        // on recupere les documents par cours(Dictionnaire)
+        $data["documents"] = $this->DocumentDAO->getDocumentsList();
+        
+        // on recupere les id des cours de chaque document
+        $idsCours = array();
+        foreach ($data["documents"] as $document) {
+            array_push($idsCours, $document['cours_id']);
+        }
+        $data["idsCours"] = $idsCours;
+        
+        $this->load->model("dao/ClasseDAO");
+        $data['classeList'] = $this->ClasseDAO->getListClasse();
+        
         $this->load->view('creer_cours', $data);
     }
 
@@ -78,7 +115,7 @@ class CoursController extends CI_Controller
         }
         $this->doctrine->em->persist($cours);
 
-        if (! empty($_FILES['files']['tmp_name'][0])) {
+        if (! empty($_FILES['files']['tmp_name'][0]) && $cours!==null) {
             $this->do_upload($cours);
         }
         $this->doctrine->em->flush();
@@ -89,6 +126,20 @@ class CoursController extends CI_Controller
         
     }
 
+    public function addDocuments(){
+        $this->doctrine->em->beginTransaction();
+        $this->doctrine->refreshSchema();
+        $cours = $this->doctrine->em->find('Cours', $this->input->post('cours_id'));
+        
+        if(!empty($_FILES['files']['tmp_name'][0]) && $cours !== null){
+            $this->do_upload($cours);
+        }
+        $this->doctrine->em->flush();
+        $this->doctrine->em->commit();
+        
+        redirect(site_url("cours?cours=".$this->input->post('cours_id')));
+    }
+    
     /**
      * permet d'upload les documents
      * joints à un cours
@@ -136,6 +187,7 @@ class CoursController extends CI_Controller
                     $document->setNom($_FILES['file']['name']);
                     $document->setPath("/projetL3/uploads/" . $_FILES['file']['name']);
                     $this->doctrine->em->persist($document);
+                    
                 } else {
                     /*
                      * SI L'UN DES DOCUMENTS N'EST PAS DE TYPE
@@ -158,6 +210,16 @@ class CoursController extends CI_Controller
             $this->session->set_flashdata("import", "Le cours a été crée avec " . $count . " documents associés");
         }
         $this->doctrine->em->commit();
+        $this->doctrine->em->flush();
+    }
+    
+    public function removeCours(){
+        $this->doctrine->refreshSchema();
+        $cours = $this->doctrine->em->find("Cours", $this->input->post('cours_id'));
+       
+        $this->doctrine->em->remove($cours);
+        $this->doctrine->em->commit();
+        $this->doctrine->em->flush();
         redirect(site_url("cours"));
     }
 }

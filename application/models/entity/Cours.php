@@ -48,7 +48,7 @@ class Cours
     
     /**
      * Many Cours have Many Classe.
-     * @ManyToMany(targetEntity="Classe", inversedBy="cours")
+     * @ManyToMany(targetEntity="Classe", inversedBy="cours", cascade={"persist"})
      * @JoinTable(name="cours_classe")
      */
     private $classes;
