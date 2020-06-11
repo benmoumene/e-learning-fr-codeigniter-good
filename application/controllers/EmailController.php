@@ -3,6 +3,10 @@
 require './vendor/autoload.php';
 use SMTPValidateEmail\Validator as SmtpEmailValidator;
 
+/**
+ * Controller de la rubrique Contact
+ * @author Mike
+ */
 class EmailController extends CI_Controller
 {
 
@@ -32,22 +36,10 @@ class EmailController extends CI_Controller
 
     /**
      * Envoi un email sur l'adresse mail configure
-     * par $this->email->to($config['smtp_user']);
-     *
+     * par la library EmailSender
+     * (dans le dossier application/library)
      * $config['smtp_user'] etant le mail destinee à recevoir
      * les messages envoyees a partir du formulaire
-     *
-     * @uses $this->input->post()
-     * @uses $this->load->library()
-     * @uses $this->email->initialize()
-     * @uses $this->email->set_newline()
-     * @uses $this->email->from()
-     * @uses $this->email->to()
-     * @uses $this->email->subject()
-     * @uses $this->email->message()
-     * @uses $this->email->send()
-     * @uses $this->session->set_flashdata()
-     * @uses $this->load->view()
      *      
      * @return void
      */

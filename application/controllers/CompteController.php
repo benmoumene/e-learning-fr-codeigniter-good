@@ -11,12 +11,6 @@ use SMTPValidateEmail\Validator as SmtpEmailValidator;
  */
 class CompteController extends CI_Controller
 {
-
-    /**
-     * Charge les fonctions utilise par
-     * la page d'accueil et lance
-     * la vue
-     */
     function __construct()
     {
         parent::__construct();
@@ -29,7 +23,6 @@ class CompteController extends CI_Controller
 
     /**
      * Charge la vue de la compte.php
-     *
      * @uses $this->load->view()
      *      
      * @return void
@@ -41,8 +34,10 @@ class CompteController extends CI_Controller
 
     /**
      * Cette fonction permet de vérifier
-     * que l'email entré et différent de l'email
+     * que l'email entré est différent de l'email
      * actuel.
+     * Elle permet aussi de verifier le 
+     * nouveau mot de passe
      *
      * @uses $this->input->post()
      * @uses $this->changeEmail()

@@ -3,17 +3,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
 use Doctrine\Common\ClassLoader;
 
 /**
- * Ce controller est le controller de la rubrique enseignements
+ * Ce controller est le controller de la rubrique classes
+ * permettant à l'enseignant de supprimer des eleves ou
+ * l'une de ses classes ou de creer une classe
  *
  * @author Mickael GUDIN <mickaelgudin@gmail.com>
  */
 class ClassesController extends CI_Controller
 {
     
-    /**
-     * Charge les fonctions utilisees par
-     * la page d'accueil
-     */
     function __construct()
     {
         parent::__construct();
@@ -25,8 +23,8 @@ class ClassesController extends CI_Controller
     }
     
     /**
-     * charge la vue de l'accueil
-     *
+     * charge la vue de classe pour 
+     * l'enseignante ou l'accueil pour les autres
      * @return void
      */
     public function index()
@@ -55,6 +53,11 @@ class ClassesController extends CI_Controller
         $this->load->view('classes', $data);
     }
     
+    /**
+     *  function permettant de 
+     *  supprimer un Eleve
+     *  @return void
+     */
     public function removeEleve(){
         $this->doctrine->em->beginTransaction();
         $this->doctrine->refreshSchema();
@@ -66,6 +69,11 @@ class ClassesController extends CI_Controller
         redirect(site_url("classes"));
     }
     
+    /**
+     *  function permettant de
+     *  supprimer une Classe
+     *  @return void
+     */
     public function removeClasse(){
         $this->doctrine->em->beginTransaction();
         $this->doctrine->refreshSchema();
@@ -78,6 +86,11 @@ class ClassesController extends CI_Controller
         redirect(site_url("classes"));
     }
     
+    /**
+     *  function permettant de
+     *  creer une Classe
+     *  @return void
+     */
     public function createClasse(){
         $this->doctrine->em->beginTransaction();
         $this->doctrine->refreshSchema();

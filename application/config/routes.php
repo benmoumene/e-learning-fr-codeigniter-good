@@ -63,4 +63,3 @@ $route['publications'] = 'PublicationController';
 $route['enseignant'] = 'EnseignantController';
 $route['quiz'] = 'QuizController';
 $route['classes'] = 'ClassesController';
-$route['remove_cours'] = 'EnseignementsController/removeQuiz';

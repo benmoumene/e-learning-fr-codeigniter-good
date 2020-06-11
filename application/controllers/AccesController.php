@@ -6,7 +6,14 @@ use Doctrine\Common\ClassLoader;
 
 require './vendor/autoload.php';
 use SMTPValidateEmail\Validator as SmtpEmailValidator;
-
+/**
+ * Controller pour la rubrique acces
+ * lorsque l'enseignant est connecté
+ * il peut importer les eleves d'une
+ * classe via cette rubrique
+ * @author Mike
+ *
+ */
 class AccesController extends CI_Controller
 {
 
@@ -129,6 +136,15 @@ class AccesController extends CI_Controller
         redirect(site_url("acces"));
     }
 
+    /**
+     * function permettant d'envoyer
+     * un mail un etudiant en
+     * vérifiant qu'on peut lui envoyé
+     * un mail
+     * @param string $email
+     * @param string $mdp
+     * @return boolean
+     */
     public function send_email_to_students($email, $mdp)
     {
         $validator = new SmtpEmailValidator($email, "tt9814023@gmail.com");

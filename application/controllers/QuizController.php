@@ -172,7 +172,7 @@ class QuizController extends CI_Controller
         foreach($_POST as $k => $p){
             if($k != 'nombre_question' && strpos($k, 'question') !== FALSE){
                 $question = new Question();
-                $question->setId(explode('_', $k)[1]);
+                $question->setId(explode('-', $k)[1]);
                 $question->setIntitule($_POST[$k]);
                 $question->setQuiz($quiz);
                 array_push($questions, $question);        

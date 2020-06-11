@@ -8,7 +8,6 @@ let item = Vue.component('menu-item', {
 
 
 new Vue({el : ".navbar-nav", components: item});
-new Vue({el : ".list-group", components: item});
 
 let menu = Vue.component('menu',{
 	template: `

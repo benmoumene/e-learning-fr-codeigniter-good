@@ -30,9 +30,8 @@ else if(!empty($coursSelectionne)){
 $title = strtoupper($title);
 
 ?>
-
 <div class="d-flex mt-2 mb-4">
-	<card class="" title="<?=($_SESSION["user"] === "admin") ? "Mes quiz" : "Liste des quiz" ?>">
+	<card class="list-group" title="<?=($_SESSION["user"] === "admin") ? "Mes quiz" : "Liste des quiz" ?>">
     	<?php if($_SESSION['user'] === 'admin'): ?>
             		<list-item lien="/projetL3/index.php/quiz?quiz=add"
     					titre="Ajouter un quiz" description=""></list-item>
@@ -98,7 +97,7 @@ $title = strtoupper($title);
                   <?php endforeach;?>
                   	
                   	
-                  	<?php if($_GET['quiz'] === 'add'): ?>
+       <?php if($_GET['quiz'] === 'add'): ?>
 						<label class="required">Nom du Quiz</label> <input type="text"
 			name="quiz_name"><br> <label class="required"
 			style="font-weight: bold">Classes</label> <select name="classe_ids[]"
@@ -110,30 +109,39 @@ $title = strtoupper($title);
 		<br>
 
 		<h3>Questions</h3>
-		<label>Nombre de questions à ajouter : </label>
-		<input type="number" name="nombreQuestionSouhaite" class="nombreQuestionSouhaite">
-		<button class="btn btn-primary col-md-1 col-sm-2 nombreQuestions"><i class="fa fa-plus" onclick="this.parentNode.click()"></i></button><br>
-		
-		<label class="required font-weight-bold">Question 1</label> <input type="text"
-			name="question 1" class="questionInput">
-		<br><label class="required labelreponse-1-1">Reponse 1</label> <input type="text"
-			name="reponse-1-1"> <label class="labelcheckbox-1-1">Vrai ?</label> <input type="checkbox"
-			name="estvrai-1-1" /><br><label class="required labelreponse-1-2">Reponse 2</label> <input
-			type="text" name="reponse-1-2"> <label class="labelcheckbox-1-2">Vrai ?</label> <input
-			type="checkbox" name="estvrai-1-2" />
+		<div id="divQuiz">
+    	<label>Nombre de questions à ajouter : </label>
+		<input type="number" name="nombreQuestionSouhaite" v-model="nbQuestionSouhaite">
+		<button type="button" class="btn btn-primary col-md-1 col-sm-2" v-on:click.self="addMultipleQuestions"><i class="fa fa-plus"></i></button><br>
 
-		<button class="btn btn-primary ml-1 col-md-1 col-sm-2 addReponse addReponse-1-2"><i class="fa fa-plus-circle" onclick="this.parentNode.click()"></i></button>
-		<button class="btn btn-danger col-md-1 col-sm-2 removeReponse removeReponse-1-2"><i class="fa fa-minus-circle" onclick="this.parentNode.click()"></i></button>	
+    	<div v-for="q in questions">
+    		<label class="required font-weight-bold">
+				Question {{q.numeroQuestion}}
+			</label>
+			<input type="text" :name="'question-' + q.numeroQuestion"/>
+			<div v-for="n in q.numeroReponse">
+				<label>
+					Reponse {{n}}<br/>
+				</label>
+				<input type="text" :name="'reponse-' +q.numeroQuestion+'-'+ n"/>
+				<label>Vrai ?</label> 
+				<input type="checkbox" :name="'estvrai-'+ q.numeroQuestion +'-' + n" />
+			</div>
+			<br>
+			<button type="button" class="btn btn-primary ml-1 col-md-1 col-sm-2" v-on:click.self="addReponse" :name="q.numeroQuestion"><i class="fa fa-plus-circle"></i></button>
+			<button type="button" class="btn btn-danger col-md-1 col-sm-2" v-on:click.self="removeReponse" :name="q.numeroQuestion"><i class="fa fa-minus-circle"></i></button>
+			<button type="button" class="btn btn-danger col-md-3 col-sm-2" v-on:click.self="removeQuestion" :name="q.numeroQuestion"><i class="fa fa-minus-circle"></i> question</button>
+			<br><br>
+		</div>
 		<br>
-		<button class="btn btn-primary mt-4 col-md-5 col-sm-2 addQuestion addQuestion-1"><i class="fa fa-plus" onclick="this.parentNode.click()"></i> question</button>
-		<button class="btn btn-danger mt-4 col-md-5 col-sm-2 removeQuestion removeQuestion-1"><i class="fa fa-minus" onclick="this.parentNode.click()"></i> question</button><br>  	                  
-                  	<?php endif;?>
+		<button type="button" class="btn btn-primary ml-1 col-md-4 col-sm-2" v-on:click.self="addQuestion"><i class="fa fa-plus-circle"></i> question</button>
+	</div>
+	
+	<?php endif;?>
                   	<input type="submit"
 			class="btn btn-primary mt-4 col-md-5 col-sm-2" name="submit_quiz">
                   
-                  <?php
-                echo form_close();
-                ?>
+                </form>
                 <?php else: ?>
                 	<h2 class="card-title">Résultat</h2>
 						<p><?=$evaluation[0]["note"]?></p>
@@ -153,14 +161,11 @@ $title = strtoupper($title);
 	margin-bottom: 20px;
 }
 </style>
-
-<script
-	src="/projetL3/application/views/page_template/components_vuejs/list_group.js"></script>
-<script
-	src="/projetL3/application/views/page_template/components_vuejs/card.js"></script>
+<!-- package for the toast -->
+<script src="https://cdn.jsdelivr.net/npm/vue-toast-notification"></script>
+<link href="https://cdn.jsdelivr.net/npm/vue-toast-notification/dist/theme-default.css" rel="stylesheet">
 
 
-<?php $this->load->view("page_template/footer");?>
 
 <script>
 Vue.use(VueToast);
@@ -178,6 +183,14 @@ else if('<?=$_SESSION['creation_quiz']?>' === 'Le quiz a été crée'){
 }
 </script>
 
-<script src="/projetL3/application/views/page_template/add_quiz"></script>
+<script
+	src="/projetL3/application/views/page_template/components_vuejs/quiz.js"></script>
 
 </body>
+
+
+<footer class="page-footer font-small blue">
+<div class="footer text-center py-3">
+	<p>Ce site est reserve au partage des ressources pour le cours UX</p>
+</div>
+</footer>

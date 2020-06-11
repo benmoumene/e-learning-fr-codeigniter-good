@@ -3,6 +3,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 use Doctrine\Common\ClassLoader;
 
+/**
+ * Controller de la rubrique
+ * cours qui permet de visualiser
+ * les cours et les documents associes
+ * Elle permet aussi à l'enseignante 
+ * de créer un cours, supprimer un cours,
+ * ou ajouter des documents à un cours 
+ * existant
+ * @author Mike
+ *
+ */
 class CoursController extends CI_Controller
 {
 
@@ -28,7 +39,6 @@ class CoursController extends CI_Controller
      * Charge les fonctions utilise pour
      * le formulaire(present dans la vue)
      * puis charge la vue de la page
-     *
      * @uses $this->load->helper()
      * @uses $this->load->view()
      *      
@@ -77,7 +87,7 @@ class CoursController extends CI_Controller
     }
 
     /**
-     * creer un cours dans la base de donn�es
+     * creer un cours dans la base de donnees
      * le formulaire(present dans la vue)
      * si des documents sont joints au cours
      * alors on les upload avec la methode
@@ -126,6 +136,11 @@ class CoursController extends CI_Controller
         
     }
 
+    /**
+     * permet d'ajouter des documents
+     * a un cours existant
+     * return @void
+     */
     public function addDocuments(){
         $this->doctrine->em->beginTransaction();
         $this->doctrine->refreshSchema();
@@ -213,6 +228,10 @@ class CoursController extends CI_Controller
         $this->doctrine->em->flush();
     }
     
+    /**
+     * permet de supprimer un cours existant
+     * return @void
+     */
     public function removeCours(){
         $this->doctrine->refreshSchema();
         $cours = $this->doctrine->em->find("Cours", $this->input->post('cours_id'));
