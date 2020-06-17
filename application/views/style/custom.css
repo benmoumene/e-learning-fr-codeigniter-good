@@ -14,7 +14,7 @@ body{
 
 menu{
     background: var(--bg-blanc);
-    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 0 6px rgba(0,0,0,0.23);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     color: var(--bg-blanc);
     overflow: hidden;
 }
@@ -27,7 +27,6 @@ menu{
 
 menu button i{
     color: var(--bg-blanc);
-    font-size: 30px;
     font-size: 25px;
     margin-top: 10px;
 }
@@ -39,17 +38,23 @@ menu .fa-user-circle-o{
     width: 25%;
 }
 .nav-item a{
-    color: black !important;
+    color: black;
     text-align: center;
     font-size: 18px;
+    text-transform: uppercase ;
     
 }
 
-.nav-item a:hover, .nav-item a.active {
+
+
+.nav-link:hover, .nav-link:active {
     color: var(--blue-personalise) !important;
     border-bottom: 3px solid var(--blue-personalise);
     width: 100%;
-} 
+    top: 100%;
+}
+
+
 
 .navbar{
     padding-bottom: 0;
@@ -80,6 +85,28 @@ menu .fa-user-circle-o{
 	content:"Fichier d'importation";
 }
 
-.footer{
-	background-color: var(--blue-personalise);
+.submit {
+    text-align : center; !important;
+}
+
+.control-label {
+    text-align: right;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: var(--blue-personalise);
+    color:#fff;
+}
+
+.list-group-item-action {
+    width: auto; !important;
+}
+
+.quiz {
+    padding: 15px !important;
+    margin: 10px !important;
+    text: align-center;
 }
