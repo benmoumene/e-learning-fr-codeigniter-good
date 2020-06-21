@@ -142,7 +142,9 @@ $title = strtoupper($title);
 
 
                           </div>
-
+						  <div class ="submit">
+                              <input type="submit" class="btn btn-primary mt-4 col-md-5 col-sm-2" name="submit_quiz">
+                          </div>	
                       </div>
 
 
@@ -152,13 +154,13 @@ $title = strtoupper($title);
 	</div>
 	
 	<?php endif;?>
-              <div class ="submit">
-                  <input type="submit" class="btn btn-primary mt-4 col-md-5 col-sm-2" name="submit_quiz">
-              </div>
-
-
-                  
-                </form>
+              <?php if($_SESSION['user'] === 'etudiant'): ?>
+              	<div class ="submit">
+                	<input type="submit" class="btn btn-primary mt-4 col-md-5 col-sm-2" name="submit_quiz">
+                </div>
+              <?php endif;?>
+   
+             </form>
                 <?php else: ?>
                 	<h2 class="card-title">Résultat</h2>
 						<p><?=$evaluation[0]["note"]?></p>

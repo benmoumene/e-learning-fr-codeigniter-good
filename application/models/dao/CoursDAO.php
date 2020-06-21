@@ -1,7 +1,8 @@
 <?php
 
-if (! defined('BASEPATH'))
+if (! defined('BASEPATH')){
     exit('No direct script access allowed');
+}
     
 /**
  * 
@@ -10,6 +11,7 @@ if (! defined('BASEPATH'))
  */
 class CoursDAO extends CI_MODEL
 {
+    private $table = "cours";
     
     function __construct()
     {
@@ -17,14 +19,14 @@ class CoursDAO extends CI_MODEL
     
     function getListCours(){
         $this->db->select("*");
-        $this->db->from("cours");
+        $this->db->from($this->table);
         
         return $this->db->get()->result_array();
     }
     
     function getCoursById($id){
         $this->db->select("*");
-        $this->db->from("cours");
+        $this->db->from($this->table);
         $this->db->where("id", $id);
         
         return $this->db->get()->result_array()[0];
@@ -32,7 +34,7 @@ class CoursDAO extends CI_MODEL
     
     function getListCoursByIdClasse($idClasse){
         $this->db->select("*");
-        $this->db->from("cours");
+        $this->db->from($this->table);
         $this->db->join('cours_classe', 'cours.id = cours_classe.cours_id');
         $this->db->where('classe_id', $idClasse);
         

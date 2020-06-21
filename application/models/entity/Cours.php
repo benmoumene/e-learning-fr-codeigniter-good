@@ -2,9 +2,9 @@
 use Doctrine\Common\Collections\ArrayCollection;
 require './vendor/autoload.php';
 
-if (! defined('BASEPATH'))
+if (! defined('BASEPATH')){
     exit('No direct script access allowed');
-
+}
 /**
  *
  * @Entity

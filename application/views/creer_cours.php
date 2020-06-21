@@ -44,8 +44,10 @@ if (isset($_GET['cours'])) {
               <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="5" name="description"></textarea>
             </div>
            
-            <add-files label="Ajouter des documents" multiple="multiple"></add-files><br>
-            		
+           	<label style="font-weight:bold" class="required">Documents du cours</label>
+        	<input type="file"  class="form-control" id="id" name="files[]" multiple="multiple"/><br>
+        	
+           		
         	<label class="required" style="font-weight:bold">Classes</label><br>
         	<select name="classes_ids[]" multiple="multiple">
         		<?php foreach($classeList as $classe): ?>
@@ -82,14 +84,16 @@ if (isset($_GET['cours'])) {
 			<h4>Documents du cours</h4>
 		<?php endif;?>
 		 
+		 <div class="documents">
      	 <?php foreach($documents as $document):?>
               <?php if(isset($_GET['cours']) && $document['cours_id'] == $_GET['cours']): ?>    
                   <list-item lien="<?=$document["path"]?>"
 			titre="<?=$document["nom"]?>" description=""
-			class="ml-4 documents documentsCours<?=$document['cours_id']?>"></list-item>	
-              
+			class="ml-4 documentsCours<?=$document['cours_id']?>"></list-item>	
               <?php endif;?>
           <?php endforeach;?>
+          </div>
+          
 		
 		
 	</div>
@@ -101,7 +105,7 @@ if (isset($_GET['cours'])) {
 <?php $this->load->view("page_template/footer");?>
 <script>
 Vue.use(VueToast);
-if("<?=$this->session->flashdata('import')?>" === "Le cours a été crée sans documents" || ("<?=$this->session->flashdata('import')?>".includes("Le cours a été crée avec ") && "<?=$this->session->flashdata('import')?>".includes(" documents associés"))){
+if(("<?=$this->session->flashdata('import')?>".includes("Le cours a été crée avec ") && "<?=$this->session->flashdata('import')?>".includes(" documents associés"))){
 	Vue.$toast.success("<?=$this->session->flashdata('import');?>", {
 	  position: 'top',
 	  duration: 8000

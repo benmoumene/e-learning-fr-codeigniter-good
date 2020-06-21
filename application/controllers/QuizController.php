@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 use Doctrine\Common\ClassLoader;
 
 /**
@@ -54,6 +54,9 @@ class QuizController extends CI_Controller
             $idClasse = intval($this->db->get()->result_array()[0]["classe_id"], 10);
 
             $data["coursList"] = $this->CoursDAO->getListCoursByIdClasse($idClasse);
+        } else{
+            //utilisateur non connecté
+            redirect(site_url('accueil'));
         }
 
         // on recupere les documents par cours(Dictionnaire)
@@ -142,11 +145,15 @@ class QuizController extends CI_Controller
         redirect(site_url("quiz"));
     }
     
+    
+    /**
+     * create quiz
+     * @return void
+     */
     public function saveNewQuiz(){
-        //insert new quiz
         if($this->input->post('quiz_id') === null || empty($_POST['classe_ids'])){
             $this->session->set_flashdata("creation_quiz", "Veuillez renseigner les champs");
-            redirect(site_url("quiz?quiz=".$_POST['quiz_id']));
+            redirect(site_url("quiz?quiz=add"));
         }
         
         $this->doctrine->em->beginTransaction();
@@ -155,13 +162,12 @@ class QuizController extends CI_Controller
         $quiz = new Quiz();
         $quiz->setNom($_POST['quiz_name']);
         
-        /*on prend les classes selectionnes pour le quiz 
-          et on lui affecte*/
         $classes = array();
         for($i=0; $i<sizeof($_POST['classe_ids']); $i++){
             $classe = $this->doctrine->em->find("Classe", $_POST['classe_ids'][$i]);
             array_push($classes, $classe);
         }
+        
         $quiz->setClasses($classes);
         $this->doctrine->em->persist($quiz);
         
@@ -171,6 +177,7 @@ class QuizController extends CI_Controller
         //on recupere les reponses et les question
         foreach($_POST as $k => $p){
             if($k != 'nombre_question' && strpos($k, 'question') !== FALSE){
+                //questions
                 $question = new Question();
                 $question->setId(explode('-', $k)[1]);
                 $question->setIntitule($_POST[$k]);
@@ -178,6 +185,7 @@ class QuizController extends CI_Controller
                 array_push($questions, $question);        
             }
             else if(strpos($k, 'reponse') !== FALSE){
+                //reponses
                 $reponse = new Reponse();
                 $reponse->setContenu($_POST[$k]);
                 
@@ -206,7 +214,5 @@ class QuizController extends CI_Controller
         
         $this->session->set_flashdata("creation_quiz", "Le quiz a été crée");
         redirect(site_url("quiz?quiz=".$_POST['quiz_id']));
-    
     }
-    
 }

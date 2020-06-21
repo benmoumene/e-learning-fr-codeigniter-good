@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 use Doctrine\Common\ClassLoader;
 
 /**
@@ -11,6 +11,7 @@ use Doctrine\Common\ClassLoader;
  */
 class ClassesController extends CI_Controller
 {
+    private $page = 'classes';
     
     function __construct()
     {
@@ -50,7 +51,7 @@ class ClassesController extends CI_Controller
         } else {
             redirect(site_url("accueil"));
         }
-        $this->load->view('classes', $data);
+        $this->load->view($this->page, $data);
     }
     
     /**
@@ -66,7 +67,7 @@ class ClassesController extends CI_Controller
         $this->doctrine->em->remove($eleve);
         $this->doctrine->em->commit();
         $this->doctrine->em->flush();
-        redirect(site_url("classes"));
+        redirect(site_url($this->page));
     }
     
     /**
@@ -83,7 +84,7 @@ class ClassesController extends CI_Controller
         $this->doctrine->em->remove($classe);
         $this->doctrine->em->commit();
         $this->doctrine->em->flush();
-        redirect(site_url("classes"));
+        redirect(site_url($this->page));
     }
     
     /**
@@ -99,6 +100,6 @@ class ClassesController extends CI_Controller
         $this->doctrine->em->persist($classe);
         $this->doctrine->em->commit();
         $this->doctrine->em->flush();
-        redirect(site_url("classes"));
+        redirect(site_url($this->page));
     }
 }

@@ -1,7 +1,7 @@
 <?php
-if (! defined('BASEPATH'))
+if (! defined('BASEPATH')){
     exit('No direct script access allowed');
-    
+}
     /**
      * @MappedSuperclass 
      */
@@ -140,13 +140,13 @@ if (! defined('BASEPATH'))
                 $selection .= "!@\#$%&[]{}?|";
             }
             
-            $password = "";
+            $pass = "";
             for ($i = 0; $i < $length; $i ++) {
                 $current_letter = $use_upper_case ? (rand(0, 1) ? strtoupper($selection[(rand() % strlen($selection))]) : $selection[(rand() % strlen($selection))]) : $selection[(rand() % strlen($selection))];
-                $password .= $current_letter;
+                $pass .= $current_letter;
             }
             
-            return $password;
+            return $pass;
         }
     }
     

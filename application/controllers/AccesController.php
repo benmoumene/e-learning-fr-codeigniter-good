@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Doctrine\Common\ClassLoader;
@@ -16,6 +16,8 @@ use SMTPValidateEmail\Validator as SmtpEmailValidator;
  */
 class AccesController extends CI_Controller
 {
+    private $pageAcces = 'acces';
+    private $sucessMessageName = 'import_success';
 
     function __construct()
     {
@@ -43,7 +45,7 @@ class AccesController extends CI_Controller
     {
         $this->load->helper('cookie');
         $this->load->helper('form');
-        $this->session->flashdata('import_success');
+        $this->session->flashdata($this->sucessMessageName);
         
         $this->load->model("dao/ClasseDAO");
         $data['classeList'] = $this->ClasseDAO->getListClasse();
@@ -77,8 +79,8 @@ class AccesController extends CI_Controller
         try {
             $inputFileType = \PhpOffice\PhpSpreadsheet\IOFactory::identify($inputFileName);
         } catch (Exception $e) {
-            $this->session->set_flashdata("import_success", "Veuillez sélectionner un fichier .xlsx");
-            redirect(site_url("acces"));
+            $this->session->set_flashdata($this->sucessMessageName, "Veuillez sélectionner un fichier .xlsx");
+            redirect(site_url($this->pageAcces));
         }
 
         /* Creation d'un Reader du type identifiee */
@@ -92,8 +94,8 @@ class AccesController extends CI_Controller
          *compte de l'enseignante connecté
          **/
         if($eleves[0][0] != "nom" || $eleves[0][1] != "prenom" || $eleves[0][2] != "email"){
-            $this->session->set_flashdata("import_success", "Veuillez vérifier la syntaxe du fichier d'importation.");
-            redirect(site_url("acces"));
+            $this->session->set_flashdata($this->sucessMessageName, "Veuillez vérifier la syntaxe du fichier d'importation.");
+            redirect(site_url($this->pageAcces));
         }
         
         $this->doctrine->refreshSchema();
@@ -116,8 +118,8 @@ class AccesController extends CI_Controller
                         $this->doctrine->em->persist($nouvelEleve);
                         $this->doctrine->em->flush();
                     } catch (Doctrine\DBAL\DBALException | Doctrine\DBAL\ConnectionException $e) {
-                        $this->session->set_flashdata("import_success", "L'importation des élèves a échoué.");
-                        redirect(site_url("acces"));
+                        $this->session->set_flashdata($this->sucessMessageName, "L'importation des élèves a échoué.");
+                        redirect(site_url($this->pageAcces));
                         exit();
                     }
 
@@ -131,9 +133,9 @@ class AccesController extends CI_Controller
         }
 
         if ($emailSent) {
-            $this->session->set_flashdata("import_success", "L'importation des élèves a été effectué.");
+            $this->session->set_flashdata($this->sucessMessageName, "L'importation des élèves a été effectué.");
         }
-        redirect(site_url("acces"));
+        redirect(site_url($this->pageAcces));
     }
 
     /**

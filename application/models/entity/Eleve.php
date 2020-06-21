@@ -1,7 +1,7 @@
 <?php
-if (! defined('BASEPATH'))
+if (! defined('BASEPATH')){
     exit('No direct script access allowed');
-
+}
 use Doctrine\Common\Collections\ArrayCollection;
 include_once 'Personne.php';
 
@@ -59,7 +59,7 @@ class Eleve extends Personne
      */
     public function setEvaluations($evaluations)
     {
-        $this->evaluations = $classe;
+        $this->evaluations = $evaluations;
     }
 
     /**

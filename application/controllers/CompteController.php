@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 require './vendor/autoload.php';
 use SMTPValidateEmail\Validator as SmtpEmailValidator;
@@ -11,6 +11,9 @@ use SMTPValidateEmail\Validator as SmtpEmailValidator;
  */
 class CompteController extends CI_Controller
 {
+    private $messageName = 'retour_modification';
+    private $page = 'compte';
+    
     function __construct()
     {
         parent::__construct();
@@ -29,7 +32,10 @@ class CompteController extends CI_Controller
      */
     public function index()
     {
-        $this->load->view('compte');
+        if($_SESSION['user'] === ''){
+            redirect(site_url('accueil'));
+        }
+        $this->load->view($this->page);
     }
 
     /**
@@ -55,7 +61,7 @@ class CompteController extends CI_Controller
                 $this->changeEmail($email);
             }
             else{
-                redirect(site_url("compte"));
+                redirect(site_url($this->page));
             }
         } 
         
@@ -67,16 +73,16 @@ class CompteController extends CI_Controller
             if($_POST['newpassword'] === $_POST['checknewpassword']){
                 //on change le mot de passe
                 $this->UserModel->updateUserDetails($this->input->post('email'), '', $_POST['newpassword']);
-                $_SESSION['retour_modification'] = "Le mot de passe a été changé";
+                $_SESSION[$this->messageName] = "Le mot de passe a été changé";
             } else{
-                $_SESSION['retour_modification'] = "Veuillez saisir le même mot de passe";
+                $_SESSION[$this->messageName] = "Veuillez saisir le même mot de passe";
             }
         } 
         
         else {
-            $_SESSION['retour_modification'] = "Vérifiez l'email ou le mot de passe";
+            $_SESSION[$this->messageName] = "Vérifiez l'email ou le mot de passe";
         }
-        redirect(site_url("compte"));
+        redirect(site_url($this->page));
     }
 
     /**

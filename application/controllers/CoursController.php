@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 use Doctrine\Common\ClassLoader;
 
@@ -46,10 +46,13 @@ class CoursController extends CI_Controller
      */
     public function index()
     {
+        if ($_SESSION['user'] == '') {
+            redirect(site_url('accueil'));
+        }
+        
         $this->load->model("dao/ClasseDAO");
         $data['classeList'] = $this->ClasseDAO->getListClasse();
-        
-        
+                
         $this->load->library('encrypt');
         $idClasse = 0;
         
@@ -83,15 +86,13 @@ class CoursController extends CI_Controller
         $this->load->model("dao/ClasseDAO");
         $data['classeList'] = $this->ClasseDAO->getListClasse();
         
+        
         $this->load->view('creer_cours', $data);
     }
 
     /**
-     * creer un cours dans la base de donnees
-     * le formulaire(present dans la vue)
-     * si des documents sont joints au cours
-     * alors on les upload avec la methode
-     * do_upload
+     * creer un cours avec les documents 
+     * associes
      *
      * @uses $this->load->model()
      * @uses $this->doctrine->em->persist()
@@ -102,7 +103,13 @@ class CoursController extends CI_Controller
      */
     public function creer_cours()
     {
+        if (empty($_FILES['files']['tmp_name'][0])) {
+            $this->session->set_flashdata("cours_champ_required", "Veuillez saisir les champs requis");
+            redirect(site_url("cours"));
+        }
+        
         $this->doctrine->refreshSchema();
+        $this->doctrine->em->getConnection()->beginTransaction();
         
         // vérification que des champs requis
         if (empty($this->input->post('nom_cours')) || empty($this->input->post('classes_ids'))) {
@@ -124,16 +131,14 @@ class CoursController extends CI_Controller
             $cours->setDescription($this->input->post('description'));
         }
         $this->doctrine->em->persist($cours);
-
+        
         if (! empty($_FILES['files']['tmp_name'][0]) && $cours!==null) {
             $this->do_upload($cours);
         }
-        $this->doctrine->em->flush();
         $this->doctrine->em->commit();
-
-        $this->session->set_flashdata("import", "Le cours a été crée sans documents");
-        redirect(site_url("cours"));
         
+
+        redirect(site_url("cours"));
     }
 
     /**
@@ -142,14 +147,16 @@ class CoursController extends CI_Controller
      * return @void
      */
     public function addDocuments(){
-        $this->doctrine->em->beginTransaction();
         $this->doctrine->refreshSchema();
+        $this->doctrine->em->getConnection()->beginTransaction();
+                
         $cours = $this->doctrine->em->find('Cours', $this->input->post('cours_id'));
         
         if(!empty($_FILES['files']['tmp_name'][0]) && $cours !== null){
             $this->do_upload($cours);
         }
-        $this->doctrine->em->flush();
+        
+        $this->doctrine->em->persist($cours);
         $this->doctrine->em->commit();
         
         redirect(site_url("cours?cours=".$this->input->post('cours_id')));
@@ -214,18 +221,18 @@ class CoursController extends CI_Controller
                     $this->session->set_flashdata("import", $import);
                     redirect(site_url("cours"));
                 }
-                $this->doctrine->em->flush();
                 $this->session->set_flashdata("import", $import);
             }
         }
 
+        $this->doctrine->em->commit();
+        $this->doctrine->em->flush();
+        
         if ($count == 0) {
             $this->session->set_flashdata("import", "Le cours a été crée sans documents");
         } else {
-            $this->session->set_flashdata("import", "Le cours a été crée avec " . $count . " documents associés");
+            $this->session->set_flashdata("import", "Le cours a été crée ou modifié avec " . $count . " documents associés");
         }
-        $this->doctrine->em->commit();
-        $this->doctrine->em->flush();
     }
     
     /**

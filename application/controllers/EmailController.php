@@ -9,6 +9,7 @@ use SMTPValidateEmail\Validator as SmtpEmailValidator;
  */
 class EmailController extends CI_Controller
 {
+    private $emailField = 'email';
 
     function __construct()
     {
@@ -46,16 +47,16 @@ class EmailController extends CI_Controller
     public function send_mail()
     {
         $params = array(
-            $this->input->post('email'),
+            $this->input->post($this->emailField),
             $this->input->post('subject'),
             $this->input->post('message'),
-            $this->input->post('email')
+            $this->input->post($this->emailField)
         );
                 
-        $validator = new SmtpEmailValidator($this->input->post("email"), "tt9814023@gmail.com");
+        $validator = new SmtpEmailValidator($this->input->post($this->emailField), "tt9814023@gmail.com");
         $results = $validator->validate();
         
-        if (isset($results[$this->input->post("email")])){
+        if (isset($results[$this->input->post($this->emailField)])){
             $this->load->library('EmailSender', $params);
             $this->session->set_flashdata("email_sent", "Votre message a bien été envoyé.");
         }

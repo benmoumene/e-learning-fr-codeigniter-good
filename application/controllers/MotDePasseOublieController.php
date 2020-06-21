@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 require './vendor/autoload.php';
 use SMTPValidateEmail\Validator as SmtpEmailValidator;

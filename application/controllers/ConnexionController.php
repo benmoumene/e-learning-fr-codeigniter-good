@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Ce controller est le controller gérant la partie
@@ -15,10 +15,16 @@ class ConnexionController extends CI_Controller
         'path' => '/'
     );
 
+    private $passField = 'password';
+    private $emailField = 'email';
+    
     private $_cookiesId = array(
         "name" => "189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD",
         "password" => "1C89DS7CDS8CD89CSD7CSDDSVDSIJPIOCDS"
     );
+    
+    private $prefixCookie = 'cookie_prefix';
+    
 
     /**
      * Charge les fonctions utilisees
@@ -63,22 +69,22 @@ class ConnexionController extends CI_Controller
      */
     public function connexion()
     {
-        if ($this->input->post('email', TRUE) && $this->input->post('password', TRUE)) {
+        if ($this->input->post($this->emailField, TRUE) && $this->input->post($this->passField, TRUE)) {
             
-            if ($this->UserModel->validate($this->input->post('email'), $this->input->post('password'))) {
+            if ($this->UserModel->validate($this->input->post($this->emailField), $this->input->post($this->passField))) {
                 /* --ON INITIALISE LES COOKIES-- */
-                $this->setCookieForUser('name', $this->input->post('email'));
-                $this->setCookieForUser('password', $this->input->post('password'));
+                $this->setCookieForUser('name', $this->input->post($this->emailField));
+                $this->setCookieForUser($this->passField, $this->input->post($this->passField));
                 /* ----------------------------- */
 
                 $this->redirect(false, "accueil");
             } else {
                 $this->redirect();
             }
-        } elseif (get_cookie($this->config->item('cookie_prefix') . $this->_cookiesId['name'], TRUE) && get_cookie($this->config->item('cookie_prefix') . $this->_cookiesId['password'], TRUE)) {
+        } elseif (get_cookie($this->config->item($this->prefixCookie) . $this->_cookiesId['name'], TRUE) && get_cookie($this->config->item($this->prefixCookie) . $this->_cookiesId[$this->passField], TRUE)) {
             
-            $mail = $this->encrypt->decode(get_cookie($this->config->item('cookie_prefix') . $this->_cookiesId['name']));
-            $password = $this->encrypt->decode(get_cookie($this->config->item('cookie_prefix') . $this->_cookiesId['password']));
+            $mail = $this->encrypt->decode(get_cookie($this->config->item($this->prefixCookie) . $this->_cookiesId['name']));
+            $password = $this->encrypt->decode(get_cookie($this->config->item($this->prefixCookie) . $this->_cookiesId[$this->passField]));
 
             $hasFailed = false;
             if (!($this->UserModel->validate($mail, $password))){
@@ -128,7 +134,7 @@ class ConnexionController extends CI_Controller
         $cookie['name'] = $cookieId[$typeCookie];
         $cookie['value'] = $this->encrypt->encode($inputValue);
 
-        $cookie['prefix'] = ($this->UserModel->type === "enseignant") ? $this->config->item('cookie_prefix') : "ux_e";
+        $cookie['prefix'] = ($this->UserModel->type === "enseignant") ? $this->config->item($this->prefixCookie) : "ux_e";
         set_cookie($cookie);
     }
 }

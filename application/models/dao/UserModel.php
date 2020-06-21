@@ -19,8 +19,11 @@ class UserModel extends CI_MODEL
     );
     
     
-    private $_table = "enseignant";
-
+    private $tableEnseignant = 'enseignant';
+    private $tableEleve = 'eleve';
+    private $cookieName = "189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD";
+    private $emailFieldName = 'email';
+    
     public $type = "";
 
     function __construct()
@@ -58,17 +61,17 @@ class UserModel extends CI_MODEL
     public function _getUser($email)
     {
         /* -----CHECK IF ADMIN(ENSEIGNANT)----- */
-        $user = $this->_getUserFromTable($this->_table, $email);
+        $user = $this->_getUserFromTable($this->tableEnseignant, $email);
         if (isset($user->motDePasse)) {
-            $this->type = "enseignant";
+            $this->type = $this->tableEnseignant;
             return $this->encrypt->decode($user->motDePasse);
         }
 
         /* -----CHECK IF ETUDIANT----- */
-        $user = $this->_getUserFromTable("eleve", $email);
+        $user = $this->_getUserFromTable($this->tableEleve, $email);
       
         if (isset($user->motDePasse)) {
-            $this->type = "eleve";
+            $this->type = $this->tableEleve;
             return $this->encrypt->decode($user->motDePasse);
         }
 
@@ -86,11 +89,11 @@ class UserModel extends CI_MODEL
      */
     public function _getUserFromTable(string $table, string $email){
         return $this->db->select(array(
-            'email',
+            $this->emailFieldName,
             'motDePasse'
         ))
         ->get_where($table, array(
-            'email' => $email
+            $this->emailFieldName => $email
         ))
         ->row();
     }
@@ -107,28 +110,28 @@ class UserModel extends CI_MODEL
      * @uses $this->changePassword()
      */
     public function updateUserDetails(string $oldmail, string $newmail, string $newPassword){
-        $user = $this->_getUserFromTable('eleve', $oldmail);
+        $user = $this->_getUserFromTable($this->tableEleve, $oldmail);
         
         if($user != null){
             //alors on update l'email d'un eleve
             if($newPassword !== ''){
-                $this->changePassword('eleve', $oldmail, $newPassword);
+                $this->changePassword($this->tableEleve, $oldmail, $newPassword);
             }
                 
             if($newmail !== ''){
-                $this->changeEmail($oldmail, "eleve", $newmail);
+                $this->changeEmail($oldmail, $this->tableEleve, $newmail);
             }
         } else{
-            $user = $this->_getUserFromTable('enseignant', $oldmail);
+            $user = $this->_getUserFromTable($this->tableEnseignant, $oldmail);
             
             if($user != null){         
                 //alors on update l'email d'un enseignant
                 if($newPassword !== ''){
-                    $this->changePassword('enseignant', $oldmail, $newPassword);
+                    $this->changePassword($this->tableEnseignant, $oldmail, $newPassword);
                 }
                 
                 if($newmail !== ''){
-                    $this->changeEmail($oldmail, "enseignant", $newmail);
+                    $this->changeEmail($oldmail, $this->tableEnseignant, $newmail);
                 }
                 
             }
@@ -144,19 +147,19 @@ class UserModel extends CI_MODEL
      * @param string $newmail
      */
     private function changeEmail(string $oldmail, string $table, string $newmail){
-        $this->db->where('email', $oldmail);
+        $this->db->where($this->emailFieldName, $oldmail);
         $updateUser = $this->db->update($table, array(
-            'email' => $newmail
+            $this->emailFieldName => $newmail
         ));
         
         $cookie = $this->_cookie;
-        $cookie['name'] = "189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD";
+        $cookie['name'] = $this->cookieName;
         $cookie['value'] = $this->encrypt->encode($newmail);
         if($updateUser){
             //on modifie les cookie de connexion
-            delete_cookie("189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD");
-            delete_cookie("189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD", '', '/', "ux_e");
-            $cookie['prefix'] = ($table === "eleve") ? "ux_e": "ux_ad_";
+            delete_cookie($this->cookieName);
+            delete_cookie($this->cookieName, '', '/', "ux_e");
+            $cookie['prefix'] = ($table === $this->tableEleve) ? "ux_e": "ux_ad_";
             set_cookie($cookie);
         }
     }
@@ -174,7 +177,7 @@ class UserModel extends CI_MODEL
             'motDePasse' => $this->encrypt->encode($newPassword)
         );
         
-        $this->db->where('email', $oldmail);
+        $this->db->where($this->emailFieldName, $oldmail);
         $this->db->update($table, $data);
     }
 }
