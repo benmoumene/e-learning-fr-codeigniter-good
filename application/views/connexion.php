@@ -2,7 +2,7 @@
 
 <center>
     <div id="body">
-        <card class="connexion" title="Se connecter" style="width: 60%;margin: 20px auto">
+        <card class="connexion" title="Se connecter" >
         	<?php
             echo form_open('/ConnexionController/connexion');
         	?>    

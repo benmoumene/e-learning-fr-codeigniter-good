@@ -87,7 +87,7 @@ class CoursController extends CI_Controller
         $data['classeList'] = $this->ClasseDAO->getListClasse();
         
         
-        $this->load->view('creer_cours', $data);
+        $this->load->view('cours', $data);
     }
 
     /**

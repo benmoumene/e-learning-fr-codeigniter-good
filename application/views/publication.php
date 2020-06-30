@@ -1,7 +1,7 @@
 <?php $this->load->view("page_template/header"); ?>
 
 <div id="body">
-    <card title="<?=($_SESSION['user'] === "admin") ? "Mes publications" : "Les publications de l'enseignante" ?>" style="width: 60%;margin: 20px auto">
+    <card title="<?=($_SESSION['user'] === "admin") ? "Mes publications" : "Les publications de l'enseignante" ?>">
     	<div class="list-group mt-4">
           <list-item lien="https://www.google.com/" titre="Publication 1" description="Description publication 1"></list-item>
           <list-item lien="https://www.google.com/" titre="Publication 2" description="Description publication 2"></list-item>

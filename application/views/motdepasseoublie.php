@@ -4,8 +4,7 @@ $this->load->view("page_template/header");
 ?>
 <center>
 	<div id="body">
-		<card class="card connexion" title="Mot de passe oublié ?"
-			style="width: 60%;margin: 20px auto">
+		<card class="card connexion" title="Mot de passe oublié ?">
         
         <?php
         echo form_open('/MotDePasseOublieController/send_password');

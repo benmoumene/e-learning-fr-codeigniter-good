@@ -30,8 +30,8 @@ else if(!empty($coursSelectionne)){
 $title = strtoupper($title);
 
 ?>
-<div class="d-flex mt-2 mb-4 pl-4">
-	<card class="list-group" title="<?=($_SESSION["user"] === "admin") ? "Mes quiz" : "Liste des quiz" ?>">
+<div class="row d-flex mt-2 pl-4 mbot">
+	<card class="list-group quizlist" title="<?=($_SESSION["user"] === "admin") ? "Mes quiz" : "Liste des quiz" ?>">
     	<?php if($_SESSION['user'] === 'admin'): ?>
             		<list-item lien="/projetL3/index.php/quiz?quiz=add"
     					titre="Ajouter un quiz" description=""></list-item>
@@ -53,7 +53,7 @@ $title = strtoupper($title);
 	</card>	
 
 	
-	<card class="mx-auto w-50" title="<?=$title?>">
+	<card class="quizlist mx-auto w-50" title="<?=$title?>">
 	<div class="list-group documents">
      
           <?php if(isset($_GET['quiz'])): ?>
@@ -98,34 +98,68 @@ $title = strtoupper($title);
                   	
                   	
        <?php if($_GET['quiz'] === 'add'): ?>
-                  <div class="col-md-12">
-                      <div class="form-group">
-                          <label class=" control-label col-sm-3 required">Nom du Quiz</label>
-                          <input type="text" name="quiz_name" class="col-sm-4">
+                  <div>
+                      <div class="row">
+                          <div class="form-group col-md-6 mb-2">
+                              <label class="required">Nom du Quiz</label>
+                              <input type="text" name="quiz_name" class="form-control">
+                          </div>
+                          <div class="form-group col-md-6 mb-2">
+                              <label class="required" style="font-weight: bold">Classes</label>
+                              <select multiple name="classe_ids[]"  class="form-control">
+                                  <?php foreach($classeList as $classe): ?>
+                                      <option value="<?=$classe['id']?>"><?=$classe['nom']?></option>
+                                  <?php endforeach;?>
+                              </select>
+                          </div>
                       </div>
-                      <div class="form-group mb-4">
-                        <label class=" control-label col-sm-3 required" style="font-weight: bold">Classes</label>
-                        <select multiple name="classe_ids[]"  class="col-sm-3">
-                              <?php foreach($classeList as $classe): ?>
-                                  <option value="<?=$classe['id']?>"><?=$classe['nom']?></option>
-                              <?php endforeach;?>
-                          </select>
-                      </div>
-                      <h3 class="text-center">Questions</h3>
-                      <div id="divQuiz">
-                      <div class="form-group mt-4">
-                          <label class=" control-label col-sm-4 required">Nombre de questions à ajouter : </label>
-                          <input class="col-md-2" type="number" name="nombreQuestionSouhaite" v-model="nbQuestionSouhaite">
-                          <button type="button" class="btn btn-primary col-md-1 col-sm-2" v-on:click.self="addMultipleQuestions"><i class="fa fa-plus"></i></button>
 
-                      </div>
+                      <hr>
+                      <h3 class="text-center col-md-10 font-weight-bold">Questions</h3>
+
+                      <div id="divQuiz">
+
+                          <div class="row">
+                              <div class="form-group col-md-6 mb-2">
+                                  <label class="control-label required">Nombre de questions à ajouter : </label>
+                                  <input class="form-control" type="number" name="nombreQuestionSouhaite" v-model="nbQuestionSouhaite">
+                              </div>
+                              <div class="form-group col-md-6 mb-2">
+                                  <button type="button" class="btn buttonAddQuestion btn-primary" v-on:click.self="addMultipleQuestions">Ajouter une question <i class="fa fa-plus"></i></button>
+                              </div>
+                          </div>
+
                           <div v-for="q in questions">
-                              <div class="form-group">
-                                  <label class="control-label col-sm-4 required font-weight-bold">
+                              <div class="form-group col-md-10" style="text-align: center">
+                                  <label class="control-label required font-weight-bold">
                                       Question {{q.numeroQuestion}}
                                   </label>
-                                  <input class="col-md-2" type="text" :name="'question-' + q.numeroQuestion"/>
+                                  <input class="form-control" type="text" :name="'question-' + q.numeroQuestion"/>
                               </div>
+
+                              <div class="form-group ">
+                                  <div v-for="n in q.numeroReponse">
+                                      <div class="row">
+                                          <label class="col-md-4 mb-2 required">
+                                              Reponse {{n}}
+                                          </label>
+                                          <input class="form-control col-md-4 mb-2" type="text" :name="'reponse-' +q.numeroQuestion+'-'+ n"/>
+                                          <label class="col-md-4 mb-2">Vrai ? <input type="checkbox" :name="'estvrai-'+ q.numeroQuestion +'-' + n" /></label>
+                                      </div>
+                                  </div>
+                                  <div class="row">
+                                      <button type="button" class="btn btn-primary buttonsQuiz col-md-5 col-sm-4" v-on:click.self="addReponse" :name="q.numeroQuestion"><i class="fa fa-plus-circle"> réponse</i></button>
+                                      <button type="button" class="btn btn-danger buttonsQuiz col-md-5 col-sm-4" v-on:click.self="removeReponse" :name="q.numeroQuestion"><i class="fa fa-minus-circle"> réponse</i></button>
+                                  </div>
+                                  <div class="row">
+                                      <button type="button" class="btn btn-primary buttonsQuiz col-md-5 col-sm-4" v-on:click.self="addQuestion"><i class="fa fa-plus-circle"> question</i></button>
+                                      <button type="button" class="btn btn-danger buttonsQuiz col-md-5 col-sm-4" v-on:click.self="removeQuestion" :name="q.numeroQuestion"><i class="fa fa-minus-circle"> question</i></button>
+                                  </div>
+                                  <hr>
+                              </div>
+
+
+                              <!--
                               <div class="form-group ">
                                   <div v-for="n in q.numeroReponse">
                                       <label class="control-label col-sm-4 required">
@@ -138,12 +172,13 @@ $title = strtoupper($title);
                                   <button type="button" class="mx btn btn-danger col-md-1 col-sm-2" v-on:click.self="removeReponse" :name="q.numeroQuestion"><i class="fa fa-minus-circle"></i></button>
                                   <button type="button" class="btn btn-primary ml-1 col-md-4 col-sm-2" v-on:click.self="addQuestion"><i class="fa fa-plus-circle"></i> question</button>
                                   <button type="button" class="mx btn btn-danger col-md-3 col-sm-2" v-on:click.self="removeQuestion" :name="q.numeroQuestion"><i class="fa fa-minus-circle"></i> question</button>
+                                  <hr>
                               </div>
-
+                               -->
 
                           </div>
 						  <div class ="submit">
-                              <input type="submit" class="btn btn-primary mt-4 col-md-5 col-sm-2" name="submit_quiz">
+                              <input type="submit" class="btn btn-primary mt-4 col-md-5 col-sm-2" name="submit_quiz" value="Soumettre le quiz">
                           </div>	
                       </div>
 

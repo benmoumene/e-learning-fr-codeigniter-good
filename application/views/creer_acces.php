@@ -4,7 +4,7 @@
 
 <div id="body">
     <center>
-	<card class="connexion" title="Création des comptes pour les étudiants" style="width: 60%;margin: 20px auto">
+	<card class="connexion" title="Création des comptes pour les étudiants" >
 		<div class="justify-content-md-center">
             <div class="col-md-4 form-group mb-2">
             	<label class="required" style="font-weight:bold">Classe</label>

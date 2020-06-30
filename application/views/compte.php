@@ -8,7 +8,7 @@ else if($_SESSION['user'] === 'admin')
     
 ?>
 <div id="body">
-<card class="mb-4" style="width: 60%;margin: 20px auto">
+<card class="mb-4" >
    
 		<?php echo form_open('/CompteController/hasChange');?>
 		

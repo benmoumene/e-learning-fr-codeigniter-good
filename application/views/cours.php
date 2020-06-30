@@ -10,8 +10,8 @@ if (isset($_GET['cours'])) {
 
 <center>
 <div id="body" class="d-flex mt-2 mb-4 row">
-	<card class=""
-		title="<?=($_SESSION["user"] === "admin") ? "Mes cours" : "Les cours de l'enseignante" ?>">
+	<card class="cours"
+		title="<?=($_SESSION["user"] === "admin") ? "Les cours de l'enseignante" : "Mes cours" ?>">
 		<div class="list-group mb-2">
 			<?php if($_SESSION['user'] === 'admin'): ?>
 			<list-item
@@ -31,8 +31,8 @@ if (isset($_GET['cours'])) {
 		</div>
 	</card>
 
-    <card title="<?=(empty($_GET['cours']) && $_SESSION['user'] === 'admin') ? 'Créer un cours' : '' ?>" style="width: 60%;margin: 20px auto">
-	<div class="justify-content-md-center">
+    <card class = "cours btn-creercours" title="<?=(empty($_GET['cours']) && $_SESSION['user'] === 'admin') ? 'Créer un cours' : '' ?>">
+	<div class="justify-content-md-center" >
         <?php if(empty($_GET["cours"]) && $_SESSION['user'] === 'admin'): ?>
 		<?=form_open_multipart('/CoursController/creer_cours');?>
 
@@ -98,7 +98,7 @@ if (isset($_GET['cours'])) {
               <?php if(isset($_GET['cours']) && $document['cours_id'] == $_GET['cours']): ?>    
                   <list-item lien="<?=$document["path"]?>"
 			titre="<?=$document["nom"]?>" description=""
-			class="ml-4 documentsCours<?=$document['cours_id']?>"></list-item>	
+			class="ml-4 documentsCours<?=$document['cours_id']?>" target="_blank"></list-item>
               <?php endif;?>
           <?php endforeach;?>
           </div>
