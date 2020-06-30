@@ -9,7 +9,7 @@ if (isset($_GET['cours'])) {
 <?php $this->load->view("page_template/header"); ?>
 
 <center>
-<div id="body" class="d-flex mt-2 mb-4">
+<div id="body" class="d-flex mt-2 mb-4 row">
 	<card class=""
 		title="<?=($_SESSION["user"] === "admin") ? "Mes cours" : "Les cours de l'enseignante" ?>">
 		<div class="list-group mb-2">
@@ -35,28 +35,37 @@ if (isset($_GET['cours'])) {
 	<div class="justify-content-md-center">
         <?php if(empty($_GET["cours"]) && $_SESSION['user'] === 'admin'): ?>
 		<?=form_open_multipart('/CoursController/creer_cours');?>
-	    <div class="col-md-4 form-group mb-2">
-        	<label class="required" style="font-weight:bold">Nom du cours</label>
-            <input type="text" id="nom_cours" name="nom_cours" placeholder="Nom du cours"/><br><br>
-           	
-           	<div class="form-group">
-              <label for="exampleFormControlTextarea1" style="font-weight:bold">Description du cours</label>
-              <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="5" name="description"></textarea>
+
+        <div class="row">
+            <div class="col-md-6 form-group mb-2">
+                <label class="required" style="font-weight:bold">Nom du cours</label>
+                <input class="form-control" type="text" id="nom_cours" name="nom_cours" placeholder="Nom du cours"/><br><br>
             </div>
-           
-           	<label style="font-weight:bold" class="required">Documents du cours</label>
-        	<input type="file"  class="form-control" id="id" name="files[]" multiple="multiple"/><br>
-        	
-           		
-        	<label class="required" style="font-weight:bold">Classes</label><br>
-        	<select name="classes_ids[]" multiple="multiple">
-        		<?php foreach($classeList as $classe): ?>
-        			<option value="<?=$classe['id']?>"><?=$classe['nom']?></option>
-        		<?php endforeach;?>
-        	</select><br><br>
-        	
+            <div class="col-md-6 form-group mb-2">
+                <label for="exampleFormControlTextarea1" style="font-weight:bold">Description du cours</label>
+                <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="5" name="description"></textarea>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 form-group mb-2">
+                <label style="font-weight:bold" class="required">Documents du cours</label>
+                <input type="file"  class="form-control" id="id" name="files[]" multiple="multiple"/><br>
+            </div>
+
+            <div class="col-md-6 form-group mb-2">
+                <label class="required" style="font-weight:bold">Classes</label><br>
+                <select class="form-control" name="classes_ids[]" multiple="multiple">
+                    <?php foreach($classeList as $classe): ?>
+                        <option value="<?=$classe['id']?>"><?=$classe['nom']?></option>
+                    <?php endforeach;?>
+                </select><br><br>
+            </div>
+        </div>
+
+
         	<input class="btn btn-primary" type="submit" name="creer" value="Créer" /><br><br>
-		</div>
+
 		<?php echo form_close();?>	
 		<?php endif;?>
         
