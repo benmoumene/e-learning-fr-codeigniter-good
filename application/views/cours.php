@@ -74,10 +74,6 @@ if (isset($_GET['cours'])) {
         	<?php if(!empty($coursSelectionne)): ?>
 			<p><?=$coursSelectionne['description']?></p>
 			<?php if($_SESSION['user'] === 'admin'): ?>
-				<?php echo form_open('/CoursController/removeCours');?>
-            		<input type="text" value="<?=$_GET['cours']?>" name="cours_id" hidden/>
-            		<button class="btn btn-danger deleteCours" title="Supprimer le cours" onclick="return confirm('Etes vous sur de vouloir supprimer ce cours?')"><i class="fa fa-trash" style="font-size:30px;"></i></button>
-    			<?php echo form_close();?>
     			
     			<?=form_open_multipart('/CoursController/addDocuments');?>
         			<br>
@@ -100,20 +96,27 @@ if (isset($_GET['cours'])) {
 
                         <list-item lien="<?=$document["path"]?>"
                                    titre="<?=$document["nom"]?>" description=""
-                                   class="ml-4 mr-2 col-md-6 col-sm-2 documentsCours<?=$document['cours_id']?>" target="_blank"></list-item>
+                                   class="ml-4 mr-4 col-md-6 col-sm-2 documentsCours<?=$document['cours_id']?>" target="_blank"></list-item>
+                        <?php if($_SESSION['user'] === 'admin'): ?>
                         <?php echo form_open('/CoursController/removeDocument')?>
                         <input type="text" name="document_id" value="<?=$document["id"]?>" hidden>
 
                         <td><button class="btn btn-danger " title="Supprimer le fichier" onclick="return confirm('Etes vous sur de vouloir supprimer ce fichier?')"><i class="fa fa-trash" style="font-size:30px;"></i></button>
+                        <?php endif;?>
                     </div>
 
                     <?php echo form_close();?>
                 <?php endif;?>
             <?php endforeach;?>
+
+            <?php if($_SESSION['user'] === 'admin'): ?>
+                <?php echo form_open('/CoursController/removeCours');?>
+                    <input type="text" value="<?=$_GET['cours']?>" name="cours_id" hidden/>
+                    <button class="mt-4 btn btn-danger deleteCours" title="Supprimer le cours" onclick="return confirm('Etes vous sur de vouloir supprimer ce cours?')"><i class="fa fa-trash" style="font-size:30px;"></i></button>
+                <?php echo form_close();?>
+            <?php endif;?>
+
         </div>
-          
-		
-		
 	</div>
     
 	</card>

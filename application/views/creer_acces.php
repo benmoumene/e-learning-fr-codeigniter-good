@@ -20,7 +20,10 @@
                 <input class="btn btn-primary" type="submit" name="import" value="Importer" /><br><br>
 			</div>
 		</div>
-		  <p>Le fichier d'importation est un fichier excel(.xslx), le modèle est disponible dans Compte</p>
+            <p>Utilisez le fichier ci-dessous comme format pour importer les étudiants lors de la création d'une classe.</p>
+            <a id="fichierImportation" href="/projetL3/uploads/modele_insertion/modele_importation.xlsx">
+                <img height="100" alt="fichier d'importation" src="/projetL3/application/views/images/excel.jpg"/>
+            </a>
     </card>
     </center>
 </div>
