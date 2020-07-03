@@ -243,10 +243,35 @@ class CoursController extends CI_Controller
         $this->doctrine->refreshSchema();
         $cours = $this->doctrine->em->find("Cours", $this->input->post('cours_id'));
        
+        if($cours!=null){
+            foreach ($cours->getDocuments() as $d) {
+                unlink('uploads/'.$d->getNom());
+            }
+        }
+
         $this->doctrine->em->remove($cours);
         $this->doctrine->em->commit();
         $this->doctrine->em->flush();
         redirect(site_url("cours"));
     }
+
+
+    /**
+     * permet de supprimer un document existant
+     * return @void
+     */
+    public function removeDocument(){
+        $this->doctrine->refreshSchema();
+        $document = $this->doctrine->em->find("Document", $this->input->post('document_id'));
+        
+        if($document != null){
+            unlink('uploads/'.$document->getNom());
+            $this->doctrine->em->remove($document);
+            $this->doctrine->em->commit();
+            $this->doctrine->em->flush();
+        }
+        redirect(site_url("cours"));
+    }
+
 }
 

@@ -76,7 +76,7 @@ if (isset($_GET['cours'])) {
 			<?php if($_SESSION['user'] === 'admin'): ?>
 				<?php echo form_open('/CoursController/removeCours');?>
             		<input type="text" value="<?=$_GET['cours']?>" name="cours_id" hidden/>
-            		<button class="btn btn-danger deleteCours" onclick="return confirm('Etes vous sur de vouloir supprimer ce cours?')"><i class="fa fa-trash" style="font-size:30px;"></i></button>
+            		<button class="btn btn-danger deleteCours" title="Supprimer le cours" onclick="return confirm('Etes vous sur de vouloir supprimer ce cours?')"><i class="fa fa-trash" style="font-size:30px;"></i></button>
     			<?php echo form_close();?>
     			
     			<?=form_open_multipart('/CoursController/addDocuments');?>
@@ -92,16 +92,25 @@ if (isset($_GET['cours'])) {
 			<hr>
 			<h4>Documents du cours</h4>
 		<?php endif;?>
-		 
-		 <div class="documents">
-     	 <?php foreach($documents as $document):?>
-              <?php if(isset($_GET['cours']) && $document['cours_id'] == $_GET['cours']): ?>    
-                  <list-item lien="<?=$document["path"]?>"
-			titre="<?=$document["nom"]?>" description=""
-			class="ml-4 documentsCours<?=$document['cours_id']?>" target="_blank"></list-item>
-              <?php endif;?>
-          <?php endforeach;?>
-          </div>
+
+        <div class="documents">
+            <?php foreach($documents as $document):?>
+                <?php if(isset($_GET['cours']) && $document['cours_id'] == $_GET['cours']): ?>
+                    <div class="row">
+
+                        <list-item lien="<?=$document["path"]?>"
+                                   titre="<?=$document["nom"]?>" description=""
+                                   class="ml-4 mr-2 col-md-6 col-sm-2 documentsCours<?=$document['cours_id']?>" target="_blank"></list-item>
+                        <?php echo form_open('/CoursController/removeDocument')?>
+                        <input type="text" name="document_id" value="<?=$document["id"]?>" hidden>
+
+                        <td><button class="btn btn-danger " title="Supprimer le fichier" onclick="return confirm('Etes vous sur de vouloir supprimer ce fichier?')"><i class="fa fa-trash" style="font-size:30px;"></i></button>
+                    </div>
+
+                    <?php echo form_close();?>
+                <?php endif;?>
+            <?php endforeach;?>
+        </div>
           
 		
 		

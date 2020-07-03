@@ -1,7 +1,7 @@
 <?php $this->load->view("page_template/header"); ?>
 
 <div id="body" class="mbot">
-    <card title="<?=($_SESSION['user'] === "admin") ? "Mes classes" : "" ?>" style="width: 60%;margin: 20px auto">
+    <card title="<?=($_SESSION['user'] === "admin") ? "Mes classes" : "" ?>">
     	
     	<div class="list-group mt-4">
     	                
