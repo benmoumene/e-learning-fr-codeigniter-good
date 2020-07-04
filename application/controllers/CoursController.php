@@ -236,6 +236,32 @@ class CoursController extends CI_Controller
     }
     
     /**
+     * permet de modifier les classes d'un cours
+     * return @void
+     */
+    public function modifyClasses(){
+        $this->doctrine->refreshSchema();
+        $cours = $this->doctrine->em->find("Cours", $this->input->post('cours_id'));
+        
+        $classes = array();
+        if($cours!=null && !empty($_POST['classes_ids']) ){
+            foreach($_POST['classes_ids'] as $c){
+                $classe = $this->doctrine->em->find("Classe", $c);
+                array_push($classes, $classe);
+            }
+            
+            if(!empty($classes)){
+                $cours->setClasses($classes);
+                $this->doctrine->em->persist($cours);
+                $this->doctrine->em->commit();
+                $this->doctrine->em->flush();
+            }
+        }
+       
+        redirect(site_url("cours"));
+    }
+    
+    /**
      * permet de supprimer un cours existant
      * return @void
      */

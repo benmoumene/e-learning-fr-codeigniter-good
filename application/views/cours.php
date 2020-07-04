@@ -83,6 +83,17 @@ if (isset($_GET['cours'])) {
             		
             		<input class="btn btn-primary" type="submit" name="add_documents" value="Ajouter" /><br><br>
     			<?php echo form_close();?>
+    			
+    			<?=form_open_multipart('/CoursController/modifyClasses');?>
+    				<input type="text" name="cours_id" value="<?=$_GET['cours']?>" hidden/>
+    				<label class="required" style="font-weight:bold">Classes</label><br>
+                    <select class="form-control" name="classes_ids[]" multiple="multiple">
+                        <?php foreach($classeList as $classe): ?>
+                            <option value="<?=$classe['id']?>"><?=$classe['nom']?></option>
+                        <?php endforeach;?>
+                    </select><br>
+                    <input class="btn btn-primary" type="submit" name="modifyClasses" value="Modifier les classes" />
+    			<?php echo form_close();?>
 			<?php endif;?>
 			
 			<hr>
