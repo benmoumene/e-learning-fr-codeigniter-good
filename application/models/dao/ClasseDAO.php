@@ -33,5 +33,13 @@ if (! defined('BASEPATH')){
             
             return $classe;
         }
+
+        function getClasseForCoursId($id) {
+            $this->db->select("*");
+            $this->db->from("cours_classe");
+            $this->db->where("cours_id=".$id);
+            $data = $this->db->get()->result_array();
+            return $data;
+        }
         
     }

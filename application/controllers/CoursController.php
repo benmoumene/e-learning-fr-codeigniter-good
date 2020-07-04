@@ -31,7 +31,9 @@ class CoursController extends CI_Controller
         $this->load->model("dao/DocumentDAO");
         $this->load->model("dao/QuizDAO");
         $this->load->model("dao/EleveDAO");
+        $this->load->model("dao/ClasseDAO");
         $this->load->model("dao/EvaluationDAO");
+        $this->load->model("entity/Classe");
         $this->load->helper('form');
     }
 
@@ -86,7 +88,18 @@ class CoursController extends CI_Controller
         $this->load->model("dao/ClasseDAO");
         $data['classeList'] = $this->ClasseDAO->getListClasse();
         
-        
+        $array = array();
+        foreach ($data["coursList"] as $cours) {
+
+            $res = $this->ClasseDAO->getClasseForCoursId($cours['id']);
+            if (!empty($res)) {
+                $classeinfo = array();
+                foreach ($res as $r) {
+                    array_push($classeinfo, $this->ClasseDAO->getClasseById($r["classe_id"]));
+                }
+                array_push($array, $classeinfo);
+            }
+        }
         $this->load->view('cours', $data);
     }
 

@@ -3,6 +3,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $coursSelectionne = null;
 if (isset($_GET['cours'])) {
     $coursSelectionne = $this->CoursDAO->getCoursById($_GET['cours']);
+    $classbycours = array();
+
+        $res = $this->ClasseDAO->getClasseForCoursId($coursSelectionne['id']);
+        if (!empty($res)) {
+            $classeinfo = array();
+            foreach ($res as $r) {
+                array_push($classeinfo, $this->ClasseDAO->getClasseById($r["classe_id"]));
+            }
+            array_push($classbycours, $classeinfo);
+        }
 }
 ?>
 <!-- AFFICHER LE MENU -->
@@ -83,10 +93,25 @@ if (isset($_GET['cours'])) {
             		
             		<input class="btn btn-primary" type="submit" name="add_documents" value="Ajouter" /><br><br>
     			<?php echo form_close();?>
-    			
+
     			<?=form_open_multipart('/CoursController/modifyClasses');?>
     				<input type="text" name="cours_id" value="<?=$_GET['cours']?>" hidden/>
-    				<label class="required" style="font-weight:bold">Classes</label><br>
+    				<label style="font-weight:bold">Classes liées au cours</label><br>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                <?php foreach($classbycours[0] as $classe): ?>
+                                <td>
+                                    <?= $classe->getNom()?>
+                                </td>
+                                <?php endforeach;?>
+                                </thead>
+                            </table>
+                        </div>
+
+                    <label style="font-weight:bold">Mettre en ligne dans une classe</label><br>
+
                     <select class="form-control" name="classes_ids[]" multiple="multiple">
                         <?php foreach($classeList as $classe): ?>
                             <option value="<?=$classe['id']?>"><?=$classe['nom']?></option>
