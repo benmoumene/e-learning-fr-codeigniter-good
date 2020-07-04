@@ -96,9 +96,9 @@ if (isset($_GET['cours'])) {
 
     			<?=form_open_multipart('/CoursController/modifyClasses');?>
     				<input type="text" name="cours_id" value="<?=$_GET['cours']?>" hidden/>
+    				<?php if($classbycours != null): ?>
     				<label style="font-weight:bold">Classes liées au cours</label><br>
-
-                        <div class="table-responsive">
+						<div class="table-responsive">
                             <table class="table table-bordered">
                                 <thead>
                                 <?php foreach($classbycours[0] as $classe): ?>
@@ -109,6 +109,7 @@ if (isset($_GET['cours'])) {
                                 </thead>
                             </table>
                         </div>
+					<?php endif;?>
 
                     <label style="font-weight:bold">Mettre en ligne dans une classe</label><br>
 
