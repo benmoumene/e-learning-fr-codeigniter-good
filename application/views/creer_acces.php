@@ -4,7 +4,7 @@
 
 <div id="body">
     <center>
-	<card class="connexion" title="Création des comptes pour les étudiants" >
+	<card class="connexion mbot" title="Création des comptes pour les étudiants" >
 		<div class="justify-content-md-center">
             <div class="col-md-4 form-group mb-2">
             	<label class="required" style="font-weight:bold">Classe</label>

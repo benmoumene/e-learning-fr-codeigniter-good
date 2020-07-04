@@ -7,7 +7,7 @@ else if($_SESSION['user'] === 'admin')
     $email = $this->encrypt->decode(get_cookie('ux_ad_189CDS8CSDC98JCPDSCDSCDSCDSD8C9SD'));
     
 ?>
-<div id="body">
+<div id="body" class="mbot">
 <card class="mb-4" >
    
 		<?php echo form_open('/CompteController/hasChange');?>

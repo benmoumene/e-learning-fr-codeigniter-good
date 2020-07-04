@@ -2,12 +2,11 @@
       echo form_open('/EmailController/send_mail');
 ?>
 
-<div id="body"> 
+<div id="body" class="mbot">
 	<center>
 	<card class="mb-4 mt-4" title="Me contacter">
         <!--Section description-->
-	    <p class="text-center w-responsive mx-auto mb-5">Do you have any questions? Please do not hesitate to contact us directly. Our team will come back to you within
-	        a matter of hours to help you.</p>
+	    <p class="text-center w-responsive mx-auto mb-5">N'hésitez pas à me contacter, que ce soit pour une question cours, un problème du site, etc.</p>
 
 	    <div class="row justify-content-md-center">
 
@@ -65,7 +64,7 @@
 
 	            <center>
 		            <div>
-		                <input class="btn btn-primary" type = "submit" value = "SEND MAIL">
+		                <input class="btn btn-primary" type = "submit" value = "Envoyer le mail">
 		            </div>
 	            </center>
 	            <div class="status"></div>

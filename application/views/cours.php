@@ -89,7 +89,7 @@ if (isset($_GET['cours'])) {
 			<h4>Documents du cours</h4>
 		<?php endif;?>
 
-        <div class="documents">
+        <div class="documents mbot">
             <?php foreach($documents as $document):?>
                 <?php if(isset($_GET['cours']) && $document['cours_id'] == $_GET['cours']): ?>
                     <div class="row">
@@ -109,10 +109,11 @@ if (isset($_GET['cours'])) {
                 <?php endif;?>
             <?php endforeach;?>
 
-            <?php if($_SESSION['user'] === 'admin'): ?>
+            <?php if($_SESSION['user'] === 'admin' && isset($_GET['cours'])): ?>
                 <?php echo form_open('/CoursController/removeCours');?>
                     <input type="text" value="<?=$_GET['cours']?>" name="cours_id" hidden/>
-                    <button class="mt-4 btn btn-danger deleteCours" title="Supprimer le cours" onclick="return confirm('Etes vous sur de vouloir supprimer ce cours?')"><i class="fa fa-trash" style="font-size:30px;"></i></button>
+                    <hr>
+                    <button class="mt-4 btn btn-danger deleteCours" title="Supprimer le cours" onclick="return confirm('Etes vous sur de vouloir supprimer ce cours?')">Supprimer le cours <i class="fa fa-trash" style="font-size:30px;"></i></button>
                 <?php echo form_close();?>
             <?php endif;?>
 
