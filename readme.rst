@@ -21,10 +21,11 @@ Installation
 ###################
 
 Il faut :
-
     *   Avoir WAMP / LAMP / XAMPP installé
     *   Importer la base de données avec le fichier bdd_import.sql à la racine du projet
     *   Changer les informations de la base de données au niveau du fichier **application\\config\\database.php** et **application\\libraries\\Doctrine.php**
+    
+**Si l'on souhaite tester les parties contact / mot de passe oublié / insertion des eleves, alors il faut changer l'email : tt9814023@gmail.com (qui sert d'email de noreply, mais qui a des problèmes de sécurité lorsqu'il n'y est pas sur une machine s'étant connecté à cette adresse mail)**
 
 Puis via un navigateur accéder à l'URL suivante::
 
