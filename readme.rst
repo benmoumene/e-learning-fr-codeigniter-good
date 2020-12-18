@@ -22,6 +22,7 @@ Installation
 
 Il faut :
     *   Avoir WAMP / LAMP / XAMPP installé
+    *   Etre sur que le dossier s'appel **projetL3**
     *   Importer la base de données avec le fichier bdd_import.sql à la racine du projet
     *   Changer les informations de la base de données au niveau du fichier **application\\config\\database.php** et **application\\libraries\\Doctrine.php**
     
