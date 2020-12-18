@@ -63,4 +63,3 @@ $route['publications'] = 'PublicationController';
 $route['enseignant'] = 'EnseignantController';
 $route['quiz'] = 'QuizController';
 $route['classes'] = 'ClassesController';
-$route['api/classes'] = 'ClassesController/getClasses';

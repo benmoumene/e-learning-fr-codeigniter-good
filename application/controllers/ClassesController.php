@@ -17,12 +17,6 @@ class ClassesController extends CI_Controller
     {
         parent::__construct();
         $this->load->helper('cookie');
-        $this->load->model("dao/ClasseDAO");
-        $this->load->model("entity/Classe");
-        $this->load->model("entity/Eleve");
-        $this->load->model("entity/Evaluation");
-        $this->load->model("entity/Cours");
-        $this->load->model("entity/Quiz");
         
         $this->load->library('session');
         $this->load->library("encrypt");
@@ -36,21 +30,29 @@ class ClassesController extends CI_Controller
      */
     public function index()
     {
-        $data['controller'] = $this; 
-        $this->load->view($this->page, $data);
-    }
-    
-    public function getClasses() {
         if ($_SESSION['user'] == 'admin') {
             // on recupere tous les classes
             $this->doctrine->em->beginTransaction();
             $this->doctrine->refreshSchema();
-            $classes = $this->ClasseDAO->getListClasse();
+            $classeRepository = $this->doctrine->em->getRepository('Classe');
+            $classes = $classeRepository->findAll();
             
-            echo json_encode($classes);
+            $eleveRepository = $this->doctrine->em->getRepository('Eleve');
+            $elevesByClasseId = array();
+            
+            foreach ($classes as $classe){
+                if(!array_key_exists($classe->getId(), $elevesByClasseId)){
+                    $elevesByClasseId[$classe->getId()] = $eleveRepository->findBy(array('classe' => $classe->getId()));
+                }
+            }
+            $data["eleveList"] = $elevesByClasseId;
+            
+            $data["classeList"] = $classes;
+        } else {
+            redirect(site_url("accueil"));
         }
+        $this->load->view($this->page, $data);
     }
-    
     
     /**
      *  function permettant de 
