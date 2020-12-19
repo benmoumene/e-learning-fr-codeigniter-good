@@ -41,14 +41,13 @@ class ClassesController extends CI_Controller
     }
     
     public function getClasses() {
-        if ($_SESSION['user'] == 'admin') {
             // on recupere tous les classes
             $this->doctrine->em->beginTransaction();
             $this->doctrine->refreshSchema();
             $classes = $this->ClasseDAO->getListClasse();
             
             echo json_encode($classes);
-        }
+        
     }
     
     

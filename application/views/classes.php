@@ -26,8 +26,39 @@
 </div>
 
 </div>
+
 <script src="/projetL3/application/views/page_template/components_vuejs/list_group.js"></script>
 
+<script>
+var classesList = [];
+
+function getClasses () {
+	  const Http = new XMLHttpRequest();
+		Http.open("GET", 'http://[::1]/projetL3/index.php/api/classes');
+		Http.send();
+
+		Http.onreadystatechange = (e) => {
+		  if (Http.readyState === 4) {
+			  classesList = JSON.parse(Http.responseText);
+			  console.log(classesList);
+			  var divList = document.querySelector('.classesList');
+			  var ul = document.createElement('ul');
+			  
+			  classesList.forEach(function(e){
+				  console.log(e);
+				  var li = document.createElement('li');
+				  li.innerText = e['nom'];
+				  li.classList = "list-group-item list-group-item-action flex-column align-items-start";
+				  
+				  ul.appendChild(li);
+			  });
+			  
+			  divList.appendChild(ul);
+		  }
+		}
+}
+
+</script>
 
 
 <?php $this->load->view("page_template/footer");?>
