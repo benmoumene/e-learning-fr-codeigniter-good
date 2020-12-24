@@ -64,3 +64,4 @@ $route['enseignant'] = 'EnseignantController';
 $route['quiz'] = 'QuizController';
 $route['classes'] = 'ClassesController';
 $route['api/classes'] = 'ClassesController/getClasses';
+$route['api/eleves'] = 'ClassesController/getElevesByClasseId';

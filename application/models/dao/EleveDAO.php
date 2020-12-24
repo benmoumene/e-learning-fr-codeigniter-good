@@ -11,6 +11,14 @@ class EleveDAO extends CI_MODEL
 
     function __construct()
     {}
+    
+    function getListElevesByClasseId(){
+        $this->db->select("id, nom, prenom, email");
+        $this->db->from("eleve");
+        $this->db->where("classe_id = ".$this->input->get('classe'));
+        return $this->db->get()->result_array();
+    }
+    
 
     function getIdByEmail($email)
     {

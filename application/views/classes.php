@@ -4,10 +4,9 @@
 <div id="body" class="mbot">
     <card title="<?=($_SESSION['user'] === "admin") ? "Mes classes" : "" ?>">
     	
-    	<div class="list-group mt-4">
     	                
         <div class="classesList">
-        
+        	<classe-list></classe-list>
         </div>
         <?php echo form_open("/ClassesController/createClasse");?>
 
@@ -28,38 +27,37 @@
 </div>
 
 <script src="/projetL3/application/views/page_template/components_vuejs/list_group.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.0/axios.min.js" integrity="sha512-DZqqY3PiOvTP9HkjIWgjO6ouCbq+dxqWoJZ/Q+zPYNHmlnI2dQnbJ5bxAHpAMw+LXRm4D72EIRXzvcHQtE8/VQ==" crossorigin="anonymous"></script>
 
 <script>
-var classesList = [];
-
-function getClasses () {
-	  const Http = new XMLHttpRequest();
-		Http.open("GET", 'http://[::1]/projetL3/index.php/api/classes');
-		Http.send();
-
-		Http.onreadystatechange = (e) => {
-		  if (Http.readyState === 4) {
-			  classesList = JSON.parse(Http.responseText);
-			  console.log(classesList);
-			  var divList = document.querySelector('.classesList');
-			  var ul = document.createElement('ul');
-			  
-			  classesList.forEach(function(e){
-				  console.log(e);
-				  var li = document.createElement('li');
-				  li.innerText = e['nom'];
-				  li.classList = "list-group-item list-group-item-action flex-column align-items-start";
-				  
-				  ul.appendChild(li);
-			  });
-			  
-			  divList.appendChild(ul);
-		  }
+var classeList = Vue.component('classe-list', {
+	template: '<div v-if="fetched"><div v-for="item in classesNames"><list-item :titre="item.nom" :lien="`classes/eleves?id=${item.id}`"></list-item></div></div>',
+	data(){
+		return {
+			classesNames:[],
+			fetched:false
+		};
+	},
+	mounted() {
+	  	this.getClasses();
+	},
+	beforeDestroy() {
+	  	clearInterval(this.setIntervalId);
+	},
+	methods:  {
+		async getClasses() {
+			try {
+				const classes = await axios.get('http://[::1]/projetL3/index.php/api/classes');
+				this.classesNames = classes.data;
+				this.fetched = true;
+            }catch(err) {
+      	        console.log(err);
+            }
 		}
-}
-
+    },
+	component: listItem
+});
 </script>
-
 
 <?php $this->load->view("page_template/footer");?>
 </body>

@@ -18,6 +18,7 @@ class ClassesController extends CI_Controller
         parent::__construct();
         $this->load->helper('cookie');
         $this->load->model("dao/ClasseDAO");
+        $this->load->model("dao/EleveDAO");
         $this->load->model("entity/Classe");
         $this->load->model("entity/Eleve");
         $this->load->model("entity/Evaluation");
@@ -41,15 +42,22 @@ class ClassesController extends CI_Controller
     }
     
     public function getClasses() {
-            // on recupere tous les classes
-            $this->doctrine->em->beginTransaction();
-            $this->doctrine->refreshSchema();
-            $classes = $this->ClasseDAO->getListClasse();
-            
-            echo json_encode($classes);
+        // on recupere tous les classes
+        $this->doctrine->em->beginTransaction();
+        $this->doctrine->refreshSchema();
+        $classes = $this->ClasseDAO->getListClasse();
+        
+        echo json_encode($classes);
         
     }
     
+    public function getElevesByClasseId() {
+        $this->doctrine->em->beginTransaction();
+        $this->doctrine->refreshSchema();
+        $eleves = $this->EleveDAO->getListElevesByClasseId();
+        
+        echo json_encode($eleves);
+    }
     
     /**
      *  function permettant de 
