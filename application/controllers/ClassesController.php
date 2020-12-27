@@ -105,6 +105,5 @@ class ClassesController extends CI_Controller
         $this->doctrine->em->persist($classe);
         $this->doctrine->em->commit();
         $this->doctrine->em->flush();
-        redirect(site_url($this->page));
     }
 }
