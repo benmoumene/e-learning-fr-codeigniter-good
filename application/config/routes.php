@@ -71,3 +71,4 @@ $route['api/documents'] = 'CoursController/getDocumentsByCours';
 $route['api/add/document'] = 'CoursController/addDocuments';
 $route['api/delete/document'] = 'CoursController/removeDocument';
 $route['api/cours/classes'] = 'CoursController/getClassesByCours';
+$route['api/cours/modify/classes'] = 'CoursController/modifyClasses';

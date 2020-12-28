@@ -250,9 +250,13 @@ class CoursController extends CI_Controller
         $this->doctrine->refreshSchema();
         $cours = $this->doctrine->em->find("Cours", $this->input->post('cours_id'));
         
+        
+        
         $classes = array();
         if($cours!=null && !empty($_POST['classes_ids']) ){
-            foreach($_POST['classes_ids'] as $c){
+            
+            $result = json_decode($_POST['classes_ids'], true);
+            foreach($result as $c){
                 $classe = $this->doctrine->em->find("Classe", $c);
                 array_push($classes, $classe);
             }
@@ -264,8 +268,9 @@ class CoursController extends CI_Controller
                 $this->doctrine->em->flush();
             }
         }
+        var_dump($this->input->post('cours_id'));
+        
        
-        redirect(site_url("cours"));
     }
     
     /**

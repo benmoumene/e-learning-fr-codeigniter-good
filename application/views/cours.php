@@ -1,19 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-$coursSelectionne = null;
-if (isset($_GET['cours'])) {
-    $coursSelectionne = $this->CoursDAO->getCoursById($_GET['cours']);
-    $classbycours = array();
-
-        $res = $this->ClasseDAO->getClasseForCoursId($coursSelectionne['id']);
-        if (!empty($res)) {
-            $classeinfo = array();
-            foreach ($res as $r) {
-                array_push($classeinfo, $this->ClasseDAO->getClasseById($r["classe_id"]));
-            }
-            array_push($classbycours, $classeinfo);
-        }
-}
 ?>
 <!-- AFFICHER LE MENU -->
 <?php $this->load->view("page_template/header"); ?>
@@ -76,10 +62,8 @@ if (isset($_GET['cours'])) {
         
         	
         	
-        	<?php if(!empty($coursSelectionne)): ?>
-			<p><?=$coursSelectionne['description']?></p>
-			
-    			<div class="documentsList mb-4">
+        	<?php if(!empty($_GET['cours'])): ?>
+				<div class="documentsList mb-4">
     				<?php if($_SESSION['user'] === 'admin'): ?>
     					<add-document></add-document>
     				<?php endif;?>
@@ -87,26 +71,11 @@ if (isset($_GET['cours'])) {
 				</div>
 				<hr>
 
-		<?php if($_SESSION['user'] === 'admin'): ?>
-    			<?=form_open_multipart('/CoursController/modifyClasses');?>
-    				<input type="text" name="cours_id" value="<?=$_GET['cours']?>" hidden/>
-    				
-    				<div class="classesList">
-    					<classes-cours></classes-cours>
-    				</div>
-
-                    <label style="font-weight:bold">Mettre en ligne dans une classe</label><br>
-
-                    <select class="form-control" name="classes_ids[]" multiple="multiple">
-                        <?php foreach($classeList as $classe): ?>
-                            <option value="<?=$classe['id']?>"><?=$classe['nom']?></option>
-                        <?php endforeach;?>
-                    </select><br>
-                    <input class="btn btn-primary" type="submit" name="modifyClasses" value="Modifier les classes" />
-    			<?php echo form_close();?>
-			<?php endif;?>
-			
-			
+        		<?php if($_SESSION['user'] === 'admin'): ?>
+        				<div class="classesList">
+        					<classes-cours></classes-cours>
+        				</div>
+        		<?php endif;?>
 			
 		<?php endif;?>
 
@@ -234,16 +203,20 @@ var addDocumentsComponent = Vue.component('add-document', {
 });
 
 
+
 var classesList = Vue.component('classes-cours', {
-	template: '<div :key="fetched"><label style="font-weight:bold">Classes liées au cours</label><br><b-list-group horizontal class="mb-4"><b-list-group-item v-for="classe in classes">{{classe.nom}}</b-list-group-item></b-list-group><p v-if="fetched > 0 && classes.length == 0" style="color:red" class="mb-4">Pas encore de classes associés à ce cours</p></div>',
+	template: '<div :key="fetched"><label style="font-weight:bold">Classes liées au cours</label><br><b-list-group horizontal class="mb-4"><b-list-group-item v-for="classe in classes">{{classe.nom}}</b-list-group-item></b-list-group><p v-if="fetched > 0 && classes.length == 0" style="color:red" class="mb-4">Pas encore de classes associés à ce cours</p><label style="font-weight:bold">Mettre en ligne dans une classe</label><br><select class="form-control" v-model="selections" multiple="multiple"><option v-for="clas in allClasses" :key="clas.id" :value="clas.id">{{clas.nom}}</option></select><b-button @click="modifyClasses">Modifier les classes</b-button></div>',
 	data(){
 		return {
 			classes:[],
+			allClasses:[],
+			selections:[],
 			fetched:0
 		};
 	},
 	mounted() {
 	  	this.getClassesByCours();
+	  	this.getAllClasses();
 	  	this.$root.$on('refreshClasses', () => {
             this.getClassesByCours();
         });
@@ -259,14 +232,39 @@ var classesList = Vue.component('classes-cours', {
             }catch(err) {
       	        console.log(err);
             }
+		},
+		async getAllClasses() {
+			try {
+				const allClas = await axios.get('http://[::1]/projetL3/index.php/api/classes');
+				this.allClasses = allClas.data;
+				this.fetchedAll = this.fetchedAll+1;
+            }catch(err) {
+      	        console.log(err);
+            }
+		},
+		modifyClasses() {
+			let urlParams = new URLSearchParams(window.location.search);
+			let coursParam = urlParams.get('cours');
+			
+			const params = new URLSearchParams();
+			params.append('classes_ids', JSON.stringify(this.selections));
+			params.append('cours_id', coursParam);
+			var that = this;
+			
+			axios({ method: 'post',
+				url: 'http://[::1]/projetL3/index.php/api/cours/modify/classes',
+				data: params
+			}).then(function (response) {
+			    // handle success
+			    console.log(response);
+				that.$root.$emit('refreshClasses');
+			  });
 		}
 	}
 });
 
 new Vue({el : ".documentsList", components: {documentsList, addDocumentsComponent } });
 new Vue({el : ".classesList", components: {classesList } });
-
-
 </script>
 
 </body>
