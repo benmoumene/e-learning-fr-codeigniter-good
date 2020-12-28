@@ -65,4 +65,5 @@ $route['quiz'] = 'QuizController';
 $route['classes'] = 'ClassesController';
 $route['api/classes'] = 'ClassesController/getClasses';
 $route['api/create/classe'] = 'ClassesController/createClasse';
+$route['api/delete/classe'] = 'ClassesController/removeClasse';
 $route['api/eleves'] = 'ClassesController/getElevesByClasseId';

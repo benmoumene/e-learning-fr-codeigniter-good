@@ -89,7 +89,6 @@ class ClassesController extends CI_Controller
         $this->doctrine->em->remove($classe);
         $this->doctrine->em->commit();
         $this->doctrine->em->flush();
-        redirect(site_url($this->page));
     }
     
     /**

@@ -37,7 +37,7 @@
 
 
 var classeList = Vue.component('classe-list', {
-	template: '<div v-if="fetched"><b-container class="bv-example-row"><b-row><b-col><b-list-group v-for="item in classesNames"><b-list-group-item @click="getElevesByClasse(item.id, item.nom)">{{item.nom}}</b-list-group-item></b-list-group></b-col>     <b-col><h3 class="mt-4" v-if="nomClasseClicked && eleves.length > 0">Eleve de la classe {{nomClasseClicked}}</h3> <b-table striped hover :items="eleves" ></b-table><h2 v-if="eleves.length==0 && idClasseClicked!=0 ">Pas encore élèves pour la classe {{nomClasseClicked}}</h2> </b-col></b-row></b-container>  </div>',
+	template: '<div v-if="fetched"><b-container class="bv-example-row"><b-row><b-col><b-list-group v-for="item in classesNames"><b-list-group-item @click="getElevesByClasse(item.id, item.nom)">{{item.nom}}</b-list-group-item></b-list-group></b-col>     <b-col><h3 class="mt-4" v-if="nomClasseClicked && eleves.length > 0">Eleve de la classe {{nomClasseClicked}}</h3> <b-table striped hover :items="eleves" ></b-table><h2 v-if="eleves.length==0 && idClasseClicked!=0 ">Pas encore élèves pour la classe {{nomClasseClicked}}</h2> <b-button v-if="idClasseClicked != 0" variant="danger" @click="deleteCours()">supprimer le cours</b-button></b-col></b-row></b-container>  </div>',
 	data(){
 		return {
 			classesNames:[],
@@ -76,6 +76,19 @@ var classeList = Vue.component('classe-list', {
             }catch(err) {
       	        console.log(err);
             }
+		},
+		deleteCours(){
+			const params = new URLSearchParams();
+			params.append('classe_id', this.idClasseClicked);
+			var that = this;
+			
+			axios({ method: 'post',
+				url: 'http://[::1]/projetL3/index.php/api/delete/classe',
+				data: params
+			}).then(function (response) {
+			    // handle success
+				that.$root.$emit('refreshClasses');
+			  });
 		}
     }
 });
