@@ -38,7 +38,7 @@ $_SESSION['user'] = $user;
 <!-- AFFICHER LE MENU -->
 	<menu class="navbar  navbar-default navbar-light navbar-expand-lg mx-auto sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="/projetL3/index.php/" style="font-style:abedia; color:#5799D7">MY JAVAFX</a>
+            <a class="navbar-brand" href="/projetL3/index.php/" style="font-style:abedia; color:#5799D7">SITE DE L'ENSEIGNANTE</a>
             <button class="navbar-toggler"  type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon" ></span>
             </button>
@@ -58,4 +58,7 @@ $_SESSION['user'] = $user;
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
 <script src="/projetL3/application/views/page_template/components_vuejs/menu_components.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.0/axios.min.js" integrity="sha512-DZqqY3PiOvTP9HkjIWgjO6ouCbq+dxqWoJZ/Q+zPYNHmlnI2dQnbJ5bxAHpAMw+LXRm4D72EIRXzvcHQtE8/VQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-vue/2.21.1/bootstrap-vue.min.js"></script>
+
 

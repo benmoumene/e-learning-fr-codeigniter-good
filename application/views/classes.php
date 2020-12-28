@@ -2,6 +2,8 @@
 ?>
 
 <div id="body" class="mbot">
+	 
+
     <card title="<?=($_SESSION['user'] === "admin") ? "Mes classes" : "" ?>">
     	
     	                
@@ -11,29 +13,31 @@
         <?php echo form_open("/ClassesController/createClasse");?>
 
 
-        <center>
+       
+
+		<?php echo form_close();?>	 
+		
+    </card>
+    <center>
         <h5 class="mt-4">Créer une nouvelle classe</h5>
     	<div class="col-md-4 form-group mb-2" id="formdiv">
               <form-class></form-class>
       		  <br><br>
 		</div>
-        </center>
-
-		<?php echo form_close();?>	   
-    </card>
+        </center>  
 </div>
 
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-vue/2.21.1/bootstrap-vue.min.js"></script>
 <script src="/projetL3/application/views/page_template/components_vuejs/list_group.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.0/axios.min.js" integrity="sha512-DZqqY3PiOvTP9HkjIWgjO6ouCbq+dxqWoJZ/Q+zPYNHmlnI2dQnbJ5bxAHpAMw+LXRm4D72EIRXzvcHQtE8/VQ==" crossorigin="anonymous"></script>
-
 
 
 <script>
+
+
+
 var classeList = Vue.component('classe-list', {
-	template: '<div v-if="fetched"><b-list-group v-for="item in classesNames"><b-list-group-item @click="getElevesByClasse(item.id, item.nom)">{{item.nom}}</b-list-group-item></b-list-group> <h3 class="mt-4" v-if="nomClasseClicked && eleves.length > 0">Eleve de la classe {{nomClasseClicked}}</h3> <b-table striped hover :items="eleves" ></b-table> </div>',
+	template: '<div v-if="fetched"><b-container class="bv-example-row"><b-row><b-col><b-list-group v-for="item in classesNames"><b-list-group-item @click="getElevesByClasse(item.id, item.nom)">{{item.nom}}</b-list-group-item></b-list-group></b-col>     <b-col><h3 class="mt-4" v-if="nomClasseClicked && eleves.length > 0">Eleve de la classe {{nomClasseClicked}}</h3> <b-table striped hover :items="eleves" ></b-table><h2 v-if="eleves.length==0 && idClasseClicked!=0 ">Pas encore élèves pour la classe {{nomClasseClicked}}</h2> </b-col></b-row></b-container>  </div>',
 	data(){
 		return {
 			classesNames:[],

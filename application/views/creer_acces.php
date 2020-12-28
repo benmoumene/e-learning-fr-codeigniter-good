@@ -8,11 +8,8 @@
 		<div class="justify-content-md-center">
             <div class="col-md-4 form-group mb-2">
             	<label class="required" style="font-weight:bold">Classe</label>
-            	<select name="classe_id">
-            		<?php foreach($classeList as $classe): ?>
-            			<option value="<?=$classe['id']?>"><?=$classe['nom']?></option>
-            		<?php endforeach;?>
-            	</select><br><br>
+            		<classes-options></classes-options>
+            	<br>
             	
             	<label class="required" style="font-weight:bold">Fichier d'importation</label>
             	<input type="file" class="form-control" id="id" name="file" /><br><br>
@@ -32,24 +29,39 @@
 echo form_close();
 ?>
 
+<script>
+var classesOptions = Vue.component('classes-options', {
+	template: '<div v-if="fetched"><select name="classe_id"><option v-for="classe in classesNames" :value="classe.id">{{classe.nom}}</option></select> </div>',
+	data(){
+		return {
+			classesNames:[],
+			fetched:false
+		};
+	},
+	mounted() {
+	  	this.getClasses();
+	},
+	beforeDestroy() {
+	  	clearInterval(this.setIntervalId);
+	},
+	methods:  {
+		async getClasses() {
+			try {
+				const classes = await axios.get('http://[::1]/projetL3/index.php/api/classes');
+				this.classesNames = classes.data;
+				this.fetched = true;
+				console.log(this.classesNames);
+            }catch(err) {
+      	        console.log(err);
+            }
+		}
+    }
+});
+</script>
+
 <?php $this->load->view("page_template/footer");?> 
 
-<script>
-Vue.use(VueToast);
-if("<?=$this->session->flashdata('import_success')?>" === "L'importation des élèves a été effectué."){
-	Vue.$toast.success("<?=$this->session->flashdata('import_success');?>", {
-	  position: 'top',
-	  duration: 8000
-	})
-}	
-else if("<?=$this->session->flashdata('import_success')?>" === "Veuillez sélectionner un fichier .xlsx" || "<?=$this->session->flashdata('import_success')?>" === "Veuillez vérifier la syntaxe du fichier d'importation." || "<?=$this->session->flashdata('import_success')?>" === "L'importation des élèves a échoué."){
-    Vue.$toast.error("<?=$this->session->flashdata('import_success');?>", {
-	  position: 'top', 
-	  duration: 8000
-	})
-}
 
-</script>
     
 </body>
 </html>
