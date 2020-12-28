@@ -75,15 +75,8 @@ class CoursController extends CI_Controller
             $data["coursList"] = $this->CoursDAO->getListCoursByIdClasse($idClasse);
         }
         
-        // on recupere les documents par cours(Dictionnaire)
-        $data["documents"] = $this->DocumentDAO->getDocumentsList();
         
-        // on recupere les id des cours de chaque document
-        $idsCours = array();
-        foreach ($data["documents"] as $document) {
-            array_push($idsCours, $document['cours_id']);
-        }
-        $data["idsCours"] = $idsCours;
+        
         
         $this->load->model("dao/ClasseDAO");
         $data['classeList'] = $this->ClasseDAO->getListClasse();
@@ -154,6 +147,12 @@ class CoursController extends CI_Controller
         redirect(site_url("cours"));
     }
 
+    public function getDocumentsByCours() {
+        $documents = $this->DocumentDAO->getDocumentsListByCours($this->input->post('cours_id'));
+        echo json_encode($documents);
+    }
+    
+    
     /**
      * permet d'ajouter des documents
      * a un cours existant
@@ -309,7 +308,6 @@ class CoursController extends CI_Controller
             $this->doctrine->em->commit();
             $this->doctrine->em->flush();
         }
-        redirect(site_url("cours"));
     }
 
 }

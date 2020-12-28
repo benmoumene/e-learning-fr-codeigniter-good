@@ -59,21 +59,12 @@ class QuizController extends CI_Controller
             redirect(site_url('accueil'));
         }
 
-        // on recupere les documents par cours(Dictionnaire)
-        $data["documents"] = $this->DocumentDAO->getDocumentsList();
-
         if ($idClasse == 0) {
             $data["quizzes"] = $this->QuizDAO->getQuizList();
         } else {
             $data["quizzes"] = $this->QuizDAO->getQuizListByIdClasse($idClasse);
         }
 
-        // on recupere les id des cours de chaque document
-        $idsCours = array();
-        foreach ($data["documents"] as $document) {
-            array_push($idsCours, $document['cours_id']);
-        }
-        $data["idsCours"] = $idsCours;
             
         $this->load->model("dao/ClasseDAO");
         $data['classeList'] = $this->ClasseDAO->getListClasse();

@@ -17,9 +17,10 @@ if (! defined('BASEPATH')){
         {
         }
         
-        function getDocumentsList(){
+        function getDocumentsListByCours(){
             $this->db->select("*");
             $this->db->from("document");
+            $this->db->where("cours_id = ".$this->input->get('cours_id'));
             
             return $this->db->get()->result_array();
         }

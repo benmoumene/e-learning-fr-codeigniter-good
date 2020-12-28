@@ -22,23 +22,18 @@ if (isset($_GET['cours'])) {
 <div id="body" class="d-flex mt-2 mb-4 row">
 	<card class="cours"
 		title="<?=($_SESSION["user"] === "admin") ? "Les cours de l'enseignante" : "Mes cours" ?>">
-		<div class="list-group mb-2">
-			<?php if($_SESSION['user'] === 'admin'): ?>
-			<list-item
-    			lien="/projetL3/index.php/cours"
-    			titre="Créer un cours" description=""
-    			class="coursIntitule">
-			</list-item>
-			<?php endif;?>
-			
-            <?php foreach ($coursList as $cours): ?>
-            <list-item
-    			lien="/projetL3/index.php/cours?cours=<?=$cours['id']?>"
-    			titre="<?=$cours['intitule']?>" description=""
-    			class="coursIntitule">
-			</list-item>	
-            <?php endforeach;?>
-		</div>
+		
+		<b-list-group>
+    		<div class="list-group mb-2">
+    			<?php if($_SESSION['user'] === 'admin'): ?>
+    				<b-list-group-item href="/projetL3/index.php/cours">Créer un cours</b-list-group-item>
+    			<?php endif;?>
+    			
+                <?php foreach ($coursList as $cours): ?>
+                	<b-list-group-item href="/projetL3/index.php/cours?cours=<?=$cours['id']?>"><?=$cours['intitule']?></b-list-group-item>
+    			<?php endforeach;?>
+    		</div>
+		</b-list-group>
 	</card>
 
     <card class = "cours btn-creercours" title="<?=(empty($_GET['cours']) && $_SESSION['user'] === 'admin') ? 'Créer un cours' : '' ?>">
@@ -123,29 +118,20 @@ if (isset($_GET['cours'])) {
 			<?php endif;?>
 			
 			<hr>
-			<h4>Documents du cours</h4>
+			
 		<?php endif;?>
 
         <div class="documents mbot">
-            <?php foreach($documents as $document):?>
-                <?php if(isset($_GET['cours']) && $document['cours_id'] == $_GET['cours']): ?>
-                    <div class="row">
+        	<b-list-group>
+                <?php if(isset($_GET['cours'])) : ?>
+                    <div class="row documentsList">
+						<documents-list></documents-list>
 
-                        <list-item lien="<?=$document["path"]?>"
-                                   titre="<?=$document["nom"]?>" description=""
-                                   class="ml-4 mr-4 col-md-6 col-sm-2 documentsCours<?=$document['cours_id']?>" target="_blank"></list-item>
-                        <?php if($_SESSION['user'] === 'admin'): ?>
-                        <?php echo form_open('/CoursController/removeDocument')?>
-                        <input type="text" name="document_id" value="<?=$document["id"]?>" hidden>
-
-                        <td><button class="btn btn-danger " title="Supprimer le fichier" onclick="return confirm('Etes vous sur de vouloir supprimer ce fichier?')"><i class="fa fa-trash" style="font-size:30px;"></i></button>
-                        <?php endif;?>
                     </div>
-
-                    <?php echo form_close();?>
                 <?php endif;?>
-            <?php endforeach;?>
-
+			</b-list-group>
+			
+			
             <?php if($_SESSION['user'] === 'admin' && isset($_GET['cours'])): ?>
                 <?php echo form_open('/CoursController/removeCours');?>
                     <input type="text" value="<?=$_GET['cours']?>" name="cours_id" hidden/>
@@ -160,6 +146,7 @@ if (isset($_GET['cours'])) {
 	</card>
 </div>
 </center>
+
 
 <?php $this->load->view("page_template/footer");?>
 <script>
@@ -185,8 +172,54 @@ else if("<?=$this->session->flashdata('import')?>" === "Les documents doivent ê
 
 </script>
 
-<script
-	src="/projetL3/application/views/page_template/components_vuejs/list_group.js"></script>
+<script>
+var documentsList = Vue.component('documents-list', {
+	template: '<div v-if="fetched"><h4>Documents du cours</h4><b-container class="bv-example-row" v-for="(document, index) in documents"><b-row><b-col><b-list-group-item class="ml-4" style="width:300px" target="_blank" :href="document.path">{{document.nom}} </b-list-group-item></b-col><b-col><b-button @click="deleteDocument(index)">supprimer</b-button></b-col></b-row><b-container></div>',
+	data(){
+		return {
+			documents:[],
+			fetched:false
+		};
+	},
+	mounted() {
+	  	this.getDocumentsByCours();
+	  	this.$root.$on('refreshDocuments', () => {
+            this.getDocumentsByCours();
+        });
+	},
+	methods:  {
+		async getDocumentsByCours() {
+			let urlParams = new URLSearchParams(window.location.search);
+			let coursParam = urlParams.get('cours');
+			try {
+				const docs = await axios.get('http://[::1]/projetL3/index.php/api/documents?cours_id='+coursParam);
+				this.documents = docs.data;
+				console.log(this.documents);
+				this.fetched = true;
+            }catch(err) {
+      	        console.log(err);
+            }
+		},
+		deleteDocument(index) {
+			console.log('supprimer le doc : '+JSON.stringify(this.documents[index]));
+			const params = new URLSearchParams();
+			params.append('document_id', this.documents[index].id);
+			var that = this;
+			
+			axios({ method: 'post',
+				url: 'http://[::1]/projetL3/index.php/api/delete/document',
+				data: params
+			}).then(function (response) {
+			    // handle success
+				that.$root.$emit('refreshDocuments');
+			  });
+		}
+	}
+});
+
+new Vue({el : ".documentsList", component: documentsList});
+
+</script>
 
 </body>
 </html>
