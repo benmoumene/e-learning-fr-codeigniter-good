@@ -148,10 +148,14 @@ class CoursController extends CI_Controller
     }
 
     public function getDocumentsByCours() {
-        $documents = $this->DocumentDAO->getDocumentsListByCours($this->input->post('cours_id'));
+        $documents = $this->DocumentDAO->getDocumentsListByCours($this->input->get('cours_id'));
         echo json_encode($documents);
     }
     
+    public function getClassesByCours() {
+        $classes = $this->ClasseDAO->getClasseForCoursId($this->input->get('cours_id'));
+        echo json_encode($classes);
+    }
     
     /**
      * permet d'ajouter des documents
@@ -164,6 +168,7 @@ class CoursController extends CI_Controller
                 
         $cours = $this->doctrine->em->find('Cours', $this->input->post('cours_id'));
         
+        
         if(!empty($_FILES['files']['tmp_name'][0]) && $cours !== null){
             $this->do_upload($cours);
         }
@@ -171,7 +176,6 @@ class CoursController extends CI_Controller
         $this->doctrine->em->persist($cours);
         $this->doctrine->em->commit();
         
-        redirect(site_url("cours?cours=".$this->input->post('cours_id')));
     }
     
     /**
@@ -230,21 +234,12 @@ class CoursController extends CI_Controller
                      */
                     $import = 'Les documents doivent être de type pdf';
                     $this->doctrine->em->rollback();
-                    $this->session->set_flashdata("import", $import);
-                    redirect(site_url("cours"));
                 }
-                $this->session->set_flashdata("import", $import);
             }
         }
 
         $this->doctrine->em->commit();
         $this->doctrine->em->flush();
-        
-        if ($count == 0) {
-            $this->session->set_flashdata("import", "Le cours a été crée sans documents");
-        } else {
-            $this->session->set_flashdata("import", "Le cours a été crée ou modifié avec " . $count . " documents associés");
-        }
     }
     
     /**

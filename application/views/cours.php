@@ -78,33 +78,22 @@ if (isset($_GET['cours'])) {
         	
         	<?php if(!empty($coursSelectionne)): ?>
 			<p><?=$coursSelectionne['description']?></p>
-			<?php if($_SESSION['user'] === 'admin'): ?>
-    			
-    			<?=form_open_multipart('/CoursController/addDocuments');?>
-        			<br>
-        			<input type="text" name="cours_id" value="<?=$_GET['cours']?>" hidden/>
-        			<label style="font-weight:bold">Ajouter des documents</label>
-            		<input type="file"  class="form-control" id="id" name="files[]" multiple="multiple"/><br>
-            		
-            		<input class="btn btn-primary" type="submit" name="add_documents" value="Ajouter" /><br><br>
-    			<?php echo form_close();?>
+			
+    			<div class="documentsList mb-4">
+    				<?php if($_SESSION['user'] === 'admin'): ?>
+    					<add-document></add-document>
+    				<?php endif;?>
+    				<documents-list></documents-list>
+				</div>
+				<hr>
 
+		<?php if($_SESSION['user'] === 'admin'): ?>
     			<?=form_open_multipart('/CoursController/modifyClasses');?>
     				<input type="text" name="cours_id" value="<?=$_GET['cours']?>" hidden/>
-    				<?php if($classbycours != null): ?>
-    				<label style="font-weight:bold">Classes liées au cours</label><br>
-						<div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead>
-                                <?php foreach($classbycours[0] as $classe): ?>
-                                <td>
-                                    <?= $classe->getNom()?>
-                                </td>
-                                <?php endforeach;?>
-                                </thead>
-                            </table>
-                        </div>
-					<?php endif;?>
+    				
+    				<div class="classesList">
+    					<classes-cours></classes-cours>
+    				</div>
 
                     <label style="font-weight:bold">Mettre en ligne dans une classe</label><br>
 
@@ -117,22 +106,12 @@ if (isset($_GET['cours'])) {
     			<?php echo form_close();?>
 			<?php endif;?>
 			
-			<hr>
+			
 			
 		<?php endif;?>
 
         <div class="documents mbot">
-        	<b-list-group>
-                <?php if(isset($_GET['cours'])) : ?>
-                    <div class="row documentsList">
-						<documents-list></documents-list>
-
-                    </div>
-                <?php endif;?>
-			</b-list-group>
-			
-			
-            <?php if($_SESSION['user'] === 'admin' && isset($_GET['cours'])): ?>
+        	<?php if($_SESSION['user'] === 'admin' && isset($_GET['cours'])): ?>
                 <?php echo form_open('/CoursController/removeCours');?>
                     <input type="text" value="<?=$_GET['cours']?>" name="cours_id" hidden/>
                     <hr>
@@ -174,11 +153,11 @@ else if("<?=$this->session->flashdata('import')?>" === "Les documents doivent ê
 
 <script>
 var documentsList = Vue.component('documents-list', {
-	template: '<div v-if="fetched"><h4>Documents du cours</h4><b-container class="bv-example-row" v-for="(document, index) in documents"><b-row><b-col><b-list-group-item class="ml-4" style="width:300px" target="_blank" :href="document.path">{{document.nom}} </b-list-group-item></b-col><b-col><b-button @click="deleteDocument(index)">supprimer</b-button></b-col></b-row><b-container></div>',
+	template: '<div :key="fetched"><h4>Documents du cours</h4><b-container class="bv-example-row" v-for="(document, index) in documents" :key="document.id"><b-row><b-col><b-list-group-item class="ml-4" style="width:300px" target="_blank" :href="document.path">{{document.nom}} </b-list-group-item></b-col><b-col><b-button @click="deleteDocument(index)">supprimer</b-button></b-col></b-row><b-container></div>',
 	data(){
 		return {
 			documents:[],
-			fetched:false
+			fetched:0
 		};
 	},
 	mounted() {
@@ -195,7 +174,7 @@ var documentsList = Vue.component('documents-list', {
 				const docs = await axios.get('http://[::1]/projetL3/index.php/api/documents?cours_id='+coursParam);
 				this.documents = docs.data;
 				console.log(this.documents);
-				this.fetched = true;
+				this.fetched = this.fetched+1;
             }catch(err) {
       	        console.log(err);
             }
@@ -217,7 +196,76 @@ var documentsList = Vue.component('documents-list', {
 	}
 });
 
-new Vue({el : ".documentsList", component: documentsList});
+var addDocumentsComponent = Vue.component('add-document', {
+	template: '<div><label style="font-weight:bold">Ajouter des documents</label><input type="file" ref="files" class="form-control" id="id" multiple="multiple" v-on:change="handleFilesUpload()"/><b-button type="submit" class="mt-2 mb-4" @click="addDocuments">Ajouter le document</b-button></div>',
+	data(){
+		return {
+			files:''
+		};
+	},
+	methods:  {
+        handleFilesUpload(){
+            this.files = this.$refs.files.files;
+        },
+		addDocuments() {
+        	 let urlParams = new URLSearchParams(window.location.search);
+			 let coursParam = urlParams.get('cours');
+        	 let formData = new FormData();
+			 var that = this;
+        	 
+        	 formData.append('cours_id', coursParam);
+        	 for( var i = 0; i < this.files.length; i++ ){
+    		    let file = this.files[i];
+				formData.append('files[' + i + ']', file);
+    		 }
+
+             axios.post( 'http://[::1]/projetL3/index.php/api/add/document',
+                     formData,
+                     {
+                     headers: {
+                         'Content-Type': 'multipart/form-data'
+                     }
+                   }
+                 ).then(function(response){
+                	 that.$root.$emit('refreshDocuments');
+            	 });
+		}
+	}
+});
+
+
+var classesList = Vue.component('classes-cours', {
+	template: '<div :key="fetched"><label style="font-weight:bold">Classes liées au cours</label><br><b-list-group horizontal class="mb-4"><b-list-group-item v-for="classe in classes">{{classe.nom}}</b-list-group-item></b-list-group><p v-if="fetched > 0 && classes.length == 0" style="color:red" class="mb-4">Pas encore de classes associés à ce cours</p></div>',
+	data(){
+		return {
+			classes:[],
+			fetched:0
+		};
+	},
+	mounted() {
+	  	this.getClassesByCours();
+	  	this.$root.$on('refreshClasses', () => {
+            this.getClassesByCours();
+        });
+	},
+	methods:  {
+		async getClassesByCours() {
+			let urlParams = new URLSearchParams(window.location.search);
+			let coursParam = urlParams.get('cours');
+			try {
+				const clas = await axios.get('http://[::1]/projetL3/index.php/api/cours/classes?cours_id='+coursParam);
+				this.classes = clas.data;
+				this.fetched = this.fetched+1;
+            }catch(err) {
+      	        console.log(err);
+            }
+		}
+	}
+});
+
+new Vue({el : ".documentsList", components: {documentsList, addDocumentsComponent } });
+new Vue({el : ".classesList", components: {classesList } });
+
 
 </script>
 

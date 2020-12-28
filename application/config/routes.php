@@ -68,4 +68,6 @@ $route['api/create/classe'] = 'ClassesController/createClasse';
 $route['api/delete/classe'] = 'ClassesController/removeClasse';
 $route['api/eleves'] = 'ClassesController/getElevesByClasseId';
 $route['api/documents'] = 'CoursController/getDocumentsByCours';
+$route['api/add/document'] = 'CoursController/addDocuments';
 $route['api/delete/document'] = 'CoursController/removeDocument';
+$route['api/cours/classes'] = 'CoursController/getClassesByCours';
