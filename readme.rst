@@ -1,3 +1,39 @@
+UTILISATEUR NON CONNECTE
+
+-connexion
+-publications
+-enseignant(présentation de l'enseignante)
+-contact
+https://user-images.githubusercontent.com/39730173/86522436-e3b8da80-be5d-11ea-9129-d9fac6fddf64.PNG
+non_connecte
+
+ETUDIANT
+
+-cours(consulter le cours et ses documents associés)
+-modifier son mot de passe / email
+-passer un quiz
+-mot de passe oublié(récupération de son mot de passe)
+
+eleve
+https://user-images.githubusercontent.com/39730173/86522438-eddad900-be5d-11ea-9aa3-dc8542ea034b.PNG
+ENSEIGNANTE
+
+-mot de passe oublié(récupération de son mot de passe)
+-importation des étudiants d'une classe via un fichier excel
+-crée cours
+-modifier les classes ayant accès à un cours
+-supprimer un cours et les documents associés
+-supprimer un document d'un cours
+-modification mot de passe / email
+-supprimer un quiz
+-créer un quiz
+-supprimer un élève d'une classe
+-supprimer une classe entière
+-créer une classe
+
+enseignante
+https://user-images.githubusercontent.com/39730173/86522440-f6331400-be5d-11ea-8fa8-70e2ef3de412.PNG
+
 ###################
 Auteurs
 ###################
